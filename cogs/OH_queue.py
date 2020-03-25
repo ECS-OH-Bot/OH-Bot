@@ -28,7 +28,7 @@ class OH_Queue(commands.Cog):
         """
         Enters user into the OH queue
         if they already are enqueued return them their position in queue
-        @ctx: context object containing information about the caller (this will be passed in by the discord API)
+        @ctx: context object containing information about the caller
         """
         sender = ctx.author._user
         if sender not in self._OHQueue:
@@ -51,8 +51,23 @@ class OH_Queue(commands.Cog):
 
     @commands.command(aliases=['leavequeue', 'lq'])
     async def leaveQueue(self, ctx):
-        pass
+        """
+        Removes caller from the queue
+        @ctx: context object containing information about the caller
+        """
+        sender = ctx.author._user
+        if sender in self._OHQueue:
+            self._OHQueue.remove(sender)
+            await ctx.send(f"{sender.mention} you have been removed from the queue")
+        else:
+            await ctx.send(f"{sender.mention} you were not in the queue")
 
+        # Let the caller know what the queue looks like now
+        await self.listQueue(ctx)
 
 def setup(client):
+    """
+    Called internally by discord API cog functionality
+    I honestly have no idea how this works...
+    """
     client.add_cog(OH_Queue(client))
