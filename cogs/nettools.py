@@ -36,4 +36,8 @@ class NetTools(commands.Cog):
 
 
 def setup(client):
+    """
+    Called internally by discord API cog functionality
+    I honestly have no idea how this works...
+    """
     client.add_cog(NetTools(client))
