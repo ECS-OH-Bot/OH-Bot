@@ -9,20 +9,44 @@ class OH_Queue(commands.Cog):
 
     @commands.command(aliases=["listqueue", "lsq"])
     async def listQueue(self, ctx):
+        """
+        List all users in the queue
+        @ctx: context object containing information about the caller (this will be passed in by the discord API)
+        """
         msg = ''
+        count = 1
         for user in self._OHQueue:
-            name = user.name + '\n'
+            name = f"{count}: {user.name}\n"
             msg += name
-
-        await ctx.send(f"Current users in queue: {msg}")
+        if len(self._OHQueue):
+            await ctx.send(f"Current users in queue:\n {msg}")
+        else:
+            await ctx.send("Queue is currently empty ")
 
     @commands.command(aliases=["enterqueue", "eq"])
     async def enterQueue(self, ctx: discord.ext.commands.context.Context):
+        """
+        Enters user into the OH queue
+        if they already are enqueued return them their position in queue
+        @ctx: context object containing information about the caller (this will be passed in by the discord API)
+        """
         sender = ctx.author._user
-        self._OHQueue.append(sender)
-        await ctx.send(f"{sender.mention} you have been added to the queue")
+        if sender not in self._OHQueue:
+            self._OHQueue.append(sender)
+            position = self._OHQueue.index(sender) + 1
+            await ctx.send(
+                f"{sender.mention} you have been added to the queue\n"
+                f"Current Position: {position}"
+            )
+        else:
+            position = self._OHQueue.index(sender) + 1
+            await ctx.send(
+                f"{sender.mention} you are already in the queue. Please wait to be called\n"
+                f"Current position: {position}"
+            )
         # Call the list queue function to let them know where they stand in the queue
-        #self.listQueue(ctx)
+        await self.listQueue(ctx)
+
 
 
     @commands.command(aliases=['leavequeue', 'lq'])
