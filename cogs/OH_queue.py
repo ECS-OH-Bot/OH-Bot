@@ -5,23 +5,22 @@ class OH_Queue(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-        self._OHQueue = dict()
+        self._OHQueue = list()
 
     @commands.command(aliases=["listqueue", "lsq"])
     async def listQueue(self, ctx):
         msg = ''
-        for _, name in self._OHQueue:
-            name = str(name)
-            name.join("\n")
-            msg.join(name)
+        for user in self._OHQueue:
+            name = user.name + '\n'
+            msg += name
 
-        print(msg)
+        await ctx.send(f"Current users in queue: {msg}")
 
     @commands.command(aliases=["enterqueue", "eq"])
     async def enterQueue(self, ctx: discord.ext.commands.context.Context):
-        sender = ctx.author
-        self._OHQueue[sender.id] = sender._user
-        await ctx.send(f"<@{sender.id}> you have been added to the queue")
+        sender = ctx.author._user
+        self._OHQueue.append(sender)
+        await ctx.send(f"{sender.mention} you have been added to the queue")
         # Call the list queue function to let them know where they stand in the queue
         #self.listQueue(ctx)
 
