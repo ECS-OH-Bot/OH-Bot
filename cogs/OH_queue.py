@@ -18,6 +18,7 @@ class OH_Queue(commands.Cog):
         for user in self._OHQueue:
             name = f"{count}: {user.name}\n"
             msg += name
+            count += 1
         if len(self._OHQueue):
             await ctx.send(f"Current users in queue:\n {msg}")
         else:
@@ -47,8 +48,6 @@ class OH_Queue(commands.Cog):
         # Call the list queue function to let them know where they stand in the queue
         await self.listQueue(ctx)
 
-
-
     @commands.command(aliases=['leavequeue', 'lq'])
     async def leaveQueue(self, ctx):
         """
@@ -64,6 +63,16 @@ class OH_Queue(commands.Cog):
 
         # Let the caller know what the queue looks like now
         await self.listQueue(ctx)
+
+    @commands.command()
+    async def dequeueStudent(self, ctx):
+        """
+        Dequeue a student from the queue and notify them
+        @ctx: context object containing information about the caller
+        """
+        sender = ctx.author._user
+
+
 
 def setup(client):
     """
