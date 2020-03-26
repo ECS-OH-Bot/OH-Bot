@@ -1,11 +1,20 @@
 import discord
 from discord.ext import commands
 
+INSTRUCTOR_ROLE_ID=202921174290792458
+
+def isAdmin(ctx) -> bool:
+    for role in ctx.author.roles:
+        if role.id == INSTRUCTOR_ROLE_ID:
+            return True
+    return False
+
 class OH_Queue(commands.Cog):
 
     def __init__(self, client):
         self.client = client
         self._OHQueue = list()
+        self.admins = list()
 
     @commands.command(aliases=["listqueue", "lsq"])
     async def listQueue(self, ctx):
@@ -64,13 +73,16 @@ class OH_Queue(commands.Cog):
         # Let the caller know what the queue looks like now
         await self.listQueue(ctx)
 
-    @commands.command()
+
+    @commands.command(aliases=["dequeue", 'dq'])
+    @commands.check(isAdmin)
     async def dequeueStudent(self, ctx):
         """
         Dequeue a student from the queue and notify them
         @ctx: context object containing information about the caller
         """
         sender = ctx.author._user
+        await ctx.send(f"{sender.mention}")
 
 
 
