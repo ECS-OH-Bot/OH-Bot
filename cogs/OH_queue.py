@@ -1,13 +1,8 @@
 import discord
 from discord.ext import commands
+from .roleManager import isAdmin
 
-INSTRUCTOR_ROLE_ID=202921174290792458
 
-def isAdmin(ctx) -> bool:
-    for role in ctx.author.roles:
-        if role.id == INSTRUCTOR_ROLE_ID:
-            return True
-    return False
 
 class OH_Queue(commands.Cog):
 
@@ -83,6 +78,18 @@ class OH_Queue(commands.Cog):
         """
         sender = ctx.author._user
         await ctx.send(f"{sender.mention}")
+
+    @commands.command(aliases=["cq", "clearqueue"])
+    @commands.check(isAdmin)
+    async def clearQueue(self, ctx):
+        """
+        Clears all students from the queue
+        @ctx: context object containing information about the caller
+        """
+        sender = ctx.author._user
+        self._OHQueue.clear()
+        await ctx.send(f"{sender.mention} has cleared the queue")
+        await self.listQueue(ctx)
 
 
 

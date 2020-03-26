@@ -4,6 +4,13 @@ from discord.utils import get
 
 ADMIN="Instructor"
 STUDENT="Student"
+INSTRUCTOR_ROLE_ID=202921174290792458
+
+def isAdmin(ctx) -> bool:
+    for role in ctx.author.roles:
+        if role.id == INSTRUCTOR_ROLE_ID:
+            return True
+    return False
 
 class roleManager(commands.Cog):
 
