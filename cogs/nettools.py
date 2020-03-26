@@ -20,12 +20,19 @@ class NetTools(commands.Cog):
         @err: error object raised by caller
         Error types currently handled:
         CommandNotFound,
+        CheckFailure
         """
         sender = ctx.author._user
         if isinstance(err, commands.CommandNotFound):
             await ctx.send(
                 f"Command '{ctx.invoked_with}' does not exist\n"
                 f"{sender.mention} check your spelling"
+            )
+
+        if isinstance(err, commands.CheckFailure):
+            await ctx.send(
+                f"{sender.mention} does not have permission to use {ctx.invoked_with}\n"
+                f"If you think this is a mistake DM the Admin: Grant Gilson"
             )
 
     #Commands
