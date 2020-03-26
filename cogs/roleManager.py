@@ -12,13 +12,19 @@ def isAdmin(ctx) -> bool:
     """
     Checks if the user who sent the command is an admin
     """
-    return INSTRUCTOR_ROLE_ID in ctx.author.roles
+    for role in ctx.author.roles:
+        if role.id == INSTRUCTOR_ROLE_ID:
+            return True
+    return False
 
 def isStudent(ctx) -> bool:
     """
-    Checks if the user who issued the command is a student
+    Checks if the user who sent the command is an admin
     """
-    return STUDENT_ROLE_ID in ctx.author.roles
+    for role in ctx.author.roles:
+        if role.id == STUDENT_ROLE_ID:
+            return True
+    return False
 
 class roleManager(commands.Cog):
 
