@@ -11,6 +11,9 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 client = commands.Bot(command_prefix=">")
 
+"""
+This group of commands may be completely useless and will likely be deprecated later
+"""
 @client.command
 async def load(ctx, extension):
     client.load_extension(f"cogs.{extension}")

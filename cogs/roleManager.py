@@ -6,15 +6,19 @@ from main import BOT_CHANNEL_ID
 ADMIN="Instructor"
 STUDENT="Student"
 INSTRUCTOR_ROLE_ID=202921174290792458
+STUDENT_ROLE_ID=692258575241707560
 
 def isAdmin(ctx) -> bool:
     """
     Checks if the user who sent the command is an admin
     """
-    for role in ctx.author.roles:
-        if role.id == INSTRUCTOR_ROLE_ID:
-            return True
-    return False
+    return INSTRUCTOR_ROLE_ID in ctx.author.roles
+
+def isStudent(ctx) -> bool:
+    """
+    Checks if the user who issued the command is a student
+    """
+    return STUDENT_ROLE_ID in ctx.author.roles
 
 class roleManager(commands.Cog):
 
