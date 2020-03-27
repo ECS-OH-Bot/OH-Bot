@@ -12,6 +12,7 @@ INSTRUCTOR_ROLE_ID = int(os.getenv("INSTRUCTOR_ROLE_ID"))
 STUDENT_ROLE_ID = (os.getenv("STUDENT_ROLE_ID"))
 
 client = commands.Bot(command_prefix=">")
+client.remove_command("help")
 
 # region cogLoaders
 """
