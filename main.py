@@ -11,6 +11,10 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 client = commands.Bot(command_prefix=">")
 
+# region cogLoaders
+"""
+This group of commands may be completely useless and will likely be deprecated later
+"""
 @client.command
 async def load(ctx, extension):
     client.load_extension(f"cogs.{extension}")
@@ -18,6 +22,8 @@ async def load(ctx, extension):
 @client.command
 async def unload(ctx, extension):
     client.unload_extension(f"cogs.{extension}")
+
+# endregion
 
 if __name__ == '__main__':
     for filename in os.listdir("./cogs"):
