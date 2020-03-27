@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from .roleManager import getSender
 
 class NetTools(commands.Cog):
 
@@ -22,7 +23,7 @@ class NetTools(commands.Cog):
         CommandNotFound,
         CheckFailure
         """
-        sender = ctx.author._user
+        sender = getSender(ctx)
         if isinstance(err, commands.CommandNotFound):
             await ctx.send(
                 f"Command '{ctx.invoked_with}' does not exist\n"
