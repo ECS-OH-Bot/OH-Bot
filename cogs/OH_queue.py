@@ -12,8 +12,7 @@ class OH_Queue(commands.Cog):
         self.client = client
         self.OHQueue = list()
         self.admins = list()
-        # References to TextChannels are resolved by the pre invoke hook
-        self.bot_channel: Optional[TextChannel] = None
+        # Reference to TextChannel is resolved by the pre invoke hook
         self.queue_channel: Optional[TextChannel] = None
 
     async def cog_before_invoke(self, context: Context) -> None:
