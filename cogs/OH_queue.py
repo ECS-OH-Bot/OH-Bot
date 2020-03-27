@@ -41,23 +41,6 @@ class OH_Queue(commands.Cog):
 
         await self.queue_channel.send(message)
 
-    @commands.command(aliases=["listqueue", "lsq"])
-    async def listQueue(self, context: Context):
-        """
-        List all users in the queue
-        @ctx: context object containing information about the caller (this will be passed in by the discord API)
-        """
-        msg = ''
-        count = 1
-        for user in self._OHQueue:
-            name = f"{count}: {user.name}\n"
-            msg += name
-            count += 1
-        if len(self._OHQueue):
-            await self.bot_channel.send(f"Current users in queue:\n {msg}")
-        else:
-            await self.bot_channel.send("Queue is currently empty ")
-
     @commands.command(aliases=["enterqueue", "eq"])
     async def enterQueue(self, context: Context):
         """
