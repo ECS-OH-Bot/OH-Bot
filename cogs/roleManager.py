@@ -1,13 +1,8 @@
-import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 from discord.utils import get
+from main import STUDENT, INSTRUCTOR_ROLE_ID, STUDENT_ROLE_ID
 
-# TODO migrate these consts to .env
-ADMIN="Instructor"
-STUDENT="Student"
-INSTRUCTOR_ROLE_ID=202921174290792458
-STUDENT_ROLE_ID=692258575241707560
 
 def isAdmin(ctx) -> bool:
     """

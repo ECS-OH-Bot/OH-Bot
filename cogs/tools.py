@@ -1,8 +1,6 @@
-import discord
 from discord.ext import commands
-from .roleManager import isAdmin
 
-class NetTools(commands.Cog):
+class Tools(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -22,4 +20,4 @@ def setup(client):
     Called internally by discord API cog functionality
     I honestly have no idea how this works...
     """
-    client.add_cog(NetTools(client))
+    client.add_cog(Tools(client))

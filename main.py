@@ -2,10 +2,15 @@ import os
 from discord.ext import commands
 from dotenv import load_dotenv
 
-QUEUE_CHANNEL_ID=692894015565332521 # TODO: Move these to env?
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+QUEUE_CHANNEL_ID = os.getenv("QUEUE_CHANNEL_ID")
+ADMIN = os.getenv("ADMIN")
+STUDENT = os.getenv("STUDENT")
+INSTRUCTOR_ROLE_ID = int(os.getenv("INSTRUCTOR_ROLE_ID"))
+STUDENT_ROLE_ID = (os.getenv("STUDENT_ROLE_ID"))
+
 client = commands.Bot(command_prefix=">")
 
 # region cogLoaders

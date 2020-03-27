@@ -1,5 +1,5 @@
 from typing import Optional
-from discord import Client, TextChannel, Forbidden
+from discord import Client, TextChannel
 from discord.ext import commands
 from discord.ext.commands.context import Context
 from .roleManager import isAdmin, getSender
@@ -8,7 +8,7 @@ from main import QUEUE_CHANNEL_ID
 
 class OH_Queue(commands.Cog):
 
-    def __init__(self, client : Client):
+    def __init__(self, client: Client):
         self.client = client
         self.OHQueue = list()
         self.admins = list()
@@ -91,7 +91,7 @@ class OH_Queue(commands.Cog):
         @ctx: context object containing information about the caller
         """
         if len(self.OHQueue):
-            sender = context.author._user
+            sender = getSender(context)
             student = self.OHQueue.pop(0)
             await student.send(f"Summoning {student.mention} to {sender.mention} OH")
 
