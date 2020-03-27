@@ -1,7 +1,9 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands import Context
 from discord.utils import get
 
+# TODO migrate these consts to .env
 ADMIN="Instructor"
 STUDENT="Student"
 INSTRUCTOR_ROLE_ID=202921174290792458
@@ -24,6 +26,13 @@ def isStudent(ctx) -> bool:
         if role.id == STUDENT_ROLE_ID:
             return True
     return False
+
+def getSender(context: Context):
+    """
+    Determines caller of message
+    Returns caller as a user object
+    """
+    return context.author
 
 class roleManager(commands.Cog):
 

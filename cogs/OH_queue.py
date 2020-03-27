@@ -2,25 +2,19 @@ from typing import Optional
 from discord import Client, TextChannel, Forbidden
 from discord.ext import commands
 from discord.ext.commands.context import Context
-from .roleManager import isAdmin
+from .roleManager import isAdmin, getSender
 from main import QUEUE_CHANNEL_ID
+
 
 class OH_Queue(commands.Cog):
 
     def __init__(self, client : Client):
         self.client = client
-        self._OHQueue = list()
+        self.OHQueue = list()
         self.admins = list()
         # References to TextChannels are resolved by the pre invoke hook
         self.bot_channel: Optional[TextChannel] = None
         self.queue_channel: Optional[TextChannel] = None
-
-    def getSender(self, context: Context):
-        """
-        Determines caller of message
-        Returns caller as a user object
-        """
-        return self.client.get_user(context.author.id)
 
     async def cog_before_invoke(self, context: Context) -> None:
         if self.queue_channel is None:
@@ -33,13 +27,12 @@ class OH_Queue(commands.Cog):
         """
         Update the persistant queue message based on _OHQueue
         """
-        message = f"There are {len(self._OHQueue)} student(s) in the queue\n"
-        for (position, user) in enumerate(self._OHQueue):
-            message += f"{position + 1}, {user.name}\n"
+        message = f"There are {len(self.OHQueue)} student(s) in the queue\n"
+        for (position, user) in enumerate(self.OHQueue):
+            message += f"{position + 1}, {user.display_name}\n"
 
         previous_messages = await self.queue_channel.history().flatten()
         await self.queue_channel.delete_messages(previous_messages)
-
         await self.queue_channel.send(message)
 
     @commands.command(aliases=["enterqueue", "eq"])
@@ -51,11 +44,11 @@ class OH_Queue(commands.Cog):
         """
 
         # TODO: Look into using context.author instead of context.author._user
-        # Testing currently
-        sender = self.getSender(context)
-        if sender not in self._OHQueue:
-            self._OHQueue.append(sender)
-            position = len(self._OHQueue)
+        # RESPONSE: Works and works better so far
+        sender = getSender(context)
+        if sender not in self.OHQueue:
+            self.OHQueue.append(sender)
+            position = len(self.OHQueue)
 
             # Respond to user
             await sender.send(
@@ -64,7 +57,7 @@ class OH_Queue(commands.Cog):
             )
 
         else:
-            position = self._OHQueue.index(sender) + 1
+            position = self.OHQueue.index(sender) + 1
             await sender.send(
                 f"{sender.mention} you are already in the queue. Please wait to be called\n"
                 f"Current position: {position}"
@@ -79,9 +72,9 @@ class OH_Queue(commands.Cog):
         @ctx: context object containing information about the caller
         """
 
-        sender = self.getSender(context)
-        if sender in self._OHQueue:
-            self._OHQueue.remove(sender)
+        sender = getSender(context)
+        if sender in self.OHQueue:
+            self.OHQueue.remove(sender)
             await sender.send(f"{sender.mention} you have been removed from the queue")
         else:
             await sender.send(f"{sender.mention} you were not in the queue")
@@ -97,9 +90,9 @@ class OH_Queue(commands.Cog):
         Dequeue a student from the queue and notify them
         @ctx: context object containing information about the caller
         """
-        if len(self._OHQueue):
+        if len(self.OHQueue):
             sender = context.author._user
-            student = self._OHQueue.pop(0)
+            student = self.OHQueue.pop(0)
             await student.send(f"Summoning {student.mention} to {sender.mention} OH")
 
         await context.message.delete()
@@ -112,8 +105,8 @@ class OH_Queue(commands.Cog):
         Clears all students from the queue
         @ctx: context object containing information about the caller
         """
-        sender = self.getSender(context)
-        self._OHQueue.clear()
+        sender = getSender(context)
+        self.OHQueue.clear()
         await sender.send(f"{sender.mention} has cleared the queue")
         await context.message.delete()
 
