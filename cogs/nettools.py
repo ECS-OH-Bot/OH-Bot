@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+
 class NetTools(commands.Cog):
 
     def __init__(self, client):
@@ -34,6 +35,8 @@ class NetTools(commands.Cog):
                 f"{sender.mention} does not have permission to use {ctx.invoked_with}\n"
                 f"If you think this is a mistake DM the Admin: Grant Gilson"
             )
+        if isinstance(err, Exception):
+            print(err)
 
     #Commands
     @commands.command()

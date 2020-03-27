@@ -8,7 +8,6 @@ BOT_CHANNEL_ID=692585035609669632
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-
 client = commands.Bot(command_prefix=">")
 
 # region cogLoaders
