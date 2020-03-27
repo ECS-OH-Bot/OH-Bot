@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from discord.utils import get
-from main import BOT_CHANNEL_ID
 
 ADMIN="Instructor"
 STUDENT="Student"
@@ -32,19 +31,14 @@ class roleManager(commands.Cog):
         self.client = client
         self.channel = None  # This will be populated later in execution
 
-    def makeChannel(self) -> None:
-        if self.channel is None:
-            self.channel = self.client.get_channel(BOT_CHANNEL_ID)
-
     @commands.Cog.listener()
     async def on_member_join(self, member):
         """
         On new student joining guild assign them student role
         """
         role = get(member.guild.roles, name=STUDENT)
-        self.makeChannel()
         await member.add_roles(role)
-        await self.channel.send(f"{member.mention} welcome! You have been promoted to the role of Student")
+        await member.send(f"{member.mention} welcome! You have been promoted to the role of Student")
 
 
 def setup(client):
