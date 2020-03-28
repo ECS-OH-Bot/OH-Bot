@@ -2,13 +2,12 @@ from typing import Optional, List
 from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions, Member, VoiceState
 from discord.ext import commands
 from discord.ext.commands.context import Context
-from .roleManager import isAdmin, getSender, getGuildMemberFromUser
-from main import QUEUE_CHANNEL_ID, WAITING_ROOM_CHANNEL_ID, DISCORD_GUILD
-
+from main import WAITING_ROOM_CHANNEL_ID, QUEUE_CHANNEL_ID, DISCORD_GUILD_ID
+from cogs.tools import selfClean
 
 class OH_Queue(commands.Cog):
 
-    def __init__(self, client : Client):
+    def __init__(self, client: Client):
         self.client = client
         self.OHQueue: List[Member] = list()
         self.admins = list()
@@ -84,6 +83,7 @@ breakout rooms when you are called on, you will be removed from the queue!**")
                 f"{sender.mention} you are already in the queue. Please wait to be called\n"
                 f"Current position: {position}"
             )
+        await selfClean(context)
 
 
     @commands.command(aliases=['leavequeue', 'lq'])
@@ -99,6 +99,7 @@ breakout rooms when you are called on, you will be removed from the queue!**")
             await sender.send(f"{sender.mention} you have been removed from the queue")
         else:
             await sender.send(f"{sender.mention} you were not in the queue")
+        await selfClean(context)
 
 
     @commands.command(aliases=["dequeue", 'dq'])
@@ -140,6 +141,7 @@ channel")
         sender = getSender(context)
         self.OHQueue.clear()
         await sender.send(f"{sender.mention} has cleared the queue")
+        await selfClean(context)
 
 
 def setup(client):

@@ -1,15 +1,11 @@
 from typing import Union, Optional
-from main import DISCORD_GUILD
+from main import DISCORD_GUILD_ID
 from discord import Client, Member, User, Guild
 from discord.ext import commands
 from discord.ext.commands import Context
 from discord.utils import get
+from main import STUDENT, INSTRUCTOR_ROLE_ID, STUDENT_ROLE_ID
 
-# TODO migrate these consts to .env
-ADMIN="Instructor"
-STUDENT="Student"
-INSTRUCTOR_ROLE_ID=202921174290792458
-STUDENT_ROLE_ID=692258575241707560
 
 async def getGuildMemberFromUser(user: User) -> Optional[Member]:
     """
@@ -21,9 +17,9 @@ async def getGuildMemberFromUser(user: User) -> Optional[Member]:
 
     # Retrieve the guild and member, from cache preferably.
 
-    guild = client.get_guild(DISCORD_GUILD)
+    guild = client.get_guild(DISCORD_GUILD_ID)
     if guild is None:
-        guild = await client.fetch_guild(DISCORD_GUILD)
+        guild = await client.fetch_guild(DISCORD_GUILD_ID)
 
     member = guild.get_member(user.id)
     if member is None:
@@ -40,6 +36,7 @@ async def isAdmin(ctx: Context) -> bool:
     if isinstance(sender, User):
         # If the message is a DM, we need to look up the authors roles in the server
         member = await getGuildMemberFromUser(sender)
+
         if member is None:
             return False
         roles = member.roles
@@ -52,7 +49,7 @@ async def isAdmin(ctx: Context) -> bool:
 
 def isStudent(ctx: Context) -> bool:
     """
-    Checks if the user who sent the command is an admin
+    Checks if the user who sent the command is an student
     """
     for role in ctx.author.roles:
         if role.id == STUDENT_ROLE_ID:
@@ -67,11 +64,12 @@ def getSender(context: Context) -> Union[User, Member]:
     """
     return context.author
 
+
 class roleManager(commands.Cog):
     client = None
+
     def __init__(self, client: Client):
         roleManager.client = client
-        self.channel = None  # This will be populated later in execution
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -81,6 +79,7 @@ class roleManager(commands.Cog):
         role = get(member.guild.roles, name=STUDENT)
         await member.add_roles(role)
         await member.send(f"{member.mention} welcome! You have been promoted to the role of Student")
+
 
 def setup(client):
     """

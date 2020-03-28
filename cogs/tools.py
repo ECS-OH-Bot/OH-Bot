@@ -1,8 +1,15 @@
-import discord
 from discord.ext import commands
-from .roleManager import isAdmin
+from discord.ext.commands import Context
 
-class NetTools(commands.Cog):
+
+async def selfClean(context: Context):
+    """
+    Deletes the message that invoked a command is possible
+    """
+    if context.guild is not None:
+        await context.message.delete()
+
+class Tools(commands.Cog):
 
     def __init__(self, client):
         self.client = client
@@ -17,9 +24,11 @@ class NetTools(commands.Cog):
         """
         await ctx.channel.purge(limit=amount)
 
+
+
 def setup(client):
     """
     Called internally by discord API cog functionality
     I honestly have no idea how this works...
     """
-    client.add_cog(NetTools(client))
+    client.add_cog(Tools(client))
