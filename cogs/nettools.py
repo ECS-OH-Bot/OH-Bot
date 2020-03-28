@@ -1,7 +1,6 @@
 from discord import Client
 from discord.ext import commands
 from discord.ext.commands import Context
-
 from cogs.roleManager import getSender
 
 
@@ -26,7 +25,9 @@ class NetTools(commands.Cog):
         CommandNotFound,
         CheckFailure
         """
+
         sender = getSender(context)
+
         if isinstance(err, commands.CommandNotFound):
             await context.send(
                 f"Command '{context.invoked_with}' does not exist\n"

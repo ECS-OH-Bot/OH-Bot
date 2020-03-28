@@ -9,24 +9,11 @@ QUEUE_CHANNEL_ID = os.getenv("QUEUE_CHANNEL_ID")
 ADMIN = os.getenv("ADMIN")
 STUDENT = os.getenv("STUDENT")
 INSTRUCTOR_ROLE_ID = int(os.getenv("INSTRUCTOR_ROLE_ID"))
-STUDENT_ROLE_ID = (os.getenv("STUDENT_ROLE_ID"))
+STUDENT_ROLE_ID = int(os.getenv("STUDENT_ROLE_ID"))
+DISCORD_GUILD = os.getenv("DISCORD_GUILD")
 
 client = commands.Bot(command_prefix=">")
 client.remove_command("help")
-
-# region cogLoaders
-"""
-This group of commands may be completely useless and will likely be deprecated later
-"""
-@client.command
-async def load(ctx, extension):
-    client.load_extension(f"cogs.{extension}")
-
-@client.command
-async def unload(ctx, extension):
-    client.unload_extension(f"cogs.{extension}")
-
-# endregion
 
 if __name__ == '__main__':
     for filename in os.listdir("./cogs"):
