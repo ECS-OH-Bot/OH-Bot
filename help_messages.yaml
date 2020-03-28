@@ -1,0 +1,42 @@
+aliases:
+  - &queuehelp_student '
+      **Enter the OH queue by using the following command:**
+
+      `>enterqueue or >eq`
+
+      ------------
+
+
+      **Leave the OH queue by using the following command:**
+
+      `>leavequeue or >lq`
+
+      ------------
+
+
+      '
+
+
+  - &queuehelp_admin '
+      **Clear the OH queue by using the following command:**
+
+      `>leavequeue or >lq`
+
+      ------------
+
+
+      **Call a student into your OH session by using the following command:**
+
+      `>dequeue or >dq`
+
+      ------------
+
+
+      '
+admin: !join ["**Commands**", "\n\n", *queuehelp_admin, *queuehelp_student]
+
+
+student: !join ["**Commands**", "\n\n", *queuehelp_student]
+
+
+

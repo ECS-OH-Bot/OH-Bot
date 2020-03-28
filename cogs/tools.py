@@ -1,5 +1,9 @@
+import yaml
 from discord.ext import commands
 from discord.ext.commands import Context
+from yaml import load, add_constructor
+
+from cogs.roleManager import isAdmin, getSender
 
 
 async def selfClean(context: Context):
@@ -15,6 +19,16 @@ class Tools(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+        def join(loader, node):
+            seq = loader.construct_sequence(node)
+            return ''.join([str(i) for i in seq])
+
+        add_constructor('!join', join)
+
+        with open('help_messages.yaml', 'r') as file:
+            self.help_messages = load(file, Loader=yaml.Loader)
+
+
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount=1):
@@ -24,6 +38,14 @@ class Tools(commands.Cog):
         @amount
         """
         await ctx.channel.purge(limit=amount)
+
+    @commands.command()
+    async def help(self, ctx):
+        help_string = self.help_messages['admin'] if await isAdmin(ctx) \
+            else self.help_messages['student']
+        
+        await getSender(ctx).send(help_string)
+        await ctx.message.delete()
 
 
 
