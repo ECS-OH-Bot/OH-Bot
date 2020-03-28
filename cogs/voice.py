@@ -3,12 +3,15 @@ Credit of this section goes to
 https://github.com/SamSanai/VoiceMaster-Discord-Bot
 """
 import asyncio
+from logging import getLogger
 import sqlite3
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 from cogs.roleManager import getSender
 from cogs.tools import selfClean
+
+logger = getLogger(__name__)
 
 
 class voice(commands.Cog):

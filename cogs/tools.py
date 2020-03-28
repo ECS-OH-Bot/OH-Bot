@@ -1,9 +1,12 @@
-import yaml
+from logging import getLogger
+
 from discord.ext import commands
 from discord.ext.commands import Context
 from yaml import load, add_constructor
 
 from cogs.roleManager import isAdmin, getSender
+
+logger = getLogger(__name__)
 
 
 async def selfClean(context: Context):

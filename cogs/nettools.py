@@ -1,7 +1,11 @@
+from logging import getLogger
+
 from discord import Client
 from discord.ext import commands
 from discord.ext.commands import Context
 from cogs.roleManager import getSender
+
+logger = getLogger(__name__)
 
 
 class NetTools(commands.Cog):

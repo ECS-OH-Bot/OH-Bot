@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Union
 from main import DISCORD_GUILD_ID
 from discord import Client, Member, User, Guild
@@ -5,6 +6,8 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from discord.utils import get
 from main import STUDENT, INSTRUCTOR_ROLE_ID, STUDENT_ROLE_ID
+
+logger = getLogger(__name__)
 
 
 # This will be resolved during cog setup

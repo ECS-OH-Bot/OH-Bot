@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Optional
 
 import discord
@@ -7,6 +8,9 @@ from discord.ext.commands.context import Context
 from .roleManager import isAdmin, getSender
 from main import QUEUE_CHANNEL_ID, DISCORD_GUILD_ID
 from cogs.tools import selfClean
+
+logger = getLogger(__name__)
+
 
 class OH_Queue(commands.Cog):
 
