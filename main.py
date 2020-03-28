@@ -1,5 +1,7 @@
+import discord
 import os
 from discord.ext import commands
+from discord.ext.commands import Context
 from dotenv import load_dotenv
 
 
@@ -14,6 +16,9 @@ DISCORD_GUILD_ID = int(os.getenv("DISCORD_GUILD_ID"))
 
 client = commands.Bot(command_prefix=">")
 client.remove_command("help")
+
+
+
 
 if __name__ == '__main__':
     for filename in os.listdir("./cogs"):

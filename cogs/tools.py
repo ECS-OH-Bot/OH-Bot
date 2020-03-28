@@ -9,6 +9,7 @@ async def selfClean(context: Context):
     if context.guild is not None:
         await context.message.delete()
 
+
 class Tools(commands.Cog):
 
     def __init__(self, client):

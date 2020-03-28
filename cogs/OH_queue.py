@@ -1,4 +1,6 @@
 from typing import Optional
+
+import discord
 from discord import Client, TextChannel, DMChannel, Permissions
 from discord.ext import commands
 from discord.ext.commands.context import Context
@@ -109,6 +111,44 @@ class OH_Queue(commands.Cog):
         sender = getSender(context)
         self.OHQueue.clear()
         await sender.send(f"{sender.mention} has cleared the queue")
+        await selfClean(context)
+
+    @commands.group()
+    async def queue(self, context: Context):
+        pass
+
+    # This is a subcommand of queue
+    # invoked by >queue help
+    # you may want to move this back to a cog command instead of a subcommand
+    @queue.command()
+    async def help(self, context: Context):
+        embed = discord.Embed(title="Help", description="", color=0x7289da)
+        embed.set_author(
+            name="OH Bot",
+            url="https://discordbots.org/bot/472911936951156740",
+            icon_url="https://i.imgur.com/i7vvOo5.png"
+        )
+
+        embed.add_field(
+            name=f'**Commands**',
+            value=f'**Enter the OH queue by using the following command:**\n\n`>enterqueue or >eq`\n\n------------\n\n'
+                  f'**Leave the OH queue by using the following command:**\n\n`>leavequeue or >lq`\n\n------------\n\n',
+            inline=False
+        )
+        if isAdmin(context):
+            adminEmbed = discord.Embed(title="Admin Help", description="", color=0x7289da)
+            adminEmbed.set_author(
+                name="OH Bot",
+                url="https://discordbots.org/bot/472911936951156740",
+                icon_url="https://i.imgur.com/i7vvOo5.png"
+            )
+            adminEmbed.add_field(
+                name=f"**Admin only commands",
+                value=f'**Clear the OH queue by using the following command:**\n\n`>leavequeue or >lq`\n\n------------\n\n'
+                      f'**Call a student into your OH session by using the following command:**\n\n`>dequeue or >dq`\n\n------------\n\n',
+                inline=False
+            )
+        await getSender(context).send(embed=embed)
         await selfClean(context)
 
 

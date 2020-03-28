@@ -84,7 +84,14 @@ class voice(commands.Cog):
         conn.commit()
         conn.close()
 
-    @commands.command()
+    @commands.group()
+    async def voice(self, context: Context):
+        pass
+
+    # This is a subcommand of voice
+    # invoked by >voice help
+    # you may want to move this back to a cog command instead of a subcommand
+    @voice.command()
     async def help(self, context: Context):
         embed = discord.Embed(title="Help", description="", color=0x7289da)
         embed.set_author(name="Voice Create", url="https://discordbots.org/bot/472911936951156740",
@@ -100,10 +107,6 @@ class voice(commands.Cog):
                         inline=False)
         await getSender(context).send(embed=embed)
         await selfClean(context)
-
-    @commands.group()
-    async def voice(self, context: Context):
-        pass
 
     @voice.command()
     @commands.has_permissions(manage_messages=True)
