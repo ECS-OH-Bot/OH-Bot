@@ -1,6 +1,6 @@
 import aiohttp
 import discord
-from typing import Union
+from typing import Union, Optional
 from main import DISCORD_GUILD
 from discord import Client, Member, User, Guild
 from discord.ext import commands
@@ -13,7 +13,25 @@ STUDENT="Student"
 INSTRUCTOR_ROLE_ID=202921174290792458
 STUDENT_ROLE_ID=692258575241707560
 
-# This will be resolved during cog setup
+async def getGuildMemberFromUser(user: User) -> Optional[Member]:
+    """
+    Resolves a user into a member of the guild
+    :param user: The user instance
+    :return: The member instance, or None if the user is not a member of the guild
+    """
+    client = roleManager.client
+
+    guild = client.get_guild(DISCORD_GUILD)
+    if guild is None:
+        # The guild was not in the cache, do an API call to fetch it
+        guild = await client.fetch_guild(DISCORD_GUILD)
+
+    # Member status can change frequently and during operation
+    # Thus, we shouldn't use the cached version.
+    member = await guild.fetch_member(user.id)
+
+    return member
+
 async def isAdmin(ctx: Context) -> bool:
     """
     Checks if the user who sent the command is an admin
@@ -22,17 +40,9 @@ async def isAdmin(ctx: Context) -> bool:
     roles = None
     if isinstance(sender, User):
         # If the message is a DM, we need to look up the authors roles in the server
-        client = roleManager.client
-
-        guild = client.get_guild(DISCORD_GUILD)
-        if guild is None:
-            # The guild was not in the cache, do an API call to fetch it
-            guild = await client.fetch_guild(DISCORD_GUILD)
-
-        member = guild.get_member(sender.id)
+        member = await getGuildMemberFromUser(sender)
         if member is None:
-            member = await guild.fetch_member(sender.id)
-
+            return False
         roles = member.roles
     else:
         # Otherwise, the message came from within the server. The roles can be extracted from the context
