@@ -1,4 +1,8 @@
+import aiohttp
 import discord
+from typing import Union
+from main import DISCORD_GUILD
+from discord import Client, Member, User, Guild
 from discord.ext import commands
 from discord.ext.commands import Context
 from discord.utils import get
@@ -9,16 +13,35 @@ STUDENT="Student"
 INSTRUCTOR_ROLE_ID=202921174290792458
 STUDENT_ROLE_ID=692258575241707560
 
-def isAdmin(ctx) -> bool:
+# This will be resolved during cog setup
+async def isAdmin(ctx: Context) -> bool:
     """
     Checks if the user who sent the command is an admin
     """
-    for role in ctx.author.roles:
-        if role.id == INSTRUCTOR_ROLE_ID:
-            return True
-    return False
+    sender = getSender(ctx)
+    roles = None
+    if isinstance(sender, User):
+        # If the message is a DM, we need to look up the authors roles in the server
+        client = roleManager.client
 
-def isStudent(ctx) -> bool:
+        guild = client.get_guild(DISCORD_GUILD)
+        if guild is None:
+            # The guild was not in the cache, do an API call to fetch it
+            guild = await client.fetch_guild(DISCORD_GUILD)
+
+        member = guild.get_member(sender.id)
+        if member is None:
+            member = await guild.fetch_member(sender.id)
+
+        roles = member.roles
+    else:
+        # Otherwise, the message came from within the server. The roles can be extracted from the context
+        roles = ctx.author.roles
+
+    return any(role.id == INSTRUCTOR_ROLE_ID for role in roles)
+
+
+def isStudent(ctx: Context) -> bool:
     """
     Checks if the user who sent the command is an admin
     """
@@ -27,7 +50,8 @@ def isStudent(ctx) -> bool:
             return True
     return False
 
-def getSender(context: Context):
+
+def getSender(context: Context) -> Union[User, Member]:
     """
     Determines caller of message
     Returns caller as a user object
@@ -35,9 +59,9 @@ def getSender(context: Context):
     return context.author
 
 class roleManager(commands.Cog):
-
-    def __init__(self, client):
-        self.client = client
+    client = None
+    def __init__(self, client: Client):
+        roleManager.client = client
         self.channel = None  # This will be populated later in execution
 
     @commands.Cog.listener()
@@ -48,7 +72,6 @@ class roleManager(commands.Cog):
         role = get(member.guild.roles, name=STUDENT)
         await member.add_roles(role)
         await member.send(f"{member.mention} welcome! You have been promoted to the role of Student")
-
 
 def setup(client):
     """

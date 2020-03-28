@@ -1,9 +1,9 @@
 from typing import Optional
-from discord import Client, TextChannel, Forbidden
+from discord import Client, TextChannel, DMChannel, Permissions
 from discord.ext import commands
 from discord.ext.commands.context import Context
 from .roleManager import isAdmin, getSender
-from main import QUEUE_CHANNEL_ID
+from main import QUEUE_CHANNEL_ID, DISCORD_GUILD
 
 
 class OH_Queue(commands.Cog):
@@ -12,8 +12,7 @@ class OH_Queue(commands.Cog):
         self.client = client
         self.OHQueue = list()
         self.admins = list()
-        # References to TextChannels are resolved by the pre invoke hook
-        self.bot_channel: Optional[TextChannel] = None
+        # Reference to TextChannel is resolved by the pre invoke hook
         self.queue_channel: Optional[TextChannel] = None
 
     async def cog_before_invoke(self, context: Context) -> None:
@@ -22,6 +21,12 @@ class OH_Queue(commands.Cog):
 
     async def cog_after_invoke(self, context: Context) -> None:
         await self.onQueueUpdate()
+
+        # Delete the command message if we have permission to do so
+        if context.channel.permissions_for is not None:
+            permissions: Permissions = context.channel.permissions_for(context.me)
+            if permissions.manage_messages:
+                await context.message.delete()
 
     async def onQueueUpdate(self) -> None:
         """
@@ -43,8 +48,6 @@ class OH_Queue(commands.Cog):
         @ctx: context object containing information about the caller
         """
 
-        # TODO: Look into using context.author instead of context.author._user
-        # RESPONSE: Works and works better so far
         sender = getSender(context)
         if sender not in self.OHQueue:
             self.OHQueue.append(sender)
@@ -62,7 +65,6 @@ class OH_Queue(commands.Cog):
                 f"{sender.mention} you are already in the queue. Please wait to be called\n"
                 f"Current position: {position}"
             )
-        await context.message.delete()
 
 
     @commands.command(aliases=['leavequeue', 'lq'])
@@ -79,8 +81,6 @@ class OH_Queue(commands.Cog):
         else:
             await sender.send(f"{sender.mention} you were not in the queue")
 
-        await context.message.delete()
-
 
 
     @commands.command(aliases=["dequeue", 'dq'])
@@ -91,11 +91,9 @@ class OH_Queue(commands.Cog):
         @ctx: context object containing information about the caller
         """
         if len(self.OHQueue):
-            sender = context.author._user
+            sender = getSender(context)
             student = self.OHQueue.pop(0)
             await student.send(f"Summoning {student.mention} to {sender.mention} OH")
-
-        await context.message.delete()
 
 
     @commands.command(aliases=["cq", "clearqueue"])
@@ -108,7 +106,6 @@ class OH_Queue(commands.Cog):
         sender = getSender(context)
         self.OHQueue.clear()
         await sender.send(f"{sender.mention} has cleared the queue")
-        await context.message.delete()
 
 
 def setup(client):
