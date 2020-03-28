@@ -2,11 +2,13 @@ import os
 from discord.ext import commands
 from dotenv import load_dotenv
 
-QUEUE_CHANNEL_ID=692894015565332521 # TODO: Move these to env?
-
 load_dotenv()
+
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 DISCORD_GUILD = os.getenv("DISCORD_GUILD")
+QUEUE_CHANNEL_ID = os.getenv("QUEUE_CHANNEL_ID")
+WAITING_ROOM_CHANNEL_ID = os.getenv("WAITING_ROOM_CHANNEL_ID")
+
 client = commands.Bot(command_prefix=">")
 
 if __name__ == '__main__':
