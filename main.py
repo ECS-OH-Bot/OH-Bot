@@ -1,9 +1,12 @@
-import discord
+from logging import getLogger
 import os
+
 from discord.ext import commands
-from discord.ext.commands import Context
 from dotenv import load_dotenv
 
+from logger_util import logging_setup
+
+logger = getLogger(__name__)
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -18,10 +21,11 @@ client = commands.Bot(command_prefix=">")
 client.remove_command("help")
 
 
-
-
 if __name__ == '__main__':
+    logging_setup(logger)
+    logger.debug("Logging Initialized")
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
+            logger.debug(f"loading in cog: {filename}")
             client.load_extension(f"cogs.{filename[:-3]}")
     client.run(BOT_TOKEN)
