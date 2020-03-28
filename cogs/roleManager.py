@@ -1,5 +1,3 @@
-import aiohttp
-import discord
 from typing import Union, Optional
 from main import DISCORD_GUILD
 from discord import Client, Member, User, Guild
@@ -21,14 +19,15 @@ async def getGuildMemberFromUser(user: User) -> Optional[Member]:
     """
     client = roleManager.client
 
+    # Retrieve the guild and member, from cache preferably.
+
     guild = client.get_guild(DISCORD_GUILD)
     if guild is None:
-        # The guild was not in the cache, do an API call to fetch it
         guild = await client.fetch_guild(DISCORD_GUILD)
 
-    # Member status can change frequently and during operation
-    # Thus, we shouldn't use the cached version.
-    member = await guild.fetch_member(user.id)
+    member = guild.get_member(user.id)
+    if member is None:
+        member = await guild.fetch_member(user.id)
 
     return member
 

@@ -1,5 +1,5 @@
-from typing import Optional
-from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions
+from typing import Optional, List
+from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions, Member, VoiceState
 from discord.ext import commands
 from discord.ext.commands.context import Context
 from .roleManager import isAdmin, getSender, getGuildMemberFromUser
@@ -10,7 +10,7 @@ class OH_Queue(commands.Cog):
 
     def __init__(self, client : Client):
         self.client = client
-        self.OHQueue = list()
+        self.OHQueue: List[Member] = list()
         self.admins = list()
         # Channel references are resolved by the pre invoke hook
         self.queue_channel: Optional[TextChannel] = None
@@ -53,7 +53,11 @@ class OH_Queue(commands.Cog):
 
         sender = getSender(context)
         if sender not in self.OHQueue:
-            self.OHQueue.append(sender)
+            if isinstance(sender, User):
+                self.OHQueue.append(await getGuildMemberFromUser(sender))
+            else:
+                self.OHQueue.append(sender)
+
             position = len(self.OHQueue)
 
             # Respond to user
@@ -66,13 +70,13 @@ class OH_Queue(commands.Cog):
             if isinstance(sender, User) or sender.voice is None:
                 # If the command comes from DMs or the user is not connected to voice, instruct them to join
                 invite: Invite = await self.waiting_room.create_invite()
-                await sender.send("Please join the waiting room until you are called on. **If you leave the waiting room \
-you will be removed from the queue.**")
+                await sender.send("Please join the waiting room until you are called on. **If you are not in the \
+waiting room or breakout rooms when you are called on, you will be removed from the queue!**")
                 await sender.send(invite.url)
             else:
                 await sender.move_to(self.waiting_room)
-                await sender.send("I have moved you into the waiting room. **If you leave the waiting room you will be \
-removed from the queue.**")
+                await sender.send("I have moved you into the waiting room. **If you are not in the waiting room or \
+breakout rooms when you are called on, you will be removed from the queue!**")
 
         else:
             position = self.OHQueue.index(sender) + 1
@@ -93,11 +97,8 @@ removed from the queue.**")
         if sender in self.OHQueue:
             self.OHQueue.remove(sender)
             await sender.send(f"{sender.mention} you have been removed from the queue")
-            # Remove this student from the voice channels
-            await sender.move_to(None)
         else:
             await sender.send(f"{sender.mention} you were not in the queue")
-
 
 
     @commands.command(aliases=["dequeue", 'dq'])
@@ -107,11 +108,27 @@ removed from the queue.**")
         Dequeue a student from the queue and notify them
         @ctx: context object containing information about the caller
         """
-        if len(self.OHQueue):
-            sender = getSender(context)
-            student = self.OHQueue.pop(0)
-            await student.send(f"Summoning {student.mention} to {sender.mention} OH")
+        sender = getSender(context)
+        if isinstance(sender, User):
+            # If the command was sent via DM, tell them to do it from the bot channel instead
+            await sender.send("Due to technical limitations, you must send the dequeue command from the bot commands \
+channel")
+            return
 
+        if sender.voice is None:
+            await sender.send("You must be connected to a voice channel to do this. The queue has not been modified.")
+
+        elif len(self.OHQueue):
+            student = self.OHQueue.pop(0)
+            if student.voice is None:
+                await sender.send(f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot\
+ move them into your voice channel. They have been removed from the queue.")
+            else:
+                await student.send(f"You are being summoned to {sender.mention}'s OH")
+                # Add this student to the voice chat
+                await student.move_to(sender.voice.channel)
+        else:
+            await sender.send("The queue is empty. Perhaps now is a good time for a coffee break?")
 
     @commands.command(aliases=["cq", "clearqueue"])
     @commands.check(isAdmin)
