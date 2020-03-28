@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.ext.commands.context import Context
 from main import WAITING_ROOM_CHANNEL_ID, QUEUE_CHANNEL_ID, DISCORD_GUILD_ID
 from cogs.tools import selfClean
+from cogs.roleManager import isAdmin, getGuildMemberFromUser, getSender
 
 class OH_Queue(commands.Cog):
 
