@@ -37,7 +37,7 @@ async def isAdmin(ctx: Context) -> bool:
 
 def isStudent(ctx: Context) -> bool:
     """
-    Checks if the user who sent the command is an admin
+    Checks if the user who sent the command is an student
     """
     for role in ctx.author.roles:
         if role.id == STUDENT_ROLE_ID:
@@ -52,11 +52,12 @@ def getSender(context: Context) -> Union[User, Member]:
     """
     return context.author
 
+
 class roleManager(commands.Cog):
     client = None
+
     def __init__(self, client: Client):
         roleManager.client = client
-        self.channel = None  # This will be populated later in execution
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -66,6 +67,7 @@ class roleManager(commands.Cog):
         role = get(member.guild.roles, name=STUDENT)
         await member.add_roles(role)
         await member.send(f"{member.mention} welcome! You have been promoted to the role of Student")
+
 
 def setup(client):
     """

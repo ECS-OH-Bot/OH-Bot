@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord.ext.commands.context import Context
 from .roleManager import isAdmin, getSender
 from main import QUEUE_CHANNEL_ID, DISCORD_GUILD
-
+from cogs.tools import selfClean
 
 class OH_Queue(commands.Cog):
 
@@ -65,6 +65,7 @@ class OH_Queue(commands.Cog):
                 f"{sender.mention} you are already in the queue. Please wait to be called\n"
                 f"Current position: {position}"
             )
+        await selfClean(context)
 
 
     @commands.command(aliases=['leavequeue', 'lq'])
@@ -80,6 +81,7 @@ class OH_Queue(commands.Cog):
             await sender.send(f"{sender.mention} you have been removed from the queue")
         else:
             await sender.send(f"{sender.mention} you were not in the queue")
+        await selfClean(context)
 
 
 
@@ -94,6 +96,7 @@ class OH_Queue(commands.Cog):
             sender = getSender(context)
             student = self.OHQueue.pop(0)
             await student.send(f"Summoning {student.mention} to {sender.mention} OH")
+        await selfClean(context)
 
 
     @commands.command(aliases=["cq", "clearqueue"])
@@ -106,6 +109,7 @@ class OH_Queue(commands.Cog):
         sender = getSender(context)
         self.OHQueue.clear()
         await sender.send(f"{sender.mention} has cleared the queue")
+        await selfClean(context)
 
 
 def setup(client):

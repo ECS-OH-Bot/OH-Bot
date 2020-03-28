@@ -1,4 +1,13 @@
 from discord.ext import commands
+from discord.ext.commands import Context
+
+
+async def selfClean(context: Context):
+    """
+    Deletes the message that invoked a command is possible
+    """
+    if context.guild is not None:
+        await context.message.delete()
 
 class Tools(commands.Cog):
 
@@ -14,6 +23,8 @@ class Tools(commands.Cog):
         @amount
         """
         await ctx.channel.purge(limit=amount)
+
+
 
 def setup(client):
     """
