@@ -1,15 +1,17 @@
 """
 Defines constants used across multiple files in this project.
 Most of these constants are loaded from the environment variables
+This singleton also holds parsed arguments
 """
 from typing import Optional
 from dotenv import load_dotenv
 from os import getenv
+import argparse
 
 class Constants:
     instance: Optional['Constants'] = None
 
-    def __init__(self):
+    def __init__(self, args):
         if Constants.instance is not None:
             raise RuntimeError("Cannot reinstantiate Constants singleton")
         # Load variables from .env
@@ -30,6 +32,9 @@ class Constants:
         self.STUDENT = getenv("STUDENT")
         self.INSTRUCTOR_ROLE_ID = int(getenv("INSTRUCTOR_ROLE_ID"))
         self.STUDENT_ROLE_ID = int(getenv("STUDENT_ROLE_ID"))
+
+        # Program arguments
+        self.args = args
 
         Constants.instance = self
 
