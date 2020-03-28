@@ -3,7 +3,7 @@ from discord import Client, TextChannel, DMChannel, Permissions
 from discord.ext import commands
 from discord.ext.commands.context import Context
 from .roleManager import isAdmin, getSender
-from main import QUEUE_CHANNEL_ID, DISCORD_GUILD
+from main import QUEUE_CHANNEL_ID, DISCORD_GUILD_ID
 from cogs.tools import selfClean
 
 class OH_Queue(commands.Cog):

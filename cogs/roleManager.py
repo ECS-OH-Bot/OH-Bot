@@ -1,5 +1,5 @@
 from typing import Union
-from main import DISCORD_GUILD
+from main import DISCORD_GUILD_ID
 from discord import Client, Member, User, Guild
 from discord.ext import commands
 from discord.ext.commands import Context
@@ -18,10 +18,10 @@ async def isAdmin(ctx: Context) -> bool:
         # If the message is a DM, we need to look up the authors roles in the server
         client = roleManager.client
 
-        guild = client.get_guild(DISCORD_GUILD)
+        guild = client.get_guild(DISCORD_GUILD_ID)
         if guild is None:
             # The guild was not in the cache, do an API call to fetch it
-            guild = await client.fetch_guild(DISCORD_GUILD)
+            guild = await client.fetch_guild(DISCORD_GUILD_ID)
 
         member = guild.get_member(sender.id)
         if member is None:

@@ -5,12 +5,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-QUEUE_CHANNEL_ID = os.getenv("QUEUE_CHANNEL_ID")
+QUEUE_CHANNEL_ID = int(os.getenv("QUEUE_CHANNEL_ID"))
 ADMIN = os.getenv("ADMIN")
 STUDENT = os.getenv("STUDENT")
 INSTRUCTOR_ROLE_ID = int(os.getenv("INSTRUCTOR_ROLE_ID"))
 STUDENT_ROLE_ID = int(os.getenv("STUDENT_ROLE_ID"))
-DISCORD_GUILD = os.getenv("DISCORD_GUILD")
+DISCORD_GUILD_ID = int(os.getenv("DISCORD_GUILD_ID"))
 
 client = commands.Bot(command_prefix=">")
 client.remove_command("help")

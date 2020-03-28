@@ -106,6 +106,7 @@ class voice(commands.Cog):
         pass
 
     @voice.command()
+    @commands.has_permissions(manage_messages=True)
     async def setup(self, context: Context):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
