@@ -1,29 +1,38 @@
 import os
 from discord.ext import commands
-from dotenv import load_dotenv
+from constants import Constants, GetConstants
 
-load_dotenv()
+def main():
+    # Instantiate constants singleton
+    Constants()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+    # Create the discord.py bot
+    bot: commands.Bot = commands.Bot(command_prefix="/")
+    before_cog_load(bot)
+    load_cogs(bot)
+    after_cog_load(bot)
 
-# Guild
-DISCORD_GUILD_ID = int(os.getenv("DISCORD_GUILD_ID"))
+    # Start the bot
+    bot.run(GetConstants().BOT_TOKEN)
 
-# Channels
-WAITING_ROOM_CHANNEL_ID = int(os.getenv("WAITING_ROOM_CHANNEL_ID"))
-QUEUE_CHANNEL_ID = int(os.getenv("QUEUE_CHANNEL_ID"))
+def before_cog_load(bot: commands.Bot) -> None:
+    """
+    Called immediately before cogs are loaded and the client is run
+    :param bot: The instance of the bot
+    """
+    bot.remove_command("help")
 
-# Roles
-ADMIN = os.getenv("ADMIN")
-STUDENT = os.getenv("STUDENT")
-INSTRUCTOR_ROLE_ID = int(os.getenv("INSTRUCTOR_ROLE_ID"))
-STUDENT_ROLE_ID = int(os.getenv("STUDENT_ROLE_ID"))
+def after_cog_load(bot: commands.Bot) -> None:
+    """
+    Called immediately after cogs are loaded and the client is run
+    :param bot: The instance of the bot
+    """
+    pass
 
-client = commands.Bot(command_prefix=">")
-client.remove_command("help")
-
-if __name__ == '__main__':
+def load_cogs(bot: commands.Bot) -> None:
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
-            client.load_extension(f"cogs.{filename[:-3]}")
-    client.run(BOT_TOKEN)
+            bot.load_extension(f"cogs.{filename[:-3]}")
+
+if __name__ == '__main__':
+    main()
