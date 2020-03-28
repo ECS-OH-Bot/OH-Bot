@@ -15,7 +15,7 @@ class voice(commands.Cog):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_voice_state_update(self, member, after):
+    async def on_voice_state_update(self, member, before, after):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
         guildID = member.guild.id
