@@ -1,10 +1,13 @@
 from typing import Optional, List
-from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions, Member, VoiceState
+
+from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions, Member
 from discord.ext import commands
 from discord.ext.commands.context import Context
-from main import WAITING_ROOM_CHANNEL_ID, QUEUE_CHANNEL_ID, DISCORD_GUILD_ID
+
 from cogs.tools import selfClean
-from cogs.roleManager import isAdmin, getGuildMemberFromUser, getSender
+from cogs.user_utils import UserUtils
+
+from constants import GetConstants
 
 class OH_Queue(commands.Cog):
 
@@ -18,9 +21,9 @@ class OH_Queue(commands.Cog):
 
     async def cog_before_invoke(self, context: Context) -> None:
         if self.queue_channel is None:
-            self.queue_channel = await self.client.fetch_channel(QUEUE_CHANNEL_ID)
+            self.queue_channel = await self.client.fetch_channel(GetConstants().QUEUE_CHANNEL_ID)
         if self.waiting_room is None:
-            self.waiting_room = await self.client.fetch_channel(WAITING_ROOM_CHANNEL_ID)
+            self.waiting_room = await self.client.fetch_channel(GetConstants().WAITING_ROOM_CHANNEL_ID)
 
     async def cog_after_invoke(self, context: Context) -> None:
         await self.onQueueUpdate()
@@ -51,10 +54,11 @@ class OH_Queue(commands.Cog):
         @ctx: context object containing information about the caller
         """
 
-        sender = getSender(context)
+        sender = context.author
         if sender not in self.OHQueue:
+            # Append the Member instance to the queue.
             if isinstance(sender, User):
-                self.OHQueue.append(await getGuildMemberFromUser(sender))
+                self.OHQueue.append(await UserUtils.userToMember(sender))
             else:
                 self.OHQueue.append(sender)
 
@@ -94,7 +98,7 @@ breakout rooms when you are called on, you will be removed from the queue!**")
         @ctx: context object containing information about the caller
         """
 
-        sender = getSender(context)
+        sender = context.author
         if sender in self.OHQueue:
             self.OHQueue.remove(sender)
             await sender.send(f"{sender.mention} you have been removed from the queue")
@@ -104,13 +108,13 @@ breakout rooms when you are called on, you will be removed from the queue!**")
 
 
     @commands.command(aliases=["dequeue", 'dq'])
-    @commands.check(isAdmin)
+    @commands.check(UserUtils.isAdmin)
     async def dequeueStudent(self, context: Context):
         """
         Dequeue a student from the queue and notify them
         @ctx: context object containing information about the caller
         """
-        sender = getSender(context)
+        sender = context.author
         if isinstance(sender, User):
             # If the command was sent via DM, tell them to do it from the bot channel instead
             await sender.send("Due to technical limitations, you must send the dequeue command from the bot commands \
@@ -133,13 +137,13 @@ channel")
             await sender.send("The queue is empty. Perhaps now is a good time for a coffee break?")
 
     @commands.command(aliases=["cq", "clearqueue"])
-    @commands.check(isAdmin)
+    @commands.check(UserUtils.isAdmin)
     async def clearQueue(self, context: Context):
         """
         Clears all students from the queue
         @ctx: context object containing information about the caller
         """
-        sender = getSender(context)
+        sender = context.author
         self.OHQueue.clear()
         await sender.send(f"{sender.mention} has cleared the queue")
         await selfClean(context)

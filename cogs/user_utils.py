@@ -49,7 +49,7 @@ class UserUtils(commands.Cog):
         return any(role.id == GetConstants().INSTRUCTOR_ROLE_ID for role in roles)
 
     @classmethod
-    def isStudent(cls, context: commands.Context) -> bool:
+    async def isStudent(cls, context: commands.Context) -> bool:
         """
         Returns true if context.author has the Student role, false otherwise
         """
