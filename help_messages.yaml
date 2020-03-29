@@ -1,42 +1,103 @@
 aliases:
   - &queuehelp_student '
-      **Enter the OH queue by using the following command:**
+      *Enter the OH queue by using the following command:*
 
       `>enterqueue or >eq`
 
       ------------
 
 
-      **Leave the OH queue by using the following command:**
+      *Leave the OH queue by using the following command:*
 
       `>leavequeue or >lq`
 
       ------------
-
-
       '
 
-
   - &queuehelp_admin '
-      **Clear the OH queue by using the following command:**
+      *Clear the OH queue by using the following command:*
 
       `>leavequeue or >lq`
 
       ------------
 
 
-      **Call a student into your OH session by using the following command:**
+      *Call a student into your OH session by using the following command:*
 
       `>dequeue or >dq`
 
       ------------
-
-
       '
-admin: !join ["**Commands**", "\n\n", *queuehelp_admin, *queuehelp_student]
+
+  - &voicehelp '
+      *Lock your channel by using the following command:*
+
+      `>voice lock`
+
+      ------------
 
 
-student: !join ["**Commands**", "\n\n", *queuehelp_student]
+      *Unlock your channel by using the following command:*
+
+      `>voice unlock`
+
+      ------------
+
+
+      *Change your channel name by using the following command:*
+
+      `>voice name <name>`
+
+      *Example:* `>voice name EU 5kd+`
+
+      ------------
+
+
+      *Change your channel limit by using the following command:*
+
+      `>voice limit number`
+
+      *Example:* `>voice limit 2`
+
+      ------------
+
+
+      *Give users permission to join by using the following command:*
+
+      `>voice permit @person`
+
+      *Example:* `>voice permit @Sam#9452`
+
+      ------------
+
+
+      *Claim ownership of channel once the owner has left:*
+
+      `>voice claim`
+
+      *Example:* `>voice claim`
+
+      ------------
+
+
+      *Remove permission and the user from your channel using the following command:*
+
+      `>voice reject @person`
+
+      *Example:* `>voice reject @Sam#9452`
+      '
+
+queue_admin: !join ["**Queue Commands**", "\n\n", *queuehelp_admin, "\n\n", *queuehelp_student]
+
+queue_student: !join ["**Queue Commands**", "\n\n", *queuehelp_student]
+
+voice_help: !join ["**Voice Commands**", "\n\n", *voicehelp]
+
+all_admin: !join ["**All Commands**", "\n\n**Queue Commands**\n", *queuehelp_admin, "\n\n", *queuehelp_student, "\n\n\n**Voice Commands**\n", *voicehelp]
+
+all_student: !join ["**All Commands**", "\n\n**Queue Commands**\n", *queuehelp_student, "\n\n\n**Voice Commands**\n",  *voicehelp]
+
+
 
 
 
