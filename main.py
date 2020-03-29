@@ -1,29 +1,55 @@
 import os
 from discord.ext import commands
-from dotenv import load_dotenv
+from constants import Constants, GetConstants
 
-load_dotenv()
+# Argparse configuration
+import argparse
+parser = argparse.ArgumentParser(description="Enable debugging output")
+parser.add_argument('--debug', action='store_true')
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+def main():
+    # Instantiate constants singleton
+    # For convenience, this object holds onto command line arguments
+    Constants(parser.parse_args())
 
-# Guild
-DISCORD_GUILD_ID = int(os.getenv("DISCORD_GUILD_ID"))
+    # Create the discord.py bot
+    bot: commands.Bot = commands.Bot(command_prefix="/")
+    before_cog_load(bot)
+    load_cogs(bot)
+    after_cog_load(bot)
 
-# Channels
-WAITING_ROOM_CHANNEL_ID = int(os.getenv("WAITING_ROOM_CHANNEL_ID"))
-QUEUE_CHANNEL_ID = int(os.getenv("QUEUE_CHANNEL_ID"))
+    # Start the bot
+    bot.run(GetConstants().BOT_TOKEN)
 
-# Roles
-ADMIN = os.getenv("ADMIN")
-STUDENT = os.getenv("STUDENT")
-INSTRUCTOR_ROLE_ID = int(os.getenv("INSTRUCTOR_ROLE_ID"))
-STUDENT_ROLE_ID = int(os.getenv("STUDENT_ROLE_ID"))
+def before_cog_load(bot: commands.Bot) -> None:
+    """
+    Called immediately before cogs are loaded and the client is run
+    :param bot: The instance of the bot
+    """
 
-client = commands.Bot(command_prefix=">")
-client.remove_command("help")
+    # Remove the default help command so that we may implement a more sophisticated one
+    bot.remove_command("help")
 
-if __name__ == '__main__':
+    # When the bot is ready, print a message to the terminal.
+    async def on_ready(): print("The bot is online! Happy helping.")
+    bot.add_listener(on_ready)
+
+    # Add a ping command
+    # TODO: Is this needed?
+    @commands.command()
+    async def ping(context: commands.Context): await context.author.send(f"Pong! {round(bot.latency * 1000)}")
+
+def after_cog_load(bot: commands.Bot) -> None:
+    """
+    Called immediately after cogs are loaded and the client is run
+    :param bot: The instance of the bot
+    """
+    pass
+
+def load_cogs(bot: commands.Bot) -> None:
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
-            client.load_extension(f"cogs.{filename[:-3]}")
-    client.run(BOT_TOKEN)
+            bot.load_extension(f"cogs.{filename[:-3]}")
+
+if __name__ == '__main__':
+    main()
