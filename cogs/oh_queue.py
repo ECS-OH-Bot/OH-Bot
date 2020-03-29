@@ -1,10 +1,11 @@
 from typing import Optional, List
 
-from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions, Member
+from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions, Member, Message
 from discord.ext import commands
 from discord.ext.commands.context import Context
 
-from cogs.tools import selfClean
+from tabulate import tabulate
+
 from cogs.user_utils import UserUtils
 
 from constants import GetConstants
@@ -26,25 +27,42 @@ class OH_Queue(commands.Cog):
             self.waiting_room = await self.client.fetch_channel(GetConstants().WAITING_ROOM_CHANNEL_ID)
 
     async def cog_after_invoke(self, context: Context) -> None:
-        await self.onQueueUpdate()
-
         # Delete the command message if we have permission to do so
         if context.channel.permissions_for is not None:
             permissions: Permissions = context.channel.permissions_for(context.me)
             if permissions.manage_messages:
                 await context.message.delete()
 
+        await self.onQueueUpdate()
+
     async def onQueueUpdate(self) -> None:
         """
         Update the persistant queue message based on _OHQueue
         """
-        message = f"There are {len(self.OHQueue)} student(s) in the queue\n"
-        for (position, user) in enumerate(self.OHQueue):
-            message += f"{position + 1}, {user.display_name}\n"
+        # Generate new queue message content
+        table_data = ((position + 1, user.nick if user.nick is not None else user.name) for (position, user)
+                      in enumerate(self.OHQueue))
+        table_text = tabulate(table_data, ["Position", "Name"], tablefmt="fancy_grid")
+        queue_text = f"There are {len(self.OHQueue)} student(s) in the queue\n```{table_text}```"
 
-        previous_messages = await self.queue_channel.history().flatten()
+
+        # Find any previous message sent by the bot in the queue channel
+        previous_messages: List[Message] = await self.queue_channel.history().flatten()
+        previous_queue_message: Optional[Message] = None
+        for message in previous_messages:
+            if message.author.id == self.client.user.id:
+                previous_queue_message = message
+                previous_messages.remove(previous_queue_message)
+                break
+
+        # Delete all but the found message. If there is no such message delete all messages.
         await self.queue_channel.delete_messages(previous_messages)
-        await self.queue_channel.send(message)
+
+        # If there is an existing message, edit it. Otherwise send a new message.
+        if previous_queue_message is None:
+            await self.queue_channel.send(queue_text)
+        else:
+            await previous_queue_message.edit(content=queue_text)
 
     @commands.command(aliases=["enterqueue", "eq"])
     async def enterQueue(self, context: Context):
@@ -88,8 +106,6 @@ breakout rooms when you are called on, you will be removed from the queue!**")
                 f"{sender.mention} you are already in the queue. Please wait to be called\n"
                 f"Current position: {position}"
             )
-        await selfClean(context)
-
 
     @commands.command(aliases=['leavequeue', 'lq'])
     async def leaveQueue(self, context: Context):
@@ -104,7 +120,6 @@ breakout rooms when you are called on, you will be removed from the queue!**")
             await sender.send(f"{sender.mention} you have been removed from the queue")
         else:
             await sender.send(f"{sender.mention} you were not in the queue")
-        await selfClean(context)
 
 
     @commands.command(aliases=["dequeue", 'dq'])
@@ -146,7 +161,6 @@ channel")
         sender = context.author
         self.OHQueue.clear()
         await sender.send(f"{sender.mention} has cleared the queue")
-        await selfClean(context)
 
 
 def setup(client):
