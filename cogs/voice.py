@@ -7,7 +7,6 @@ import sqlite3
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
-from cogs.roleManager import getSender
 from cogs.tools import selfClean
 
 
@@ -98,7 +97,7 @@ class voice(commands.Cog):
                               f'**Claim ownership of channel once the owner has left:**\n\n`>voice claim`\n\n**Example:** `>voice claim`\n\n------------\n\n'
                               f'**Remove permission and the user from your channel using the following command:**\n\n`>voice reject @person`\n\n**Example:** `>voice reject @Sam#9452`\n\n',
                         inline=False)
-        await getSender(context).send(embed=embed)
+        await context.author.send(embed=embed)
         await selfClean(context)
 
     @commands.group()
