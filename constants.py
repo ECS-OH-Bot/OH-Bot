@@ -36,6 +36,11 @@ class Constants:
         # Program arguments
         self.args = args
 
+        # Predefined constants
+        # Number of seconds a message should sit in the invoker's DMs
+        # If this value is set to None, the message will not be deleted.
+        self.MESSAGE_LIFE_TIME = None
+
         Constants.instance = self
 
 def GetConstants():
