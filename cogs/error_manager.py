@@ -16,7 +16,7 @@ class ErrorManager(commands.Cog):
         Handle errors raised by commands across all cogs
         """
 
-        sender = getSender(context)
+        sender = context.author
 
         # The sender entered a command we do not recognize
         if isinstance(err, commands.CommandNotFound):

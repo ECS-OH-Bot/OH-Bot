@@ -4,6 +4,7 @@ Utility functions for working with user and member instances
 from typing import Optional
 from discord.ext import commands
 from discord import User, Member
+
 from constants import GetConstants
 
 class UserUtils(commands.Cog):
