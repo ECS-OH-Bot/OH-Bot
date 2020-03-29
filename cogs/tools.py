@@ -7,10 +7,11 @@ from constants import GetConstants
 
 async def selfClean(context: Context):
     """
-    Deletes the message that invoked a command if possible
+    Deletes the message that invoked a command is possible
     """
     if context.guild is not None:
         await context.message.delete()
+
 
 class Tools(commands.Cog):
 
@@ -35,7 +36,6 @@ class Tools(commands.Cog):
         role = get(member.guild.roles, name=GetConstants().STUDENT)
         await member.add_roles(role)
         await member.send(f"{member.mention} welcome! You have been promoted to the role of Student")
-
 
 def setup(client):
     """

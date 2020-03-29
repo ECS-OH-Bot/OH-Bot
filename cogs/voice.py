@@ -83,23 +83,6 @@ class voice(commands.Cog):
         conn.commit()
         conn.close()
 
-    @commands.command()
-    async def help(self, context: Context):
-        embed = discord.Embed(title="Help", description="", color=0x7289da)
-        embed.set_author(name="Voice Create", url="https://discordbots.org/bot/472911936951156740",
-                         icon_url="https://i.imgur.com/i7vvOo5.png")
-        embed.add_field(name=f'**Commands**',
-                        value=f'**Lock your channel by using the following command:**\n\n`>voice lock`\n\n------------\n\n'
-                              f'**Unlock your channel by using the following command:**\n\n`>voice unlock`\n\n------------\n\n'
-                              f'**Change your channel name by using the following command:**\n\n`>voice name <name>`\n\n**Example:** `>voice name EU 5kd+`\n\n------------\n\n'
-                              f'**Change your channel limit by using the following command:**\n\n`>voice limit number`\n\n**Example:** `>voice limit 2`\n\n------------\n\n'
-                              f'**Give users permission to join by using the following command:**\n\n`>voice permit @person`\n\n**Example:** `>voice permit @Sam#9452`\n\n------------\n\n'
-                              f'**Claim ownership of channel once the owner has left:**\n\n`>voice claim`\n\n**Example:** `>voice claim`\n\n------------\n\n'
-                              f'**Remove permission and the user from your channel using the following command:**\n\n`>voice reject @person`\n\n**Example:** `>voice reject @Sam#9452`\n\n',
-                        inline=False)
-        await context.author.send(embed=embed)
-        await selfClean(context)
-
     @commands.group()
     async def voice(self, context: Context):
         pass
