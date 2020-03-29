@@ -2,9 +2,9 @@ from logging import getLogger
 
 from discord.ext import commands
 from discord.ext.commands import Context
-from yaml import load, add_constructor
+from discord.utils import get
 
-from cogs.roleManager import isAdmin, getSender
+from constants import GetConstants
 
 logger = getLogger(__name__)
 
@@ -22,16 +22,6 @@ class Tools(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-        def join(loader, node):
-            seq = loader.construct_sequence(node)
-            return ''.join([str(i) for i in seq])
-
-        add_constructor('!join', join)
-
-        with open('help_messages.yaml', 'r') as file:
-            self.help_messages = load(file, Loader=yaml.Loader)
-
-
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount=1):
@@ -42,15 +32,14 @@ class Tools(commands.Cog):
         """
         await ctx.channel.purge(limit=amount)
 
-    @commands.command()
-    async def help(self, ctx):
-        help_string = self.help_messages['admin'] if await isAdmin(ctx) \
-            else self.help_messages['student']
-        
-        await getSender(ctx).send(help_string)
-        await ctx.message.delete()
-
-
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        """
+        On new student joining guild assign them student role
+        """
+        role = get(member.guild.roles, name=GetConstants().STUDENT)
+        await member.add_roles(role)
+        await member.send(f"{member.mention} welcome! You have been promoted to the role of Student")
 
 def setup(client):
     """
