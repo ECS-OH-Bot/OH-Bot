@@ -5,6 +5,10 @@ from discord.ext import commands
 from discord.ext.commands import Bot, Context
 from discord import Permissions
 from constants import GetConstants
+from logging import getLogger
+
+logger = getLogger(__name__)
+
 
 class ErrorManager(commands.Cog):
     def __init__(self, bot: Bot):
@@ -35,25 +39,26 @@ class ErrorManager(commands.Cog):
         if isinstance(err, Exception):
             await sender.send("I have encountered an internal error in processing your last command."
                               "If the error persists please contact Grant Gilson."
-            )
+                              )
 
             if GetConstants().args.debug == True:
-                print("An internal error has occured during processing of a command\n"
-                     f"\tCommand: {context.invoked_with}"
-                     f"\tSender: {context.author}"
-                     f"\tChannel: {context.channel}"
-                )
-                print(err)
+                logger.exception("An internal error has occured during processing of a command\n"
+                                 f"\tCommand: {context.invoked_with}"
+                                 f"\tSender: {context.author}"
+                                 f"\tChannel: {context.channel}"
+                                 )
+                logger.exception(err)
             else:
-                print("An internal error has occured in the processing of a command. "
-                      "Run with --debug for more information"
-                )
+                logger.exception("An internal error has occured in the processing of a command. "
+                                 "Run with --debug for more information"
+                                 )
 
         # Once the error has been handled, delete the offending message if we have permission to do so
         if context.channel.permissions_for is not None:
             permissions: Permissions = context.channel.permissions_for(context.me)
             if permissions.manage_messages:
                 await context.message.delete()
+
 
 def setup(bot: Bot) -> None:
     bot.add_cog(ErrorManager(bot))

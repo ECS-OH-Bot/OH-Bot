@@ -16,7 +16,7 @@ class NetTools(commands.Cog):
     #Events
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"OH Bot connected")
+        logger.debug("OH Bot connected")
 
     @commands.Cog.listener()
     async def on_command_error(self, context: Context, err: Exception):
@@ -33,23 +33,27 @@ class NetTools(commands.Cog):
         sender = getSender(context)
 
         if isinstance(err, commands.CommandNotFound):
+            logger.error(f"{sender.mention} tried to use the {context.invoked_with} command, which does not exist")
             await context.send(
                 f"Command '{context.invoked_with}' does not exist\n"
                 f"{sender.mention} check your spelling"
             )
 
         if isinstance(err, commands.CheckFailure):
+            logger.error(f"{sender.mention} tried to use the {context.invoked_with} command, for which they do not "
+                         f"have permssion to")
             await sender.send(
                 f"{sender.mention} does not have permission to use {context.invoked_with}\n"
                 f"If you think this is a mistake DM the Admin: Grant Gilson"
             )
             await context.message.delete()
         if isinstance(err, Exception):
-            print(err)
+            logger.error(err)
 
     #Commands
     @commands.command()
     async def ping(self, context: Context):
+        logger.debug(f"ping called by {getSender(context)}")
         await context.send(f"Pong! {round(self.client.latency * 1000)}")
 
 
