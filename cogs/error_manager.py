@@ -43,6 +43,7 @@ class ErrorManager(commands.Cog):
                      f"\tSender: {context.author}"
                      f"\tChannel: {context.channel}"
                 )
+                print(err)
             else:
                 print("An internal error has occured in the processing of a command. "
                       "Run with --debug for more information"

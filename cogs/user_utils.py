@@ -19,9 +19,9 @@ class UserUtils(commands.Cog):
         :param user: The user instance
         :return: The member instance, or None if the user is not a member of the guild
         """
-        guild = cls.bot.get_guild(GetConstants().DISCORD_GUILD_ID)
+        guild = cls.bot.get_guild(GetConstants().GUILD_ID)
         if guild is None:
-            guild = await cls.bot.fetch_guild(GetConstants().DISCORD_GUILD_ID)
+            guild = await cls.bot.fetch_guild(GetConstants().GUILD_ID)
 
         member = guild.get_member(user.id)
         if member is None:
