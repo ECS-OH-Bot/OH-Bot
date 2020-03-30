@@ -8,7 +8,6 @@ import sqlite3
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
-from cogs.tools import selfClean
 
 logger = getLogger(__name__)
 

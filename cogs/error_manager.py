@@ -7,7 +7,7 @@ from discord import Permissions
 from constants import GetConstants
 from logging import getLogger
 
-logger = getLogger(__name__)
+logger = getLogger(f"main.{__name__}")
 
 
 class ErrorManager(commands.Cog):

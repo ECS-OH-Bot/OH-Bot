@@ -3,16 +3,11 @@ import logging
 from os import getenv, path, mkdir, listdir, remove
 from sys import stdout
 
-logger = logging.getLogger(__name__)
 
-
-def log_file_name() -> str:
+def log_file_name(directory: str) -> str:
     """Generates the name for a log file based off the current time"""
     today = datetime.today()
     current_time = today.strftime("%H.%M.%m.%d.%Y")
-
-    directory = getenv('LOGGING_DIR')
-    optional_make_dir(directory)
 
     return f"{directory}{current_time}.log"
 
@@ -33,7 +28,6 @@ def logging_cleanup(capacity: int = 5) -> None:
 
     while len(full_paths) > capacity:
         oldest_file = min(full_paths, key=path.getctime)
-        logger.debug(f"Deleting log file: {oldest_file}")
         remove(oldest_file)
         full_paths.remove(oldest_file)
 
@@ -44,13 +38,16 @@ def logging_setup(p_logger: logging.Logger) -> None:
     sets up a stream handler to log everything to stdout as well
     @param p_logger: The logger which we are adding these handlers to
     """
+    directory = getenv('LOGGING_DIR')
+    optional_make_dir(directory)
+
     logging_cleanup()
 
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     p_logger.setLevel(logging.DEBUG)
 
-    fh = logging.FileHandler(log_file_name())
+    fh = logging.FileHandler(log_file_name(directory))
     fh.setFormatter(formatter)
     fh.setLevel(logging.DEBUG)
     p_logger.addHandler(fh)
@@ -59,3 +56,4 @@ def logging_setup(p_logger: logging.Logger) -> None:
     sh.setFormatter(formatter)
     sh.setLevel(logging.DEBUG)
     p_logger.addHandler(sh)
+    p_logger.propagate = True

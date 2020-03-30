@@ -3,9 +3,9 @@ from logging import getLogger
 from discord import Client
 from discord.ext import commands
 from discord.ext.commands import Context
-from cogs.roleManager import getSender
 
-logger = getLogger(__name__)
+
+logger = getLogger(f"main.{__name__}")
 
 
 class NetTools(commands.Cog):
@@ -30,7 +30,7 @@ class NetTools(commands.Cog):
         CheckFailure
         """
 
-        sender = getSender(context)
+        sender = context.author
 
         if isinstance(err, commands.CommandNotFound):
             logger.error(f"{sender.mention} tried to use the {context.invoked_with} command, which does not exist")
@@ -53,7 +53,7 @@ class NetTools(commands.Cog):
     #Commands
     @commands.command()
     async def ping(self, context: Context):
-        logger.debug(f"ping called by {getSender(context)}")
+        logger.debug(f"ping called by {context.author}")
         await context.send(f"Pong! {round(self.client.latency * 1000)}")
 
 

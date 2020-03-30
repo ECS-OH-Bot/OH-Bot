@@ -9,7 +9,8 @@ from yaml import load, add_constructor
 from cogs.user_utils import UserUtils
 from cogs.tools import selfClean
 
-logger = getLogger(__name__)
+logger = getLogger(f"main.{__name__}")
+
 
 class Help(commands.Cog):
     def __init__(self, client):

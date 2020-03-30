@@ -7,7 +7,7 @@ from constants import Constants, GetConstants
 import argparse
 
 
-logger = getLogger(__name__)
+logger = getLogger('main')
 
 # Argparse configuration
 
@@ -19,6 +19,7 @@ def main():
     # For convenience, this object holds onto command line arguments
     Constants(parser.parse_args())
 
+    logging_setup(logger)
     # Create the discord.py bot
     bot: commands.Bot = commands.Bot(command_prefix="/")
     before_cog_load(bot)
@@ -39,7 +40,7 @@ def before_cog_load(bot: commands.Bot) -> None:
     bot.remove_command("help")
 
     # When the bot is ready, print a message to the terminal.
-    async def on_ready(): print("The bot is online! Happy helping.")
+    async def on_ready(): logger.debug("The bot is online! Happy helping.")
     bot.add_listener(on_ready)
 
     # Add a ping command
