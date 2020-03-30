@@ -18,12 +18,12 @@ class OHState(Enum):
 
 
 async def officeHoursAreClosed(context: Context) -> bool:
-    if not context.bot.get_cog("OHStateManager").state == OHState.CLOSED:
+    if not context.bot.get_cog("OHStateManager").state.value == OHState.CLOSED.value:
         raise OHStateError("Office hours are not closed.")
     return True
 
 async def officeHoursAreOpen(context: Context) -> bool:
-    if not context.bot.get_cog("OHStateManager").state == OHState.OPEN:
+    if not context.bot.get_cog("OHStateManager").state.value == OHState.OPEN.value:
         raise OHStateError("Office hours are not open.")
     return True
 

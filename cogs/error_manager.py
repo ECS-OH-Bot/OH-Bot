@@ -1,16 +1,18 @@
 """
 Cog to facilitate the handling of errors raised by bot commands across all cogs
 """
-from discord.ext import commands
-from discord.ext.commands import Bot, Context, CommandError
-from discord import Permissions
-from constants import GetConstants
 from logging import getLogger
+
+from discord import Permissions
+from discord.ext import commands
+from discord.ext.commands import Bot, Context
+
+from constants import GetConstants
+from errors import CommandPermissionError, OHStateError
 
 logger = getLogger(f"main.{__name__}")
 
 
-from errors import CommandPermissionError, OHStateError
 
 class ErrorManager(commands.Cog):
     def __init__(self, bot: Bot):

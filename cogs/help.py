@@ -27,7 +27,7 @@ class Help(commands.Cog):
 
     @commands.group(name='help', invoke_without_command=True)
     async def help_cmd(self, ctx: Context) -> None:
-        if await UserUtils.isAdmin(ctx):
+        if await isAdmin(ctx):
             logger.debug(f"{ctx.author} requested to see all admin commands")
             help_string = self.help_messages['all_admin']
         else:
@@ -38,7 +38,7 @@ class Help(commands.Cog):
 
     @help_cmd.command(name='queue')
     async def queue_help(self, ctx: Context) -> None:
-        if await UserUtils.isAdmin(ctx):
+        if await isAdmin(ctx):
             logger.debug(f"{ctx.author} requested to see admin commands for the queue")
             help_string = self.help_messages['queue_admin']
         else:

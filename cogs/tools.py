@@ -4,7 +4,6 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from discord.utils import get
 
-from user_utils import isAdmin
 from constants import GetConstants
 
 logger = getLogger(f"main.{__name__}")
