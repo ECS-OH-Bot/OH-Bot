@@ -1,3 +1,4 @@
+from logging import getLogger
 from typing import Optional, List
 
 from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions, Member, Message
@@ -9,6 +10,9 @@ from tabulate import tabulate
 from cogs.user_utils import UserUtils
 
 from constants import GetConstants
+
+logger = getLogger(f"main.{__name__}")
+
 
 class OH_Queue(commands.Cog):
 
@@ -23,8 +27,10 @@ class OH_Queue(commands.Cog):
     async def cog_before_invoke(self, context: Context) -> None:
         if self.queue_channel is None:
             self.queue_channel = await self.client.fetch_channel(GetConstants().QUEUE_CHANNEL_ID)
+            logger.debug(f"Queue channel set to :{GetConstants().QUEUE_CHANNEL_ID}")
         if self.waiting_room is None:
             self.waiting_room = await self.client.fetch_channel(GetConstants().WAITING_ROOM_CHANNEL_ID)
+            logger.debug(f"Waiting room channel set to :{GetConstants().WAITING_ROOM_CHANNEL_ID}")
 
     async def cog_after_invoke(self, context: Context) -> None:
         # Delete the command message if we have permission to do so
@@ -32,6 +38,8 @@ class OH_Queue(commands.Cog):
             permissions: Permissions = context.channel.permissions_for(context.me)
             if permissions.manage_messages:
                 await context.message.delete()
+        else:
+            logger.debug("Failed to invoke OH Queue cog")
 
         await self.onQueueUpdate()
 
@@ -79,6 +87,7 @@ class OH_Queue(commands.Cog):
                 self.OHQueue.append(await UserUtils.userToMember(sender))
             else:
                 self.OHQueue.append(sender)
+            logger.debug(f"{sender} has been added to the queue")
 
             position = len(self.OHQueue)
 
@@ -91,6 +100,7 @@ class OH_Queue(commands.Cog):
             # Move the user into the waiting room if we can
             if isinstance(sender, User) or sender.voice is None:
                 # If the command comes from DMs or the user is not connected to voice, instruct them to join
+                logger.debug(f"{sender} enqueued themselves from DMs or user is not connected to voice")
                 invite: Invite = await self.waiting_room.create_invite()
                 await sender.send("Please join the waiting room until you are called on.\n"
                                   "**If you are not in the waiting room or breakout rooms when you are called on,"
@@ -99,11 +109,12 @@ class OH_Queue(commands.Cog):
                                   delete_after=GetConstants().MESSAGE_LIFE_TIME)
             else:
                 await sender.move_to(self.waiting_room)
-                await sender.send("I have moved you into the waiting room. **If you are not in the waiting room or"
-                                  " breakout rooms when you are called on, you will be removed from the queue!**",
-                                  delete_after=GetConstants().MESSAGE_LIFE_TIME)
+                await sender.send("I have moved you into the waiting room. **If you are not in the waiting room or \
+breakout rooms when you are called on, you will be removed from the queue!**")
+                logger.debug(f"{sender} has been placed in the waiting room")
 
         else:
+            logger.debug(f"{sender} was already in the queue and tried to enqueue themselves again")
             position = self.OHQueue.index(sender) + 1
             await sender.send(
                 f"You are already in the queue. Please wait to be called\n"
@@ -121,11 +132,11 @@ class OH_Queue(commands.Cog):
         sender = context.author
         if sender in self.OHQueue:
             self.OHQueue.remove(sender)
-            await sender.send(f"You have been removed from the queue",
-                              delete_after=GetConstants().MESSAGE_LIFE_TIME)
+            logger.debug(f"{sender} has been removed form the queue")
+            await sender.send(f"{sender.mention} you have been removed from the queue")
         else:
-            await sender.send(f"You were not in the queue",
-                              delete_after=GetConstants().MESSAGE_LIFE_TIME)
+            logger.debug(f"{sender} tried to leave the queue, but they were already not in the queue")
+            await sender.send(f"{sender.mention} you were not in the queue")
 
 
     @commands.command(aliases=["dequeue", 'dq'])
@@ -137,6 +148,7 @@ class OH_Queue(commands.Cog):
         """
         sender = context.author
         if isinstance(sender, User):
+            logger.debug(f"{sender} attempted to dequeue from DMs but this isn't allowed")
             # If the command was sent via DM, tell them to do it from the bot channel instead
             await sender.send("Due to technical limitations, you must send the dequeue command from the server"
                               "channel",
@@ -144,12 +156,14 @@ class OH_Queue(commands.Cog):
             return
 
         if sender.voice is None:
-            await sender.send("You must be connected to a voice channel to do this. The queue has not been modified.",
-                              delete_after=GetConstants().MESSAGE_LIFE_TIME)
+            logger.debug(f"{sender} tried to deque but they were not in a voice channel")
+            await sender.send("You must be connected to a voice channel to do this. The queue has not been modified.")
 
         elif len(self.OHQueue):
             student = self.OHQueue.pop(0)
+            logger.debug(f"{student} has been dequeued")
             if student.voice is None:
+                logger.debug(f"{student} was not in the waiting when they were dequeued")
                 await sender.send(f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot"
                                   "move them into your voice channel. They have been removed from the queue.",
                                   delete_after=GetConstants().MESSAGE_LIFE_TIME)
@@ -158,7 +172,9 @@ class OH_Queue(commands.Cog):
                                    delete_after=GetConstants().MESSAGE_LIFE_TIME)
                 # Add this student to the voice chat
                 await student.move_to(sender.voice.channel)
+                logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
         else:
+            logger.debug(f"{sender} tried to dequeue from an empty queue")
             await sender.send("The queue is empty. Perhaps now is a good time for a coffee break?",
                               delete_after=GetConstants().MESSAGE_LIFE_TIME)
 
@@ -171,6 +187,8 @@ class OH_Queue(commands.Cog):
         """
         sender = context.author
         self.OHQueue.clear()
+
+        logger.debug(f"{sender} has cleared the queue")
         await sender.send(f"The queue has been cleared.")
 
 

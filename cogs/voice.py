@@ -3,11 +3,13 @@ Credit of this section goes to
 https://github.com/SamSanai/VoiceMaster-Discord-Bot
 """
 import asyncio
+from logging import getLogger
 import sqlite3
 import discord
 from discord.ext import commands
 from discord.ext.commands import Context
-from cogs.tools import selfClean
+
+logger = getLogger(__name__)
 
 
 class voice(commands.Cog):
@@ -92,6 +94,7 @@ class voice(commands.Cog):
     async def setup(self, context: Context):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         guildID = context.guild.id
         id = context.author.id
         if context.author.id == context.guild.owner.id or context.author.id == 151028268856770560:
@@ -103,14 +106,18 @@ class voice(commands.Cog):
                 f"**Enter the name of the category you wish to create the channels in:(e.g Voice Channels)**")
             try:
                 category = await self.bot.wait_for('message', check=check, timeout=60.0)
+                logger.debug(f"User({context.author}) has chosen to put their channel in {category}")
             except asyncio.TimeoutError:
+                logger.debug(f"User({context.author}) took to long to respond")
                 await context.channel.send('Took too long to answer!')
             else:
                 new_cat = await context.guild.create_category_channel(category.content)
                 await context.channel.send('**Enter the name of the voice channel: (e.g Join To Create)**')
                 try:
                     channel = await self.bot.wait_for('message', check=check, timeout=60.0)
+                    logger.debug(f"User({context.author}) has chosen to create the channel {channel}")
                 except asyncio.TimeoutError:
+                    logger.debug(f"User({context.author}) took to long to respond")
                     await context.channel.send('Took too long to answer!')
                 else:
                     try:
@@ -124,10 +131,13 @@ class voice(commands.Cog):
                                 "UPDATE guild SET guildID = ?, ownerID = ?, voiceChannelID = ?, voiceCategoryID = ? WHERE guildID = ?",
                                 (guildID, id, channel.id, new_cat.id, guildID))
                         await context.channel.send("**You are all setup and ready to go!**")
+                        logger.debug(f"User {context.author} has successfully created the voice channel {channel}")
                     except:
+                        logger.debug(f"User {context.author} did not enter names properly")
                         await context.channel.send("You didn't enter the names properly.\nUse `.voice setup` again!")
         else:
             await context.channel.send(f"{context.author.mention} only the owner of the server can setup the bot!")
+            logger.debug(f"{context.author} attempted to but is unauthorized to create channels")
         conn.commit()
         conn.close()
 
@@ -135,6 +145,7 @@ class voice(commands.Cog):
     async def setlimit(self, context: Context, num: int):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         if context.author.id == context.guild.owner.id or context.author.id == 151028268856770560:
             c.execute("SELECT * FROM guildSettings WHERE guildID = ?", (context.guild.id,))
             voice = c.fetchone()
@@ -144,7 +155,9 @@ class voice(commands.Cog):
             else:
                 c.execute("UPDATE guildSettings SET channelLimit = ? WHERE guildID = ?", (num, context.guild.id))
             await context.send("You have changed the default channel limit for your server!")
+            logger.debug(f"User {context.author} has changed the default channel limit of the server to {num}")
         else:
+            logger.debug(f"{context.author} attempted to but is unauthorized to alter the channel limit of the server")
             await context.channel.send(f"{context.author.mention} only the owner of the server can setup the bot!")
         conn.commit()
         conn.close()
@@ -157,17 +170,20 @@ class voice(commands.Cog):
     async def lock(self, context: Context):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         id = context.author.id
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice = c.fetchone()
         if voice is None:
             await context.channel.send(f"{context.author.mention} You don't own a channel.")
+            logger.debug(f"{context.author} attempted to lock a channel but they don't own one")
         else:
             channelID = voice[0]
             role = discord.utils.get(context.guild.roles, name='@everyone')
             channel = self.bot.get_channel(channelID)
             await channel.set_permissions(role, connect=False, read_messages=True)
             await context.channel.send(f'{context.author.mention} Voice chat locked! 🔒')
+            logger.debug(f"{context.author} locked the channel {channel}")
         conn.commit()
         conn.close()
 
@@ -175,17 +191,20 @@ class voice(commands.Cog):
     async def unlock(self, context: Context):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         id = context.author.id
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice = c.fetchone()
         if voice is None:
             await context.channel.send(f"{context.author.mention} You don't own a channel.")
+            logger.debug(f"{context.author} attempted to unlock a channel but they don't own one")
         else:
             channelID = voice[0]
             role = discord.utils.get(context.guild.roles, name='@everyone')
             channel = self.bot.get_channel(channelID)
             await channel.set_permissions(role, connect=True, read_messages=True)
             await context.channel.send(f'{context.author.mention} Voice chat unlocked! 🔓')
+            logger.debug(f"{context.author} unlocked the channel {channel}")
         conn.commit()
         conn.close()
 
@@ -193,17 +212,20 @@ class voice(commands.Cog):
     async def permit(self, context: Context, member: discord.Member):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         id = context.author.id
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice = c.fetchone()
         if voice is None:
             await context.channel.send(f"{context.author.mention} You don't own a channel.")
+            logger.debug(f"{context.author} attempted to give permission to a channel but they don't own one")
         else:
             channelID = voice[0]
             channel = self.bot.get_channel(channelID)
             await channel.set_permissions(member, connect=True)
             await context.channel.send(
                 f'{context.author.mention} You have permited {member.name} to have access to the channel. ✅')
+            logger.debug(f"{context.author} permitted {member.name} into the channel {channel}")
         conn.commit()
         conn.close()
 
@@ -211,12 +233,14 @@ class voice(commands.Cog):
     async def reject(self, context: Context, member: discord.Member):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         id = context.author.id
         guildID = context.guild.id
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice = c.fetchone()
         if voice is None:
             await context.channel.send(f"{context.author.mention} You don't own a channel.")
+            logger.debug(f"{context.author} attempted to reject someone from a channel but they don't own one")
         else:
             channelID = voice[0]
             channel = self.bot.get_channel(channelID)
@@ -229,6 +253,7 @@ class voice(commands.Cog):
             await channel.set_permissions(member, connect=False, read_messages=True)
             await context.channel.send(
                 f'{context.author.mention} You have rejected {member.name} from accessing the channel. ❌')
+            logger.debug(f"{context.author} kicked/rejected {member.name} from the channel {channel}")
         conn.commit()
         conn.close()
 
@@ -236,16 +261,19 @@ class voice(commands.Cog):
     async def limit(self, context: Context, limit: int):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         id = context.author.id
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice = c.fetchone()
         if voice is None:
             await context.channel.send(f"{context.author.mention} You don't own a channel.")
+            logger.debug(f"{context.author} attempted to limit a channel but they don't own one")
         else:
             channelID = voice[0]
             channel = self.bot.get_channel(channelID)
             await channel.edit(user_limit=limit)
             await context.channel.send(f'{context.author.mention} You have set the channel limit to be ' + '{}!'.format(limit))
+            logger.debug(f"{context.author} has the limit of channel {channel} to {limit}")
             c.execute("SELECT channelName FROM userSettings WHERE userID = ?", (id,))
             voice = c.fetchone()
             if voice is None:
@@ -259,16 +287,19 @@ class voice(commands.Cog):
     async def name(self, context: Context, *, name):
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         id = context.author.id
         c.execute("SELECT voiceID FROM voiceChannel WHERE userID = ?", (id,))
         voice = c.fetchone()
         if voice is None:
             await context.channel.send(f"{context.author.mention} You don't own a channel.")
+            logger.debug(f"{context.author} attempted to name a channel but they don't own one")
         else:
             channelID = voice[0]
             channel = self.bot.get_channel(channelID)
             await channel.edit(name=name)
             await context.channel.send(f'{context.author.mention} You have changed the channel name to ' + '{}!'.format(name))
+            logger.debug(f"{context.author} has changed the channel name {name}")
             c.execute("SELECT channelName FROM userSettings WHERE userID = ?", (id,))
             voice = c.fetchone()
             if voice is None:
@@ -283,9 +314,11 @@ class voice(commands.Cog):
         x = False
         conn = sqlite3.connect('voice.db')
         c = conn.cursor()
+        logger.debug("Established connection with voice database")
         channel = context.author.voice.channel
         if channel == None:
             await context.channel.send(f"{context.author.mention} you're not in a voice channel.")
+            logger.debug(f"{context.author} attempted to claim a channel but they're not in one")
         else:
             id = context.author.id
             c.execute("SELECT userID FROM voiceChannel WHERE voiceID = ?", (channel.id,))
@@ -298,9 +331,12 @@ class voice(commands.Cog):
                         owner = context.guild.get_member(voice[0])
                         await context.channel.send(
                             f"{context.author.mention} This channel is already owned by {owner.mention}!")
+                        logger.debug(f"{context.author} attempted to claim the channel {channel}, which was already"
+                                     f"owned by {owner}")
                         x = True
                 if x == False:
                     await context.channel.send(f"{context.author.mention} You are now the owner of the channel!")
+                    logger.debug(f"{context.author} claimed the channel {channel}")
                     c.execute("UPDATE voiceChannel SET userID = ? WHERE voiceID = ?", (id, channel.id))
             conn.commit()
             conn.close()

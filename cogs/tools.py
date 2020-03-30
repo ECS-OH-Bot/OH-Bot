@@ -1,8 +1,12 @@
+from logging import getLogger
+
 from discord.ext import commands
 from discord.ext.commands import Context
 from discord.utils import get
 
 from constants import GetConstants
+
+logger = getLogger(f"main.{__name__}")
 
 
 async def selfClean(context: Context):
@@ -27,6 +31,7 @@ class Tools(commands.Cog):
         @amount
         """
         await ctx.channel.purge(limit=amount)
+        logger.debug(f"{ctx.author} has cleared the channel {ctx.channel} of {amount} messages")
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -36,6 +41,8 @@ class Tools(commands.Cog):
         role = get(member.guild.roles, name=GetConstants().STUDENT)
         await member.add_roles(role)
         await member.send(f"{member.mention} welcome! You have been promoted to the role of Student")
+        logger.debug(f"{member.mention} has joined the server")
+
 
 def setup(client):
     """

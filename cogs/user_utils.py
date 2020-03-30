@@ -1,11 +1,15 @@
 """
 Utility functions for working with user and member instances
 """
+from logging import getLogger
 from typing import Optional
 from discord.ext import commands
 from discord import User, Member
 
 from constants import GetConstants
+
+logger = getLogger(f"main.{__name__}")
+
 
 class UserUtils(commands.Cog):
     bot: Optional[commands.Bot] = None
@@ -47,7 +51,12 @@ class UserUtils(commands.Cog):
             # Otherwise, the message came from within the server. The roles can be directly extracted from the context
             roles = context.author.roles
 
-        return any(role.id == GetConstants().INSTRUCTOR_ROLE_ID for role in roles)
+        if any(role.id == GetConstants().INSTRUCTOR_ROLE_ID for role in roles):
+            logger.debug(f"{context.author} is an admin")
+            return True
+        else:
+            logger.debug(f"{context.author} is NOT an admin")
+            return False
 
     @classmethod
     async def isStudent(cls, context: commands.Context) -> bool:
@@ -66,7 +75,13 @@ class UserUtils(commands.Cog):
             # Otherwise, the message came from within the server. The roles can be directly extracted from the context
             roles = context.author.roles
 
-        return any(role.id == GetConstants().STUDENT_ROLE_ID for role in roles)
+        if any(role.id == GetConstants().STUDENT_ROLE_ID for role in roles):
+            logger.debug(f"{context.author} is a student")
+            return True
+        else:
+            logger.debug(f"{context.author} is NOT a student")
+            return False
+
 
 def setup(bot: commands.Bot) -> None:
     UserUtils.bot = bot
