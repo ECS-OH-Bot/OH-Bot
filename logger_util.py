@@ -3,6 +3,8 @@ import logging
 from os import getenv, path, mkdir, listdir, remove
 from sys import stdout
 
+logger = logging.getLogger(f"main.{__name__}")
+
 
 def log_file_name(directory: str) -> str:
     """Generates the name for a log file based off the current time"""
@@ -14,6 +16,7 @@ def log_file_name(directory: str) -> str:
 
 def optional_make_dir(directory: str) -> None:
     """Checks if dir exists, if it doesn't we go make that directory"""
+    logger.debug(f"Logging directory did not exist at {directory} and so will be generated")
     if not path.isdir(directory):
         mkdir(directory)
 
@@ -30,6 +33,7 @@ def logging_cleanup(capacity: int = 5) -> None:
         oldest_file = min(full_paths, key=path.getctime)
         remove(oldest_file)
         full_paths.remove(oldest_file)
+        logger.debug(f"deleted log file {oldest_file} since it is the oldest and more than {capacity} log files exist")
 
 
 def logging_setup(p_logger: logging.Logger) -> None:

@@ -1,7 +1,6 @@
 from logging import getLogger
 import os
 from discord.ext import commands
-from dotenv import load_dotenv
 from logger_util import logging_setup
 from constants import Constants, GetConstants
 import argparse
@@ -10,16 +9,18 @@ import argparse
 logger = getLogger('main')
 
 # Argparse configuration
-
 parser = argparse.ArgumentParser(description="Enable debugging output")
 parser.add_argument('--debug', action='store_true')
+
 
 def main():
     # Instantiate constants singleton
     # For convenience, this object holds onto command line arguments
     Constants(parser.parse_args())
 
+    # Setup handlers and infrastructure for the logger
     logging_setup(logger)
+
     # Create the discord.py bot
     bot: commands.Bot = commands.Bot(command_prefix="/")
     before_cog_load(bot)
@@ -48,6 +49,7 @@ def before_cog_load(bot: commands.Bot) -> None:
     @commands.command()
     async def ping(context: commands.Context): await context.author.send(f"Pong! {round(bot.latency * 1000)}")
 
+
 def after_cog_load(bot: commands.Bot) -> None:
     """
     Called immediately after cogs are loaded and the client is run
@@ -55,10 +57,13 @@ def after_cog_load(bot: commands.Bot) -> None:
     """
     pass
 
+
 def load_cogs(bot: commands.Bot) -> None:
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
+            logger.debug(f"Loading in the cog {filename}")
             bot.load_extension(f"cogs.{filename[:-3]}")
+
 
 if __name__ == '__main__':
     main()
