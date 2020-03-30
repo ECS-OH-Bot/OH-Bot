@@ -9,8 +9,9 @@ import argparse
 logger = getLogger('main')
 
 # Argparse configuration
-parser = argparse.ArgumentParser(description="Enable debugging output")
-parser.add_argument('--debug', action='store_true')
+parser = argparse.ArgumentParser(description="Discord bot to manage office hours")
+parser.add_argument('config', help='The path to the configuration file. Probably config.yaml')
+parser.add_argument('--debug', help='Print debug information to the cog error handler', action='store_true', required=False)
 
 
 def main():
@@ -22,7 +23,7 @@ def main():
     logging_setup(logger)
 
     # Create the discord.py bot
-    bot: commands.Bot = commands.Bot(command_prefix="/")
+    bot: commands.Bot = commands.Bot(command_prefix=GetConstants().COMMAND_CHAR)
     before_cog_load(bot)
     load_cogs(bot)
     after_cog_load(bot)

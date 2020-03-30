@@ -3,6 +3,8 @@ import logging
 from os import getenv, path, mkdir, listdir, remove
 from sys import stdout
 
+from constants import GetConstants
+
 logger = logging.getLogger(f"main.{__name__}")
 
 
@@ -25,7 +27,7 @@ def logging_cleanup(capacity: int = 5) -> None:
     """If there are more than capacity log files in the directory,
         delete the oldest file until there are less than capacity
     """
-    log_dir = getenv('LOGGING_DIR')
+    log_dir = GetConstants().LOGGING_DIR
     log_files = listdir(log_dir)
     full_paths = [f"{log_dir}{x}" for x in log_files if x.endswith('.log')]
 
@@ -42,10 +44,10 @@ def logging_setup(p_logger: logging.Logger) -> None:
     sets up a stream handler to log everything to stdout as well
     @param p_logger: The logger which we are adding these handlers to
     """
-    directory = getenv('LOGGING_DIR')
+    directory = GetConstants().LOGGING_DIR
     optional_make_dir(directory)
 
-    logging_cleanup()
+    logging_cleanup(GetConstants().LOGGING_CAPACITY)
 
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 

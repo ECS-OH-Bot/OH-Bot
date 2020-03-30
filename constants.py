@@ -4,9 +4,10 @@ Most of these constants are loaded from the environment variables
 This singleton also holds parsed arguments
 """
 from typing import Optional
-from dotenv import load_dotenv
+import yaml
 from os import getenv
 import argparse
+
 
 class Constants:
     instance: Optional['Constants'] = None
@@ -15,32 +16,46 @@ class Constants:
         if Constants.instance is not None:
             raise RuntimeError("Cannot reinstantiate Constants singleton")
         # Load variables from .env
-        load_dotenv()
+        with open(args.config) as config_file:
+            config = yaml.safe_load(config_file)
+
+        credentials = config["DiscordCredentials"]
 
         # The API token for the bot
-        self.BOT_TOKEN = getenv("BOT_TOKEN")
+        self.BOT_TOKEN = credentials["BotToken"]
 
         # The ID for the server
-        self.GUILD_ID = int(getenv("DISCORD_GUILD_ID"))
+        self.GUILD_ID = credentials["GuildID"]
+
+        channels = config["ChannelIDs"]
 
         # The ID for the waiting room and queue channels
-        self.WAITING_ROOM_CHANNEL_ID = int(getenv("WAITING_ROOM_CHANNEL_ID"))
-        self.QUEUE_CHANNEL_ID = int(getenv("QUEUE_CHANNEL_ID"))
-        self.ANNOUNCEMENT_CHANNEL_ID = int(getenv("ANNOUNCEMENT_CHANNEL_ID"))
+        self.WAITING_ROOM_CHANNEL_ID = channels["WaitingRoom"]
+        self.QUEUE_CHANNEL_ID = channels["Queue"]
+        self.ANNOUNCEMENT_CHANNEL_ID = channels["Announcements"]
 
         # Roles
-        self.ADMIN = getenv("ADMIN")
-        self.STUDENT = getenv("STUDENT")
-        self.INSTRUCTOR_ROLE_ID = int(getenv("INSTRUCTOR_ROLE_ID"))
-        self.STUDENT_ROLE_ID = int(getenv("STUDENT_ROLE_ID"))
+        admin = config["Roles"]["Admin"]
+        self.ADMIN, self.INSTRUCTOR_ROLE_ID = admin["Name"], admin["RoleID"]
+
+        student = config["Roles"]["Admin"]
+        self.STUDENT, self.STUDENT_ROLE_ID = student["Name"], student["RoleID"]
+
+        bot_configs = config["BotConfigurations"]
+        self.COMMAND_CHAR = bot_configs["CommandCharacter"]
+        self.HELP_MESSAGES = bot_configs["HelpMessage"]
+        self.MESSAGE_LIFE_TIME = bot_configs["MessageLifetime"]
+
+        # Logging
+        logging = config["Logging"]
+        self.LOGGING_DIR = logging["LoggingDir"]
+        self.LOGGING_CAPACITY = logging["DirectoryCapacity"]
 
         # Program arguments
         self.args = args
 
         # Predefined constants
-        # Number of seconds a message should sit in the invoker's DMs
-        # If this value is set to None, the message will not be deleted.
-        self.MESSAGE_LIFE_TIME = None
+
 
         Constants.instance = self
 
