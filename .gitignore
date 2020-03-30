@@ -4,3 +4,4 @@ venv/
 voice.db
 .idea/
 .gitignore
+config.yaml
