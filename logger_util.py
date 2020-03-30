@@ -31,7 +31,7 @@ def logging_cleanup(capacity: int = 5) -> None:
     log_files = listdir(log_dir)
     full_paths = [f"{log_dir}{x}" for x in log_files if x.endswith('.log')]
 
-    while len(full_paths) > capacity:
+    while len(full_paths) >= capacity:
         oldest_file = min(full_paths, key=path.getctime)
         remove(oldest_file)
         full_paths.remove(oldest_file)
