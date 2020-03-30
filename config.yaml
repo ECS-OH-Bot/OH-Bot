@@ -1,0 +1,26 @@
+DiscordCredentials:
+  BotToken: NjkyMTc3MzY3OTY3MzM0NDEw.XoGZVg.i5Zh5DB8UMoD4ikqsTJrj_Mho7o
+  GuildID: 202920747474092033
+
+ChannelIDs:
+  Queue: 692894015565332521
+  WaitingRoom: 218217026953543682
+  Announcements: 692848065014399026
+
+Roles:
+  Admin:
+    Name: Instructor
+    RoleID: 202921174290792458
+  Student:
+    Name: Student
+    RoleID: 692258575241707560
+
+BotConfigurations:
+  CommandCharacter: /
+  HelpMessage: help_messages.yaml
+  # Left as empty for None for now
+  MessageLifetime:
+
+Logging:
+  LoggingDir: logs/
+  DirectoryCapacity: 5
