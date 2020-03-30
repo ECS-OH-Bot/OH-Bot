@@ -72,6 +72,16 @@ class OH_Queue(commands.Cog):
         else:
             await previous_queue_message.edit(content=queue_text)
 
+        # Send the next student on the queue a courtesy message to let them know its almost their turn
+        if len(self.OHQueue) > 0:
+            next_student: Member = self.OHQueue[0]
+            await self.OHQueue[0].send("It's almost your turn. You are number one on the queue.")
+            if next_student.voice is None:
+                await self.OHQueue[0].send("It looks like you are not in a voice channel right now. Make sure you join "
+                                           "the waiting room before it is your turn!")
+
+
+
     @commands.command(aliases=["enterqueue", "eq"])
     @commands.check(officeHoursAreOpen)
     async def enterQueue(self, context: Context):
