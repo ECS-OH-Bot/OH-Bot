@@ -2,6 +2,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from discord.utils import get
 
+from user_utils import isAdmin
 from constants import GetConstants
 
 
@@ -31,11 +32,12 @@ class Tools(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         """
-        On new student joining guild assign them student role
+        On new student joining guild assign them student role and send them a welcome message
         """
         role = get(member.guild.roles, name=GetConstants().STUDENT)
         await member.add_roles(role)
         await member.send(f"{member.mention} welcome! You have been promoted to the role of Student")
+        await member.send(self.client.get_cog("Help").help_messages['all_student'])
 
 def setup(client):
     """

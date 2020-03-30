@@ -1,18 +1,20 @@
 from typing import Optional, List
 
-from discord import Client, TextChannel, VoiceChannel, Invite, User, Permissions, Member, Message
+from discord import TextChannel, VoiceChannel, Invite, User, Permissions, Member, Message
 from discord.ext import commands
+from discord.ext.commands import Bot
 from discord.ext.commands.context import Context
 
 from tabulate import tabulate
 
-from cogs.user_utils import UserUtils
+from user_utils import isAdmin, userToMember
+from cogs.oh_state_manager import OHState, officeHoursAreOpen
 
 from constants import GetConstants
 
 class OH_Queue(commands.Cog):
 
-    def __init__(self, client: Client):
+    def __init__(self, client: Bot):
         self.client = client
         self.OHQueue: List[Member] = list()
         self.admins = list()
@@ -39,11 +41,17 @@ class OH_Queue(commands.Cog):
         """
         Update the persistant queue message based on _OHQueue
         """
+        # Very hacky but we need channel references to be resolved
+        await self.cog_before_invoke(None)
+
         # Generate new queue message content
+        # Get the queue status (open/closed)
+        status = "**OPEN**" if self.client.get_cog("OHStateManager").state == OHState.OPEN else "**CLOSED**"
         table_data = ((position + 1, user.nick if user.nick is not None else user.name) for (position, user)
                       in enumerate(self.OHQueue))
         table_text = tabulate(table_data, ["Position", "Name"], tablefmt="fancy_grid")
-        queue_text = f"There are {len(self.OHQueue)} student(s) in the queue\n```{table_text}```"
+        queue_text = f"The queue is currently {status}. "\
+                     f"There are {len(self.OHQueue)} student(s) in the queue\n```{table_text}```"
 
 
         # Find any previous message sent by the bot in the queue channel
@@ -65,6 +73,7 @@ class OH_Queue(commands.Cog):
             await previous_queue_message.edit(content=queue_text)
 
     @commands.command(aliases=["enterqueue", "eq"])
+    @commands.check(officeHoursAreOpen)
     async def enterQueue(self, context: Context):
         """
         Enters user into the OH queue
@@ -76,7 +85,7 @@ class OH_Queue(commands.Cog):
         if sender not in self.OHQueue:
             # Append the Member instance to the queue.
             if isinstance(sender, User):
-                self.OHQueue.append(await UserUtils.userToMember(sender))
+                self.OHQueue.append(await userToMember(sender, context.bot))
             else:
                 self.OHQueue.append(sender)
 
@@ -129,7 +138,7 @@ class OH_Queue(commands.Cog):
 
 
     @commands.command(aliases=["dequeue", 'dq'])
-    @commands.check(UserUtils.isAdmin)
+    @commands.check(isAdmin)
     async def dequeueStudent(self, context: Context):
         """
         Dequeue a student from the queue and notify them
@@ -163,7 +172,7 @@ class OH_Queue(commands.Cog):
                               delete_after=GetConstants().MESSAGE_LIFE_TIME)
 
     @commands.command(aliases=["cq", "clearqueue"])
-    @commands.check(UserUtils.isAdmin)
+    @commands.check(isAdmin)
     async def clearQueue(self, context: Context):
         """
         Clears all students from the queue
@@ -174,9 +183,9 @@ class OH_Queue(commands.Cog):
         await sender.send(f"The queue has been cleared.")
 
 
-def setup(client):
+def setup(bot):
     """
     This python file is an 'extension'. The setup file acts as the entry point to the extension.
     In our setup we load the cog we have written to be used in the discord bot
     """
-    client.add_cog(OH_Queue(client))
+    bot.add_cog(OH_Queue(bot))
