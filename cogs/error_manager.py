@@ -2,13 +2,15 @@
 Cog to facilitate the handling of errors raised by bot commands across all cogs
 """
 from discord.ext import commands
-from discord.ext.commands import Bot, Context
+from discord.ext.commands import Bot, Context, CommandError
 from discord import Permissions
 from constants import GetConstants
 from logging import getLogger
 
 logger = getLogger(f"main.{__name__}")
 
+
+from errors import CommandPermissionError, OHStateError
 
 class ErrorManager(commands.Cog):
     def __init__(self, bot: Bot):
@@ -28,16 +30,19 @@ class ErrorManager(commands.Cog):
                 f"Command '{context.invoked_with}' does not exist\n"
                 f"Check your spelling."
             )
-        # The precondition on the command failed.
-        # For our purposes, the only precondition is an admin check for elevated commands.
-        elif isinstance(err, commands.CheckFailure):
-            await sender.send(
+        # Non-admin tried to use an admin command
+        elif isinstance(err, CommandPermissionError):
+            await context.author.send(
                 f"You do not have permission to use {context.invoked_with}\n"
                 f"If you think this is a mistake DM the Admin: Grant Gilson."
             )
+        # Someone tried to open/close OH but they were already open/closed
+        elif isinstance(err, OHStateError):
+            await context.author.send("I could not complete the command. "
+                                      f"{err}")
         # There was some other error: probably an internal error
-        if isinstance(err, Exception):
-            await sender.send("I have encountered an internal error in processing your last command."
+        elif isinstance(err, Exception):
+            await sender.send("I have encountered an internal error in processing your last command. "
                               "If the error persists please contact Grant Gilson."
                               )
 

@@ -6,7 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from yaml import load, add_constructor
 
-from cogs.user_utils import UserUtils
+from user_utils import isAdmin
 from cogs.tools import selfClean
 
 logger = getLogger(f"main.{__name__}")

@@ -26,6 +26,7 @@ class Constants:
         # The ID for the waiting room and queue channels
         self.WAITING_ROOM_CHANNEL_ID = int(getenv("WAITING_ROOM_CHANNEL_ID"))
         self.QUEUE_CHANNEL_ID = int(getenv("QUEUE_CHANNEL_ID"))
+        self.ANNOUNCEMENT_CHANNEL_ID = int(getenv("ANNOUNCEMENT_CHANNEL_ID"))
 
         # Roles
         self.ADMIN = getenv("ADMIN")
