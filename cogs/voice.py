@@ -8,7 +8,9 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Context
 from cogs.tools import selfClean
+from logging import getLogger
 
+logger = getLogger(__name__)
 
 class voice(commands.Cog):
     def __init__(self, bot):
@@ -79,6 +81,8 @@ class voice(commands.Cog):
                     await asyncio.sleep(3)
                     c.execute('DELETE FROM voiceChannel WHERE userID=?', (id,))
             except:
+                # TODO Add exception handler here
+                # IDK why OP has a bare except here but i dont like it
                 pass
         conn.commit()
         conn.close()
