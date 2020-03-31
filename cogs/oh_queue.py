@@ -54,7 +54,7 @@ class OH_Queue(commands.Cog):
 
         # Generate new queue message content
         # Get the queue status (open/closed)
-        status = "**OPEN**" if self.client.get_cog("OHStateManager").state == OHState.OPEN else "**CLOSED**"
+        status = "**OPEN**" if self.client.get_cog("OHStateManager").state.value == OHState.OPEN.value else "**CLOSED**"
         table_data = ((position + 1, user.nick if user.nick is not None else user.name) for (position, user)
                       in enumerate(self.OHQueue))
         table_text = tabulate(table_data, ["Position", "Name"], tablefmt="fancy_grid")
