@@ -46,7 +46,7 @@ async def isAdmin(context: commands.Context) -> bool:
         roles = context.author.roles
 
     if not any(role.id == GetConstants().INSTRUCTOR_ROLE_ID for role in roles):
-        return False # CommandPermissionError()
+        return False
     return True
 
 async def isStudent(context: commands.Context) -> bool:

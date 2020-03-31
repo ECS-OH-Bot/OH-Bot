@@ -17,7 +17,7 @@ aliases:
   - &queuehelp_admin '
       *Clear the OH queue by using the following command:*
 
-      `/leavequeue or /lq`
+      `/clear or /cq`
 
       ------------
 
@@ -46,7 +46,8 @@ aliases:
 
       *Change your channel name by using the following command:*
 
-      `/voice name <name/`
+
+      `/voice name <name>`
 
       *Example:* `/voice name EU 5kd+`
 
@@ -87,15 +88,58 @@ aliases:
       *Example:* `/voice reject @Sam#9452`
       '
 
-queue_admin: !join ["**Queue Commands**", "\n\n", *queuehelp_admin, "\n\n", *queuehelp_student]
+  - &help_help '
+      *Have this message DMed to you*
 
-queue_student: !join ["**Queue Commands**", "\n\n", *queuehelp_student]
+      `/help`
 
-voice_help: !join ["**Voice Commands**", "\n\n", *voicehelp]
+      ------------
 
-all_admin: !join ["**All Commands**", "\n\n**Queue Commands**\n", *queuehelp_admin, "\n\n", *queuehelp_student, "\n\n\n**Voice Commands**\n", *voicehelp]
 
-all_student: !join ["**All Commands**", "\n\n**Queue Commands**\n", *queuehelp_student, "\n\n\n**Voice Commands**\n",  *voicehelp]
+      *View help for using the queue*
+
+      `/help queue`
+
+      ------------
+
+
+      *View help for using voice*
+
+      `/help voice`
+
+      '
+
+
+queue_admin: !join ["**Queue Commands**",
+                    "\n\n",
+                    *queuehelp_admin,
+                    "\n\n",
+                    *queuehelp_student]
+
+queue_student: !join ["**Queue Commands**",
+                      "\n\n",
+                      *queuehelp_student]
+
+voice_help: !join ["**Voice Commands**",
+                   "\n\n",
+                   *voicehelp]
+
+all_admin: !join ["**All Commands**",
+                  "\n\n**Help Subcommands**\n",
+                  *help_help,
+                  "\n\n**Queue Commands**\n",
+                  *queuehelp_admin,
+                  "\n\n", *queuehelp_student,
+                  "\n\n\n**Voice Commands**\n",
+                  *voicehelp]
+
+all_student: !join ["**All Commands**",
+                    "\n\n**Help Subcommands**\n",
+                    *help_help,
+                    "\n\n**Queue Commands**\n",
+                    *queuehelp_student,
+                    "\n\n\n**Voice Commands**\n",
+                    *voicehelp]
 
 
 

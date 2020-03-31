@@ -8,6 +8,7 @@ from yaml import load, add_constructor
 
 from user_utils import isAdmin
 from cogs.tools import selfClean
+from constants import GetConstants
 
 logger = getLogger(f"main.{__name__}")
 
@@ -22,7 +23,7 @@ class Help(commands.Cog):
 
         add_constructor('!join', join)
 
-        with open('help_messages.yaml', 'r') as file:
+        with open(GetConstants().HELP_MESSAGES, 'r') as file:
             self.help_messages = load(file, Loader=yaml.Loader)
 
     @commands.group(name='help', invoke_without_command=True)
@@ -52,6 +53,15 @@ class Help(commands.Cog):
         logger.debug(f"{ctx.author} requested to see voice commands")
         help_string = self.help_messages['voice_help']
         await asyncio.gather(ctx.author.send(help_string), selfClean(ctx))
+
+    @commands.command(aliases=["refreshhelp"])
+    @commands.check(isAdmin)
+    async def refresh_help(self, ctx: Context) -> None:
+        help_string = self.help_messages['all_student']
+        await ctx.channel.purge()
+        await ctx.channel.send(help_string)
+
+        logger.debug(f"{ctx.author} has refreshed the help page")
 
 
 def setup(client):
