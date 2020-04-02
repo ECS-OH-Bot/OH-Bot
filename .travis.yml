@@ -1,5 +1,5 @@
 language: python
 deploy:
   provider: azure_web_apps
- on:
-   branch: deploy
+  on:
+    branch: deploy
