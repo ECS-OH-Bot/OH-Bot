@@ -1,5 +1,4 @@
-script:
-  echo "No build needed"
+language: python
 deploy:
   provider: azure_web_apps
  on:
