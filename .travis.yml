@@ -1,4 +1,6 @@
+language: python
 deploy:
   provider: azure_web_apps
   on:
     branch: deploy
+script: echo "No tests needed :)"
