@@ -1,19 +1,19 @@
 DiscordCredentials:
-  BotToken: NjkyMTc3MzY3OTY3MzM0NDEw.XoIjrA.dlcuDPrmXWsiEBprbHSe5N3XejQ
-  GuildID: 202920747474092033
+  BotToken: !ENV ${BOT_TOKEN}
+  GuildID: !ENV ${GUILD_ID}
 
 ChannelIDs:
-  Queue: 692894015565332521
-  WaitingRoom: 218217026953543682
-  Announcements: 692848065014399026
+  Queue: !ENV ${QUEUE_ID}
+  WaitingRoom: !ENV ${WAITING_ROOM_ID}
+  Announcements: !ENV ${ANNOUNCEMENTS_ID}
 
 Roles:
   Admin:
-    Name: Instructor
-    RoleID: 202921174290792458
+    Name: !ENV ${ADMIN_NAME}
+    RoleID: !ENV ${ADMIN_ROLE_ID}
   Student:
-    Name: Student
-    RoleID: 692258575241707560
+    Name: !ENV ${STUDENT_NAME}
+    RoleID: !ENV ${STUDENT_ROLE_ID}
 
 BotConfigurations:
   CommandCharacter: /
