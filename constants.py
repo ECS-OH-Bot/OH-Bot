@@ -98,6 +98,7 @@ class Constants:
         self.STUDENT, self.STUDENT_ROLE_ID = student["Name"], int(student["RoleID"])
 
         bot_configs = config["BotConfigurations"]
+        self.CLASS = bot_configs["ClassName"]
         self.COMMAND_CHAR = bot_configs["CommandCharacter"]
         self.HELP_MESSAGES = bot_configs["HelpMessage"]
         self.MESSAGE_LIFE_TIME = bot_configs["MessageLifetime"]

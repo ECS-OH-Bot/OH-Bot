@@ -1,4 +1,5 @@
 from datetime import datetime
+from logging.handlers import TimedRotatingFileHandler
 import logging
 from os import getenv, path, mkdir, listdir, remove
 from sys import stdout
@@ -10,10 +11,7 @@ logger = logging.getLogger(f"main.{__name__}")
 
 def log_file_name(directory: str) -> str:
     """Generates the name for a log file based off the current time"""
-    today = datetime.today()
-    current_time = today.strftime("%H.%M.%m.%d.%Y")
-
-    return f"{directory}{current_time}.log"
+    return f"{directory}{GetConstants().CLASS}.log"
 
 
 def optional_make_dir(directory: str) -> None:
@@ -29,7 +27,7 @@ def logging_cleanup(capacity: int = 5) -> None:
     """
     log_dir = GetConstants().LOGGING_DIR
     log_files = listdir(log_dir)
-    full_paths = [f"{log_dir}{x}" for x in log_files if x.endswith('.log')]
+    full_paths = [f"{log_dir}{x}" for x in log_files if '.log' in x]
 
     while len(full_paths) >= capacity:
         oldest_file = min(full_paths, key=path.getctime)
@@ -53,13 +51,19 @@ def logging_setup(p_logger: logging.Logger) -> None:
 
     p_logger.setLevel(logging.DEBUG)
 
+    # Timed rotating file handler
+    fh = TimedRotatingFileHandler(log_file_name(directory), when='S', interval=10)
+    fh.suffix = '%Y_%m_%d'
+    p_logger.addHandler(fh)
+
+    # File handler
     fh = logging.FileHandler(log_file_name(directory))
     fh.setFormatter(formatter)
     fh.setLevel(logging.DEBUG)
     p_logger.addHandler(fh)
 
+    # Stream handler
     sh = logging.StreamHandler(stdout)
     sh.setFormatter(formatter)
     sh.setLevel(logging.DEBUG)
     p_logger.addHandler(sh)
-    p_logger.propagate = True
