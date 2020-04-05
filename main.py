@@ -21,6 +21,7 @@ def main():
 
     # Setup handlers and infrastructure for the logger
     logging_setup(logger)
+    logger.error("sest")
 
     # Create the discord.py bot
     bot: commands.Bot = commands.Bot(command_prefix=GetConstants().COMMAND_CHAR)

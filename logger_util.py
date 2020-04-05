@@ -1,12 +1,22 @@
 from datetime import datetime
-from logging.handlers import TimedRotatingFileHandler
+from logging.handlers import TimedRotatingFileHandler, QueueHandler, QueueListener
 import logging
-from os import getenv, path, mkdir, listdir, remove
+from queue import Queue
+from os import path, mkdir, listdir, remove
 from sys import stdout
 
 from constants import GetConstants
 
 logger = logging.getLogger(f"main.{__name__}")
+
+
+class SelfCleaningRotatingTimedFileHandler(TimedRotatingFileHandler):
+    def __init__(self, filename, when='midnight', interval='1'):
+        super().__init__(filename, when=when, interval=interval)
+
+    def doRollover(self) -> None:
+        logging_cleanup()
+        super().doRollover()
 
 
 def log_file_name(directory: str) -> str:
@@ -16,8 +26,8 @@ def log_file_name(directory: str) -> str:
 
 def optional_make_dir(directory: str) -> None:
     """Checks if dir exists, if it doesn't we go make that directory"""
-    logger.debug(f"Logging directory did not exist at {directory} and so will be generated")
     if not path.isdir(directory):
+        logger.debug(f"Logging directory did not exist at {directory} and so will be generated")
         mkdir(directory)
 
 
@@ -47,23 +57,23 @@ def logging_setup(p_logger: logging.Logger) -> None:
 
     logging_cleanup(GetConstants().LOGGING_CAPACITY)
 
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(name)s:%(lineno)d - %(levelname)s - %(message)s')
 
     p_logger.setLevel(logging.DEBUG)
 
     # Timed rotating file handler
-    fh = TimedRotatingFileHandler(log_file_name(directory), when='S', interval=10)
-    fh.suffix = '%Y_%m_%d'
-    p_logger.addHandler(fh)
-
-    # File handler
-    fh = logging.FileHandler(log_file_name(directory))
+    fh = SelfCleaningRotatingTimedFileHandler(log_file_name(directory))
+    fh.suffix = '%Y_%m_%d.log'
     fh.setFormatter(formatter)
     fh.setLevel(logging.DEBUG)
-    p_logger.addHandler(fh)
 
     # Stream handler
     sh = logging.StreamHandler(stdout)
     sh.setFormatter(formatter)
     sh.setLevel(logging.DEBUG)
-    p_logger.addHandler(sh)
+
+    queue = Queue(-1)
+    qh = QueueHandler(queue)
+    q_listener = QueueListener(queue, fh, sh)
+    p_logger.addHandler(qh)
+    q_listener.start()
