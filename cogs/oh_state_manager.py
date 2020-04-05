@@ -11,6 +11,8 @@ from discord import TextChannel, Message
 from user_utils import isAdmin
 from errors import OHStateError
 from constants import GetConstants
+from cogs.tools import selfClean
+
 
 class OHState(Enum):
     CLOSED = 0
@@ -22,10 +24,12 @@ async def officeHoursAreClosed(context: Context) -> bool:
         raise OHStateError("Office hours are not closed.")
     return True
 
+
 async def officeHoursAreOpen(context: Context) -> bool:
     if not context.bot.get_cog("OHStateManager").state.value == OHState.OPEN.value:
         raise OHStateError("Office hours are not open.")
     return True
+
 
 class OHStateManager(Cog):
     def __init__(self):
@@ -51,10 +55,15 @@ class OHStateManager(Cog):
         # Send a message to the announcements channel
         # First, delete any and all messages made by the bot to the channel
         await self.__remove_bot_messages(context)
+
         # Then send our announcements
-        await (await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send("@here, the queue is now open.")
+        await (await context.bot.fetch_channel(
+            GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send("@here, the queue is now open.")
+
         # Trigger the queue message to reprint
         await context.bot.get_cog("OH_Queue").onQueueUpdate()
+        # Remove the command message to prevent clutter
+        await selfClean(context)
 
     @commands.command(aliases=["close", "end"])
     @commands.check(officeHoursAreOpen)
@@ -64,10 +73,17 @@ class OHStateManager(Cog):
         # Send a message to the announcements channel
         # First, delete any and all messages made by the bot to the channel
         await self.__remove_bot_messages(context)
+
         # Then send our announcements
-        await (await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send("@here, the queue is now closed.")
+        await (await context.bot.fetch_channel(
+            GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send("@here, the queue is now closed.")
+
         # Trigger the queue message to reprint
         await context.bot.get_cog("OH_Queue").onQueueUpdate()
+
+        # Remove the command message to prevent clutter
+        await selfClean(context)
+
 
 def setup(bot: Bot):
     bot.add_cog(OHStateManager())
