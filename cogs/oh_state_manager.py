@@ -51,34 +51,31 @@ class OHStateManager(Cog):
     @commands.check(officeHoursAreClosed)
     @commands.check(isAdmin)
     async def startOH(self, context: Context):
-        await context.author.send("Office hours have been opened. Students may now queue up")
-        self.state = OHState.OPEN
-        # Send a message to the announcements channel
-        # First, delete any and all messages made by the bot to the channel
-        await self.__remove_bot_messages(context)
+        self.state = OHState.CLOSED
+        # Send a message to the user and delete any and all messages made by the bot to the announcements channel
+        await gather(context.author.send("Office hours have been opened. Students may now queue up"),
+                     self.__remove_bot_messages(context)
+                     )
 
         # Then remove the command message, send the announcement and trigger the queue message to reprint
         await gather(selfClean(context),
                      (await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send(
-                         "@here, the queue is now "
-                         "open."),
+                         "@here, the queue is now open."),
                      context.bot.get_cog("OH_Queue").onQueueUpdate()
                      )
 
     @commands.command(aliases=["close", "end"])
     @commands.check(officeHoursAreOpen)
     async def stopOH(self, context: Context):
-        await context.author.send("Office hours have been closed. No new students will be added to the queue.")
         self.state = OHState.CLOSED
-        # Send a message to the announcements channel
-        # First, delete any and all messages made by the bot to the channel
-        await self.__remove_bot_messages(context)
-
+        # Send a message to the user and delete any and all messages made by the bot to the announcements channel
+        await gather(context.author.send("Office hours have been closed. No new students will be added to the queue."),
+                     self.__remove_bot_messages(context)
+                     )
         # Then remove the command message, send the announcement and trigger the queue message to reprint
         await gather(selfClean(context),
                      (await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send(
-                         "@here, the queue is now "
-                         "closed."),
+                         "@here, the queue is now closed."),
                      context.bot.get_cog("OH_Queue").onQueueUpdate()
                      )
 
