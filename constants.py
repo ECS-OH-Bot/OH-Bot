@@ -108,6 +108,13 @@ class Constants:
         self.LOGGING_DIR = logging["LoggingDir"]
         self.LOGGING_CAPACITY = logging["DirectoryCapacity"]
 
+        # Email
+        email = logging["Email"]
+        self.SMTP_HOST = email["Smtp_host"]
+        self.MAILING_LIST = email["To"]
+        self.USERNAME = email["Credentials"][0]
+        self.PASSWORD = email["Credentials"][1]
+
         # Program arguments
         self.args = args
 

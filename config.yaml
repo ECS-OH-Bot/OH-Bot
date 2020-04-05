@@ -25,3 +25,9 @@ BotConfigurations:
 Logging:
   LoggingDir: logs/
   DirectoryCapacity: 5
+  Email:
+    Smtp_host: !ENV ${SMTP_HOST}
+    To: !ENV ${TO}
+    Credentials:
+      - !ENV ${USERNAME}
+      - !ENV ${PASSWORD}

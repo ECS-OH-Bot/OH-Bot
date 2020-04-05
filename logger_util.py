@@ -1,8 +1,9 @@
-from datetime import datetime
-from logging.handlers import TimedRotatingFileHandler, QueueHandler, QueueListener
+from email.message import EmailMessage
+from logging.handlers import TimedRotatingFileHandler, QueueHandler, QueueListener, SMTPHandler
 import logging
 from queue import Queue
 from os import path, mkdir, listdir, remove
+from smtplib import SMTP_SSL
 from sys import stdout
 
 from constants import GetConstants
@@ -11,12 +12,39 @@ logger = logging.getLogger(f"main.{__name__}")
 
 
 class SelfCleaningRotatingTimedFileHandler(TimedRotatingFileHandler):
-    def __init__(self, filename, when='midnight', interval='1'):
+    """
+    File handler that changes to a new file at midnight. When it does
+    this it also goes and cleans up the directory that contains the log
+    files
+    """
+
+    def __init__(self, filename, when='midnight', interval=1):
         super().__init__(filename, when=when, interval=interval)
 
     def doRollover(self) -> None:
         logging_cleanup()
         super().doRollover()
+
+
+class SSLSMTPHandler(SMTPHandler):
+    def __init__(self, mailhost, fromaddr, toaddrs, subject, **kwargs):
+        super().__init__(mailhost, fromaddr, toaddrs, subject, **kwargs)
+        self.mailhost = mailhost
+        self.fromaddr = fromaddr
+        self.toaddrs = toaddrs
+        self.subject = subject
+
+    def emit(self, record: logging.LogRecord) -> None:
+        msg = EmailMessage()
+        msg['To'] = self.toaddrs
+        msg['From'] = self.fromaddr
+        msg['Subject'] = self.subject
+        msg.set_content(self.format(record))
+
+        with SMTP_SSL(GetConstants().SMTP_HOST, 465) as server:
+            server.ehlo()
+            server.login(GetConstants().USERNAME, GetConstants().PASSWORD)
+            server.send_message(msg)
 
 
 def log_file_name(directory: str) -> str:
@@ -72,8 +100,15 @@ def logging_setup(p_logger: logging.Logger) -> None:
     sh.setFormatter(formatter)
     sh.setLevel(logging.DEBUG)
 
+    # Email Handler
+    eh = SSLSMTPHandler('smtp.gmail.com', f"{GetConstants().CLASS} OH Bot <your_friendly_bot@discord>",
+                        GetConstants().MAILING_LIST,
+                        "A CRITICAL ERROR HAS OCCURRED")
+    eh.setFormatter(formatter)
+    eh.setLevel(logging.ERROR)
+
     queue = Queue(-1)
     qh = QueueHandler(queue)
-    q_listener = QueueListener(queue, fh, sh)
+    q_listener = QueueListener(queue, fh, sh, eh, respect_handler_level=True)
     p_logger.addHandler(qh)
     q_listener.start()
