@@ -11,8 +11,6 @@ logger = getLogger('main')
 # Argparse configuration
 parser = argparse.ArgumentParser(description="Discord bot to manage office hours")
 parser.add_argument('config', help='The path to the configuration file. Probably config.yaml')
-parser.add_argument('--debug', help='Print debug information to the cog error handler', action='store_true', required=False)
-
 
 def main():
     # Instantiate constants singleton

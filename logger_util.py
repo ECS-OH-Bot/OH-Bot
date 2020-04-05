@@ -105,7 +105,7 @@ def logging_setup(p_logger: logging.Logger) -> None:
                         GetConstants().MAILING_LIST,
                         "A CRITICAL ERROR HAS OCCURRED")
     eh.setFormatter(formatter)
-    eh.setLevel(logging.ERROR)
+    eh.setLevel(logging.CRITICAL)
 
     queue = Queue(-1)
     qh = QueueHandler(queue)

@@ -20,7 +20,7 @@ BotConfigurations:
   CommandCharacter: /
   HelpMessage: help_messages.yaml
   # Left as empty for None for now
-  MessageLifetime:
+  MessageLifetime: 5
 
 Logging:
   LoggingDir: logs/
