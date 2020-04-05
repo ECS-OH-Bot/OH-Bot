@@ -56,7 +56,7 @@ class ErrorManager(commands.Cog):
                                  )
                 logger.exception(err)
             else:
-                logger.exception("An internal error has occured in the processing of a command. "
+                logger.critical("An internal error has occured in the processing of a command. "
                                  "Run with --debug for more information"
                                  )
 
