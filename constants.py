@@ -98,6 +98,7 @@ class Constants:
         self.STUDENT, self.STUDENT_ROLE_ID = student["Name"], int(student["RoleID"])
 
         bot_configs = config["BotConfigurations"]
+        self.CLASS = bot_configs["ClassName"]
         self.COMMAND_CHAR = bot_configs["CommandCharacter"]
         self.HELP_MESSAGES = bot_configs["HelpMessage"]
         self.MESSAGE_LIFE_TIME = bot_configs["MessageLifetime"]
@@ -106,6 +107,13 @@ class Constants:
         logging = config["Logging"]
         self.LOGGING_DIR = logging["LoggingDir"]
         self.LOGGING_CAPACITY = logging["DirectoryCapacity"]
+
+        # Email
+        email = logging["Email"]
+        self.SMTP_HOST = email["Smtp_host"]
+        self.MAILING_LIST = email["To"]
+        self.USERNAME = email["Credentials"][0]
+        self.PASSWORD = email["Credentials"][1]
 
         # Program arguments
         self.args = args
