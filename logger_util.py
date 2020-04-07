@@ -101,7 +101,7 @@ def logging_setup(p_logger: logging.Logger) -> None:
     sh.setLevel(logging.DEBUG)
 
     # Email Handler
-    eh = SSLSMTPHandler('smtp.gmail.com', f"{GetConstants().CLASS} OH Bot <your_friendly_bot@discord>",
+    eh = SSLSMTPHandler(GetConstants().SMTP_HOST, f"{GetConstants().CLASS} OH Bot <your_friendly_bot@discord>",
                         GetConstants().MAILING_LIST,
                         "A CRITICAL ERROR HAS OCCURRED")
     eh.setFormatter(formatter)

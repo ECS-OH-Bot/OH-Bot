@@ -53,7 +53,7 @@ class ErrorManager(commands.Cog):
             await sender.send("I have encountered an internal error in processing your last command. "
                               "If the error persists please contact Grant Gilson."
                               )
-            logger.exception("An internal error has occured during processing of a command\n"
+            logger.critical("An internal error has occured during processing of a command\n"
                              f"\tCommand: {context.invoked_with}"
                              f"\tSender: {context.author}"
                              f"\tChannel: {context.channel}",
