@@ -192,9 +192,14 @@ breakout rooms when you are called on, you will be removed from the queue!**")
             if student.voice is None:
                 logger.debug(f"{student} was not in the waiting when they were dequeued")
                 await sender.send(
-                    f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot"
+                    f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot "
                     "move them into your voice channel. They have been removed from the queue.",
                     delete_after=GetConstants().MESSAGE_LIFE_TIME)
+                # This one should not get a message timeout. The user may be afk
+                await student.send(
+                    f"{student.mention} you have been called on but were not in the waiting room or any of the breakout"
+                    "rooms. I cannot move you into the office hours. You have been removed from the queue.",
+                    )
             else:
                 await student.send(f"You are being summoned to {sender.mention}'s OH",
                                    delete_after=GetConstants().MESSAGE_LIFE_TIME)
