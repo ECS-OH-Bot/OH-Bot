@@ -30,7 +30,7 @@ async def userToMember(user: User, bot: commands.Bot) -> Optional[Member]:
 
 async def isAdmin(context: commands.Context) -> bool:
     """
-    Returns true if context.author has the Admin role, false otherwise
+    Returns true if context.author has the Admin role, raises CommandPermissionError
     This is used with the @command.check decorator to facilitate authentication for elevated commands
     """
     roles = None
@@ -46,7 +46,7 @@ async def isAdmin(context: commands.Context) -> bool:
         roles = context.author.roles
 
     if not any(role.id == GetConstants().INSTRUCTOR_ROLE_ID for role in roles):
-        return False
+        raise CommandPermissionError("User is not an admin")
     return True
 
 async def isStudent(context: commands.Context) -> bool:
