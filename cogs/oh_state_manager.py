@@ -66,6 +66,7 @@ class OHStateManager(Cog):
 
     @commands.command(aliases=["close", "end"])
     @commands.check(officeHoursAreOpen)
+    @commands.check(isAdmin)
     async def stopOH(self, context: Context):
         self.state = OHState.CLOSED
         # Send a message to the user and delete any and all messages made by the bot to the announcements channel

@@ -10,6 +10,7 @@ from tabulate import tabulate
 
 from user_utils import isAdmin, userToMember
 from cogs.oh_state_manager import OHState, officeHoursAreOpen
+from errors import CommandPermissionError
 
 from constants import GetConstants
 
@@ -165,41 +166,51 @@ breakout rooms when you are called on, you will be removed from the queue!**")
         @ctx: context object containing information about the caller
         """
         sender = context.author
-        if await isAdmin(context):
-            if isinstance(sender, User):
-                logger.debug(f"{sender} attempted to dequeue from DMs but this isn't allowed")
-                # If the command was sent via DM, tell them to do it from the bot channel instead
-                await sender.send("Due to technical limitations, you must send the dequeue command from the server"
-                                  "channel",
-                                  delete_after=GetConstants().MESSAGE_LIFE_TIME)
-                return
-
-            if sender.voice is None:
-                logger.debug(f"{sender} tried to deque but they were not in a voice channel")
-                await sender.send("You must be connected to a voice channel to do this. The queue has not been modified.")
-
-            elif len(self.OHQueue):
-                student = self.OHQueue.pop(0)
-                logger.debug(f"{student} has been dequeued")
-                if student.voice is None:
-                    logger.debug(f"{student} was not in the waiting when they were dequeued")
-                    await sender.send(f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot"
-                                      "move them into your voice channel. They have been removed from the queue.",
-                                      delete_after=GetConstants().MESSAGE_LIFE_TIME)
-                else:
-                    await student.send(f"You are being summoned to {sender.mention}'s OH",
-                                       delete_after=GetConstants().MESSAGE_LIFE_TIME)
-                    # Add this student to the voice chat
-                    await student.move_to(sender.voice.channel)
-                    logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
-            else:
-                logger.debug(f"{sender} tried to dequeue from an empty queue")
-                await sender.send("The queue is empty. Perhaps now is a good time for a coffee break?",
-                                  delete_after=GetConstants().MESSAGE_LIFE_TIME)
-
-        else:
+        try:
+            await isAdmin(context)
+        except CommandPermissionError:
             logger.debug(f"{sender} was a student who called dq. This will trigger them to leave queue")
             await self.leaveQueue(context)
+            return
+
+        if isinstance(sender, User):
+            logger.debug(f"{sender} attempted to dequeue from DMs but this isn't allowed")
+            # If the command was sent via DM, tell them to do it from the bot channel instead
+            await sender.send("Due to technical limitations, you must send the dequeue command from the server"
+                              "channel",
+                              delete_after=GetConstants().MESSAGE_LIFE_TIME)
+            return
+
+        if sender.voice is None:
+            logger.debug(f"{sender} tried to deque but they were not in a voice channel")
+            await sender.send(
+                "You must be connected to a voice channel to do this. The queue has not been modified.")
+
+        elif len(self.OHQueue):
+            student = self.OHQueue.pop(0)
+            logger.debug(f"{student} has been dequeued")
+            if student.voice is None:
+                logger.debug(f"{student} was not in the waiting when they were dequeued")
+                await sender.send(
+                    f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot "
+                    "move them into your voice channel. They have been removed from the queue.",
+                    delete_after=GetConstants().MESSAGE_LIFE_TIME)
+                # This one should not get a message timeout. The user may be afk
+                await student.send(
+                    f"{student.mention} you have been called on but were not in the waiting room or any of the breakout"
+                    "rooms. I cannot move you into the office hours. You have been removed from the queue.",
+                    )
+            else:
+                await student.send(f"You are being summoned to {sender.mention}'s OH",
+                                   delete_after=GetConstants().MESSAGE_LIFE_TIME)
+                # Add this student to the voice chat
+                await student.move_to(sender.voice.channel)
+                logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
+        else:
+            logger.debug(f"{sender} tried to dequeue from an empty queue")
+            await sender.send("The queue is empty. Perhaps now is a good time for a coffee break?",
+                              delete_after=GetConstants().MESSAGE_LIFE_TIME)
+
 
     @commands.command(aliases=["cq", "clearqueue"])
     @commands.check(isAdmin)
