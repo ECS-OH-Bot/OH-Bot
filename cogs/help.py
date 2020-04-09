@@ -9,6 +9,7 @@ from yaml import load, add_constructor
 from user_utils import isAdmin
 from cogs.tools import selfClean
 from constants import GetConstants
+from errors import CommandPermissionError
 
 logger = getLogger(f"main.{__name__}")
 
@@ -28,10 +29,11 @@ class Help(commands.Cog):
 
     @commands.group(name='help', invoke_without_command=True)
     async def help_cmd(self, ctx: Context) -> None:
-        if await isAdmin(ctx):
+        try:
+            await isAdmin(ctx)
             logger.debug(f"{ctx.author} requested to see all admin commands")
             help_string = self.help_messages['all_admin']
-        else:
+        except CommandPermissionError:
             logger.debug(f"{ctx.author} requested to see all student commands")
             help_string = self.help_messages['all_student']
 
@@ -39,10 +41,11 @@ class Help(commands.Cog):
 
     @help_cmd.command(name='queue')
     async def queue_help(self, ctx: Context) -> None:
-        if await isAdmin(ctx):
+        try:
+            await isAdmin(ctx)
             logger.debug(f"{ctx.author} requested to see admin commands for the queue")
             help_string = self.help_messages['queue_admin']
-        else:
+        except CommandPermissionError:
             logger.debug(f"{ctx.author} requested to see student commands for the queue")
             help_string = self.help_messages['queue_student']
 
