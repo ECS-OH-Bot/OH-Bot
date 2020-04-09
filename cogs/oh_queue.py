@@ -10,6 +10,7 @@ from tabulate import tabulate
 
 from user_utils import isAdmin, userToMember
 from cogs.oh_state_manager import OHState, officeHoursAreOpen
+from errors import CommandPermissionError
 
 from constants import GetConstants
 
@@ -165,7 +166,12 @@ breakout rooms when you are called on, you will be removed from the queue!**")
         @ctx: context object containing information about the caller
         """
         sender = context.author
-        if await isAdmin(context):
+        try:
+            await isAdmin(context)
+        except CommandPermissionError:
+            logger.debug(f"{sender} was a student who called dq. This will trigger them to leave queue")
+            await self.leaveQueue(context)
+        finally:
             if isinstance(sender, User):
                 logger.debug(f"{sender} attempted to dequeue from DMs but this isn't allowed")
                 # If the command was sent via DM, tell them to do it from the bot channel instead
@@ -197,9 +203,6 @@ breakout rooms when you are called on, you will be removed from the queue!**")
                 await sender.send("The queue is empty. Perhaps now is a good time for a coffee break?",
                                   delete_after=GetConstants().MESSAGE_LIFE_TIME)
 
-        else:
-            logger.debug(f"{sender} was a student who called dq. This will trigger them to leave queue")
-            await self.leaveQueue(context)
 
     @commands.command(aliases=["cq", "clearqueue"])
     @commands.check(isAdmin)
