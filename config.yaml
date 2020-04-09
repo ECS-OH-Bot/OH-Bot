@@ -17,7 +17,7 @@ Roles:
 
 BotConfigurations:
   ClassName: !ENV ${CLASS}
-  CommandCharacter: /
+  CommandCharacter: ['/', '\']
   HelpMessage: help_messages.yaml
   # Left as empty for None for now
   MessageLifetime: 5
