@@ -16,8 +16,8 @@ Roles:
     RoleID: !ENV ${STUDENT_ROLE_ID}
 
 BotConfigurations:
-  ClassName: Test
-  CommandCharacter: /
+  ClassName: !ENV ${CLASS}
+  CommandCharacter: ['/', '\']
   HelpMessage: help_messages.yaml
   # Left as empty for None for now
   MessageLifetime:
@@ -29,5 +29,5 @@ Logging:
     Smtp_host: !ENV ${SMTP_HOST}
     To: !ENV ${TO}
     Credentials:
-      - !ENV ${USERNAME}
+      - !ENV ${EMAIL}
       - !ENV ${PASSWORD}
