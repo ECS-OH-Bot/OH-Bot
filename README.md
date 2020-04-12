@@ -1,7 +1,6 @@
 # OH-BOT 
 ========
-![Discord] [https://discordapp.com/]
-![GNU] [https://www.gnu.org/licenses/gpl-3.0.html]
+[<img src="https://img.icons8.com/color/48/000000/discord-logo.png"/>](https://discordapp.com/)
 #####The Online Office Hour Discord Butler
 
 ## Purpose
