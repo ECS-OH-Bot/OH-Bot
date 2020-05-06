@@ -58,7 +58,7 @@ class OHStateManager(Cog):
                      )
 
         # Then remove the command message, send the announcement and trigger the queue message to reprint
-        await gather(selfClean(context),
+        await gather(
                      (await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send(
                          "@here, the queue is now open."),
                      context.bot.get_cog("OH_Queue").onQueueUpdate()
@@ -74,7 +74,7 @@ class OHStateManager(Cog):
                      self.__remove_bot_messages(context)
                      )
         # Then remove the command message, send the announcement and trigger the queue message to reprint
-        await gather(selfClean(context),
+        await gather(
                      (await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send(
                          "@here, the queue is now closed."),
                      context.bot.get_cog("OH_Queue").onQueueUpdate()
