@@ -19,13 +19,38 @@ OH-Bot is a server managment automation bot. This means that tasks like notifyin
 
 OH-Bot is a *self-hotsted* bot - meaning that you will need to host and maintain your own instance. 
 
-## Requirements
-* Python 3.7 (or higher)
-* Discord account
-
-
 ## Waiting Queue System
-An instructor can open the OH session by issuing the command `/open`. 
+
+### Commands
+
+* `/open` - Access Role: [Admin, Instructor]
+    * Open the OH-queue for students to join using `/eq`
+* `/close` - Access Role: [Admin, Instructor]
+    * Close the OH-queue, stop students from entering the queue
+    * Students that were in the queue before closing will still be regisitered for OH
+* `/clear /cq` - Access Role: [Admin, Instructor]
+    * Empties the OH-queue of students
+* `/enterqueue /eq` - Access Role: [Admin, Instructor, Student]
+    * Enter sender into the OH-queue
+* `/leavequeue /lq` - Access Role: [Admin, Instructor, Student]
+    * Removes sender from the OH-queue
+* `/dequeue /dq` - Access Role: [Admin, Instructor]
+    * Removes next student from the queue and moves them into the voice channel the sender is currently connected to.
+* `/help` - Access Role: [Admin, Instructor]
+    * Sends a DM to the sender containing the above commands and their behavior
+
+## Server [Template]()
+OH-Bot makes use of Discord's Server Template feature
+
+There are three roles in the OH-Bot server template:
+* Admin - total control of bot functionality and server interfaces
+* Instructor - control over OH sessions and locked channels
+* Student - ability to interface with OH-Queue
+
+
+## Requirements
+* [Python 3.7](https://www.python.org/downloads/) (or higher)
+* [Discord](https://discordapp.com/) account
 
 ## License
 
