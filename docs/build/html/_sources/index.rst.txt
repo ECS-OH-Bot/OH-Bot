@@ -1,14 +1,24 @@
-.. Discord OH Bot documentation master file, created by
-   sphinx-quickstart on Mon Jun  1 18:47:28 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to Discord OH Bot's documentation!
+Welcome to Discord OH Bot's Documentation!
 ==========================================
+.. toctree::
+   :maxdepth: 2
+   :caption: Tutorials
+
+   tutorials/creating_new_cogs
+   tutorials/interpretting_logging_messages
+
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Source Code Documentation:
+
+   cogs
+   constants
+   errors
+   main
+
+
+
 
 
 
