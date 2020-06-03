@@ -1,8 +1,8 @@
-# OH-BOT  [<img src="https://img.icons8.com/color/48/000000/discord-logo.png"/>](https://discordapp.com/)
+# [<img src="https://img.icons8.com/color/48/000000/discord-logo.png"/>](https://discordapp.com/)OH-Bot
 
 ### The Discord Office Hour Butler
 
-<p align=center>
+<p align=center style="font-size:medium">
 <a href=#purpose>Purpose</a> • 
 <a href=#overview>Overview</a> • 
 <a href=#installation>Installation</a> • 
@@ -56,14 +56,35 @@ OH-Bot commands have access level based on sender roles
 * `/help` - Access Role: [Admin, Instructor]
     * Sends a DM to the sender containing the above commands and their behavior relative to sender access level
 
+## Requirements
+* [Git](https://git-scm.com/) (Optional if using packaged release)
+* [Python 3.7](https://www.python.org/downloads/) (or higher)
+    * [Pip](https://pip.pypa.io/en/stable/installing/)
+* [Discord](https://discordapp.com/) app & account
+
 ## Installation
 
-### Requirements
-* [Python 3.7](https://www.python.org/downloads/) (or higher)
-* [Discord](https://discordapp.com/) account
+Clone the source code
+
+```bash
+git clone https://github.com/ECS-OH-Bot/OH-Bot/tree/master && cd OH-Bot
+```
+
+Follow the instructions [here](https://discordpy.readthedocs.io/en/v1.3.3/discord.html#creating-a-bot-account) for obtaining a token for your instance of the Bot
+
+Run the setup script
+```bash
+python3 setup.py
+```
+
+Run the main script
+```bash
+python3 main.py
+```
+
 
 ## License
 
 Released under the [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
 
-Copyright (C) 2020  Grant Gilson, Noah Rose Ledesma, Stephen Ott
+`Copyright (C) 2020  Grant Gilson, Noah Rose Ledesma, Stephen Ott`
