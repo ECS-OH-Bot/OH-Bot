@@ -1,7 +1,4 @@
-# OH-BOT 
-
-
-[<img src="https://img.icons8.com/color/48/000000/discord-logo.png"/>](https://discordapp.com/)
+# OH-BOT  [<img src="https://img.icons8.com/color/48/000000/discord-logo.png"/>](https://discordapp.com/)
 
 The Online Office Hour Discord Butler
 
@@ -20,6 +17,12 @@ OH-Bot is a server managment automation bot. This means that tasks like notifyin
 OH-Bot is a *self-hotsted* bot - meaning that you will need to host and maintain your own instance. 
 
 ## Waiting Queue System
+
+There are three roles in the OH-Bot server template:
+* Admin - total control of bot functionality and server interfaces
+* Instructor - control over OH sessions and locked channels
+* Student - ability to interface with OH-Queue
+
 
 ### Commands
 
