@@ -9,6 +9,7 @@ main(){
     done
 
     setupVenv
+
 }
 
 setupVenv(){
@@ -30,8 +31,7 @@ setupVenv(){
 }
 
 verifyDep(){
-
-    if ! command -V "$1" > '\dev\null' 2>&1; then
+    if ! command -V "$1"; then
         echo "Dependency $1 not met" 
         exit 128
     fi
@@ -39,8 +39,11 @@ verifyDep(){
 }
 
 generateEnv(){
-    
+    touch .env
+    echo "Please enter your discord bot token:"
+    read BOT_TOKEN
 }
+
 
 
 main
