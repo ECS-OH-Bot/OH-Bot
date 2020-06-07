@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Exceptions" href="errors.html" />
-    <link rel="prev" title="Cogs" href="cogs.html" /> 
+    <link rel="prev" title="Tools" href="cogs/tools.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -80,21 +80,17 @@
               
             
             
-              <p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/creating_new_cogs.html">Creating New Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/interpretting_logging_messages.html">How to Interpret Log Messages</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cogs.html">Cogs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cogs.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Constants</a></li>
 <li class="toctree-l1"><a class="reference internal" href="errors.html">Exceptions</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Welcome to Discord OH Bot’s Documentation!</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="cogs.html">Cogs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="errors.html">Exceptions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="main.html">Main</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main.html">Main</a></li>
 </ul>
 
@@ -160,8 +156,92 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="constants">
-<h1>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-constants">
+<span id="constants"></span><h1>Constants<a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h1>
+<p>Defines constants used across multiple files in this project.
+Most of these constants are loaded from the environment variables
+This singleton also holds parsed arguments</p>
+<dl class="py function">
+<dt id="constants.parse_config">
+<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">parse_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tag</span><span class="o">=</span><span class="default_value">'!ENV'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#constants.parse_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a yaml configuration file and resolve any environment variables
+The environment variables must have !ENV before them and be in this format
+to be parsed: ${VAR_NAME}.</p>
+<dl class="field-list">
+<dt class="field-odd">How to Use the !ENV directive in your config file</dt>
+<dd class="field-odd"><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">database</span><span class="p">:</span>
+    <span class="nt">host</span><span class="p">:</span> <span class="kt">!ENV</span> <span class="l l-Scalar l-Scalar-Plain">${HOST}</span>
+    <span class="nt">port</span><span class="p">:</span> <span class="kt">!ENV</span> <span class="l l-Scalar l-Scalar-Plain">${PORT}</span>
+<span class="nt">app</span><span class="p">:</span>
+    <span class="nt">log_path</span><span class="p">:</span> <span class="kt">!ENV</span> <span class="s">&#39;/var/${LOG_PATH}&#39;</span>
+    <span class="nt">something_else</span><span class="p">:</span> <span class="kt">!ENV</span> <span class="s">&#39;${AWESOME_ENV_VAR}/var/${A_SECOND_AWESOME_VAR}&#39;</span>
+</pre></div>
+</div>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – the path to the yaml file</p></li>
+<li><p><strong>data</strong> (<em>str</em>) – the yaml data itself as a stream</p></li>
+<li><p><strong>tag</strong> (<em>str</em>) – the tag to look for</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the dict configuration</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict[str, T]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt id="constants.Constants">
+<em class="property">class </em><code class="sig-prename descclassname">constants.</code><code class="sig-name descname">Constants</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Singleton accesible via GetConstants
+Below is the list of the variables you can access via the getter for this singleton</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BOT_TOKEN</strong> (<em>str</em>) – The API token for the bot</p></li>
+<li><p><strong>GUILD_ID</strong> (<em>int</em>) – The ID for the server which the bot will be serving</p></li>
+<li><p><strong>WAITING_ROOM_CHANNEL_ID</strong> (<em>str</em>) – Channel ID of the waiting room</p></li>
+<li><p><strong>QUEUE_CHANNEL_ID</strong> (<em>int</em>) – Channel ID of the queue</p></li>
+<li><p><strong>ANNOUNCMENT_CHANNEL_ID</strong> (<em>int</em>) – Channel ID of the announcement channel</p></li>
+<li><p><strong>ADMIN</strong> (<em>str</em>) – Name for the admin role</p></li>
+<li><p><strong>INSTRUCTOR_ROLE_ID</strong> (<em>int</em>) – Role ID for users that have the role of admin</p></li>
+<li><p><strong>STUDENT</strong> (<em>str</em>) – Name for the student role</p></li>
+<li><p><strong>STUDENT_ROLE_ID</strong> (<em>int</em>) – Role ID for users that have the role of student</p></li>
+<li><p><strong>CLASS</strong> (<em>str</em>) – The name of the class that the bot is serving</p></li>
+<li><p><strong>COMMAND_CHAR</strong> (<em>str</em>) – The character used to envoke commands, i.e. “/eq” where “/” is the command character</p></li>
+<li><p><strong>HELP_MESSAGES</strong> (<em>str</em>) – The path to the YAML file which contains the various help messages</p></li>
+<li><p><strong>MESSAGE_LIFETIME</strong> (<em>str</em>) – How long after sending the bot’s DM’s to users persist</p></li>
+<li><p><strong>LOGGING_DIR</strong> (<em>str</em>) – The path to the directory where log files will be put in</p></li>
+<li><p><strong>LOGGING_CAPACITY</strong> (<em>str</em>) – Maximum number of log files allowed in logging directory. If this amount is surpassed,
+then the oldest log file will be deleted</p></li>
+<li><p><strong>SMTP_HOST</strong> (<em>str</em>) – The smtp server used to send email notifications of fatal errors</p></li>
+<li><p><strong>MAILING_LIST</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of email addresses to send critical alerts too</p></li>
+<li><p><strong>USERNAME</strong> (<em>str</em>) – The email address that said notififcations will be sent form</p></li>
+<li><p><strong>PASSWORD</strong> (<em>str</em>) – The password to the aforementioned email account</p></li>
+</ul>
+</dd>
+</dl>
+<p>Note that the above two should both specified in the .env file</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="constants.GetConstants">
+<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">GetConstants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#constants.GetConstants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function meant to access the instance of the singleton safely. Always use this after the singleton has been initialize</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – Raised when the singleton has not first been instantiated</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The instance of the singleton</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -175,7 +255,7 @@
         <a href="errors.html" class="btn btn-neutral float-right" title="Exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="cogs.html" class="btn btn-neutral float-left" title="Cogs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="cogs/tools.html" class="btn btn-neutral float-left" title="Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

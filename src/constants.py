@@ -15,13 +15,16 @@ def parse_config(path=None, data=None, tag='!ENV'):
     Load a yaml configuration file and resolve any environment variables
     The environment variables must have !ENV before them and be in this format
     to be parsed: ${VAR_NAME}.
-    E.g.:
-    database:
-        host: !ENV ${HOST}
-        port: !ENV ${PORT}
-    app:
-        log_path: !ENV '/var/${LOG_PATH}'
-        something_else: !ENV '${AWESOME_ENV_VAR}/var/${A_SECOND_AWESOME_VAR}'
+    
+    :How to Use the !ENV directive in your config file:
+        .. code-block:: yaml
+        
+            database:
+                host: !ENV ${HOST}
+                port: !ENV ${PORT}
+            app:
+                log_path: !ENV '/var/${LOG_PATH}'
+                something_else: !ENV '${AWESOME_ENV_VAR}/var/${A_SECOND_AWESOME_VAR}'
     :param str path: the path to the yaml file
     :param str data: the yaml data itself as a stream
     :param str tag: the tag to look for
@@ -67,6 +70,40 @@ def parse_config(path=None, data=None, tag='!ENV'):
 
 
 class Constants:
+    """
+    Singleton accesible via GetConstants
+    Below is the list of the variables you can access via the getter for this singleton
+
+    :ivar str BOT_TOKEN: The API token for the bot
+    :ivar int GUILD_ID: The ID for the server which the bot will be serving
+    
+    :ivar str WAITING_ROOM_CHANNEL_ID: Channel ID of the waiting room
+    :ivar int QUEUE_CHANNEL_ID: Channel ID of the queue
+    :ivar int ANNOUNCMENT_CHANNEL_ID: Channel ID of the announcement channel
+
+    :ivar str ADMIN: Name for the admin role
+    :ivar int INSTRUCTOR_ROLE_ID: Role ID for users that have the role of admin
+
+    :ivar str STUDENT: Name for the student role
+    :ivar int STUDENT_ROLE_ID: Role ID for users that have the role of student
+
+    :ivar str CLASS: The name of the class that the bot is serving
+    :ivar str COMMAND_CHAR: The character used to envoke commands, i.e. "/eq" where "/" is the command character
+    :ivar str HELP_MESSAGES: The path to the YAML file which contains the various help messages
+    :ivar str MESSAGE_LIFETIME: How long after sending the bot's DM's to users persist
+
+    :ivar str LOGGING_DIR: The path to the directory where log files will be put in
+    :ivar str LOGGING_CAPACITY: Maximum number of log files allowed in logging directory. If this amount is surpassed,
+                            then the oldest log file will be deleted
+
+    :ivar str SMTP_HOST: The smtp server used to send email notifications of fatal errors
+    :ivar List[str] MAILING_LIST: List of email addresses to send critical alerts too
+    
+    :ivar str USERNAME: The email address that said notififcations will be sent form
+    :ivar str PASSWORD: The password to the aforementioned email account
+
+    Note that the above two should both specified in the .env file
+    """
     instance: Optional['Constants'] = None
 
     def __init__(self, args):
@@ -124,6 +161,12 @@ class Constants:
         Constants.instance = self
 
 def GetConstants():
+    """
+    Function meant to access the instance of the singleton safely. Always use this after the singleton has been initialize
+
+    :raises RuntimeError: Raised when the singleton has not first been instantiated
+    :return: The instance of the singleton
+    """
     if Constants.instance is not None:
         return Constants.instance
     else:
