@@ -16,6 +16,8 @@ Welcome to Discord OH Bot's Documentation!
    constants
    errors
    main
+   logger_util
+   user_utils
 
 
 

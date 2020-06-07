@@ -1,3 +1,8 @@
+"""
+Set of functions that culminate in logging_setup, which deals with setup of everything related to logging throughout 
+the rest of the bot
+"""
+
 from email.message import EmailMessage
 from logging.handlers import TimedRotatingFileHandler, QueueHandler, QueueListener, SMTPHandler
 import logging
@@ -13,9 +18,8 @@ logger = logging.getLogger(f"main.{__name__}")
 
 class SelfCleaningRotatingTimedFileHandler(TimedRotatingFileHandler):
     """
-    File handler that changes to a new file at midnight. When it does
-    this it also goes and cleans up the directory that contains the log
-    files
+    Subclass of the builtin TimedRotatingFileHandler logging handler that changes to a new file at midnight. 
+    When it does this it also goes and cleans up the directory that contains the log files
     """
 
     def __init__(self, filename, when='midnight', interval=1):
@@ -27,6 +31,11 @@ class SelfCleaningRotatingTimedFileHandler(TimedRotatingFileHandler):
 
 
 class SSLSMTPHandler(SMTPHandler):
+    """
+    Subclass of the builtin SMTP logging handler that uses SSL to send email messages
+    Used in this bot to send emails when a critical error has occured
+
+    """
     def __init__(self, mailhost, fromaddr, toaddrs, subject, **kwargs):
         super().__init__(mailhost, fromaddr, toaddrs, subject, **kwargs)
         self.mailhost = mailhost

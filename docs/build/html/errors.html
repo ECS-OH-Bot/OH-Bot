@@ -80,21 +80,17 @@
               
             
             
-              <p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/creating_new_cogs.html">Creating New Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/interpretting_logging_messages.html">How to Interpret Log Messages</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cogs.html">Cogs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cogs.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Exceptions</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Welcome to Discord OH Bot’s Documentation!</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="cogs.html">Cogs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Exceptions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="main.html">Main</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="index.html#indices-and-tables">Indices and tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main.html">Main</a></li>
 </ul>
 
@@ -160,8 +156,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="exceptions">
-<h1>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-errors">
+<span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-errors" title="Permalink to this headline">¶</a></h1>
+<p>Error types used by this bot</p>
+<dl class="py class">
+<dt id="errors.CommandPermissionError">
+<em class="property">class </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">CommandPermissionError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.CommandPermissionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when a non-elevated user attempts to invoke a command that requires special privileges</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="errors.OHStateError">
+<em class="property">class </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">OHStateError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.OHStateError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raised when the expected OH state for a command is different from the actual state</p>
+</dd></dl>
+
 </div>
 
 

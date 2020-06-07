@@ -10,11 +10,12 @@ from errors import CommandPermissionError
 
 async def userToMember(user: User, bot: commands.Bot) -> Optional[Member]:
     """
-    Resolves a user into a member of the guild
-    When the bot receives a direct message the author of the message is a User
-    To get information about this user as a member of a guild, a member instance is needed
-    :param user: The user instance
-    :param bot: An instance of the bot
+    Resolves a user into a member of the guild.
+    When the bot receives a direct message the author of the message is a User.
+    To get information about this user as a member of a guild, a member instance is needed.
+    
+    :param User user: The user instance
+    :param commands.Bot bot: An instance of the bot
     :return: The member instance, or None if the user is not a member of the guild
     """
     guild = bot.get_guild(GetConstants().GUILD_ID)
@@ -30,8 +31,8 @@ async def userToMember(user: User, bot: commands.Bot) -> Optional[Member]:
 
 async def isAdmin(context: commands.Context) -> bool:
     """
-    Returns true if context.author has the Admin role, raises CommandPermissionError
-    This is used with the @command.check decorator to facilitate authentication for elevated commands
+    Returns true if context.author has the Admin role, raises CommandPermissionError.
+    This is used with the @command.check decorator to facilitate authentication for elevated commands.
     """
     roles = None
     if isinstance(context.author, User):
