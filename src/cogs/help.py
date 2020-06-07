@@ -1,3 +1,6 @@
+"""
+Module that implments the help command and all of its subcommands
+"""
 import asyncio
 from logging import getLogger
 
@@ -29,6 +32,10 @@ class Help(commands.Cog):
 
     @commands.group(name='help', invoke_without_command=True)
     async def help_cmd(self, ctx: Context) -> None:
+        """
+        Generalized help command that displays all command availible to the user.\n
+        Invoked like: /help
+        """
         try:
             await isAdmin(ctx)
             logger.debug(f"{ctx.author} requested to see all admin commands")
@@ -41,6 +48,10 @@ class Help(commands.Cog):
 
     @help_cmd.command(name='queue')
     async def queue_help(self, ctx: Context) -> None:
+        """
+        Tells the user all commands that are pertinent to using the queue according to their acces level\n
+        Invoked like: /help queue
+        """
         try:
             await isAdmin(ctx)
             logger.debug(f"{ctx.author} requested to see admin commands for the queue")
@@ -53,6 +64,10 @@ class Help(commands.Cog):
 
     @help_cmd.command(name='voice')
     async def voice_help(self, ctx: Context) -> None:
+        """
+        Tells the user all commands that are pertinent to using voice features\n
+        Invoked like: /help voice
+        """
         logger.debug(f"{ctx.author} requested to see voice commands")
         help_string = self.help_messages['voice_help']
         await asyncio.gather(ctx.author.send(help_string), selfClean(ctx))
@@ -60,6 +75,9 @@ class Help(commands.Cog):
     @commands.command(aliases=["refreshhelp"])
     @commands.check(isAdmin)
     async def refresh_help(self, ctx: Context) -> None:
+        """
+        Utility refreshing the help in the help channel. Useful for when new commands get impletmented
+        """
         help_string = self.help_messages['all_student']
         await ctx.channel.purge()
         await ctx.channel.send(help_string)
