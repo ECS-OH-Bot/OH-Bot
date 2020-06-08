@@ -2,7 +2,7 @@ Cogs
 ==========================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    cogs/error_manager
@@ -12,8 +12,8 @@ Cogs
    cogs/tools
 
 
-Indices and tables
-==================
+Indices and Tables
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
