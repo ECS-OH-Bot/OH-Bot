@@ -33,7 +33,7 @@ The standard OH-Session protocol that we follow:
 
 **OH-Bot** implements a simple *first come first serve* queue where student are allowed to enter and leave the queue whenever they like while OH is being held.
 
-## Server [Template](#TODO:add_template_link)
+## Server [Template](https://discord.new/53Q2rPtTh5EG)
 **OH-Bot** makes use of Discord's Server Template feature
 
 There are three roles in the **OH-Bot** server [template](#TODO:add_template_link):
