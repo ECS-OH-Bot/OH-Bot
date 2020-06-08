@@ -1,7 +1,7 @@
-Exceptions
-==========
+Errors
+======
+
 .. automodule:: errors
-
-.. autoclass:: errors.CommandPermissionError
-
-.. autoclass:: errors.OHStateError
+   :members:
+   :undoc-members:
+   :show-inheritance:

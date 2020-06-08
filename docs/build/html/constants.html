@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Constants &mdash; Discord OH Bot 1.1 documentation</title>
+  <title>Constants Singleton &mdash; Discord OH Bot 1.1 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Exceptions" href="errors.html" />
-    <link rel="prev" title="Tools" href="cogs/tools.html" /> 
+    <link rel="next" title="Errors" href="errors.html" />
+    <link rel="prev" title="Tools Cog" href="cogs/tools.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,9 +89,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cogs.html">Cogs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="errors.html">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="main.html">Main</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Constants Singleton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger_util.html">Logging Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_utils.html">User Utilities</a></li>
 </ul>
 
             
@@ -137,7 +138,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Constants</li>
+      <li>Constants Singleton</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -157,10 +158,64 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-constants">
-<span id="constants"></span><h1>Constants<a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h1>
+<span id="constants-singleton"></span><h1>Constants Singleton<a class="headerlink" href="#module-constants" title="Permalink to this headline">¶</a></h1>
 <p>Defines constants used across multiple files in this project.
 Most of these constants are loaded from the environment variables
 This singleton also holds parsed arguments</p>
+<dl class="py class">
+<dt id="constants.Constants">
+<em class="property">class </em><code class="sig-prename descclassname">constants.</code><code class="sig-name descname">Constants</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Singleton accesible via GetConstants
+Below is the list of the variables you can access via the getter for this singleton</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>BOT_TOKEN</strong> (<em>str</em>) – The API token for the bot</p></li>
+<li><p><strong>GUILD_ID</strong> (<em>int</em>) – The ID for the server which the bot will be serving</p></li>
+<li><p><strong>WAITING_ROOM_CHANNEL_ID</strong> (<em>str</em>) – Channel ID of the waiting room</p></li>
+<li><p><strong>QUEUE_CHANNEL_ID</strong> (<em>int</em>) – Channel ID of the queue</p></li>
+<li><p><strong>ANNOUNCMENT_CHANNEL_ID</strong> (<em>int</em>) – Channel ID of the announcement channel</p></li>
+<li><p><strong>ADMIN</strong> (<em>str</em>) – Name for the admin role</p></li>
+<li><p><strong>INSTRUCTOR_ROLE_ID</strong> (<em>int</em>) – Role ID for users that have the role of admin</p></li>
+<li><p><strong>STUDENT</strong> (<em>str</em>) – Name for the student role</p></li>
+<li><p><strong>STUDENT_ROLE_ID</strong> (<em>int</em>) – Role ID for users that have the role of student</p></li>
+<li><p><strong>CLASS</strong> (<em>str</em>) – The name of the class that the bot is serving</p></li>
+<li><p><strong>COMMAND_CHAR</strong> (<em>str</em>) – The character used to envoke commands, i.e. “/eq” where “/” is the command character</p></li>
+<li><p><strong>HELP_MESSAGES</strong> (<em>str</em>) – The path to the YAML file which contains the various help messages</p></li>
+<li><p><strong>MESSAGE_LIFETIME</strong> (<em>str</em>) – How long after sending the bot’s DM’s to users persist</p></li>
+<li><p><strong>LOGGING_DIR</strong> (<em>str</em>) – The path to the directory where log files will be put in</p></li>
+<li><p><strong>LOGGING_CAPACITY</strong> (<em>str</em>) – Maximum number of log files allowed in logging directory. If this amount is surpassed,
+then the oldest log file will be deleted</p></li>
+<li><p><strong>SMTP_HOST</strong> (<em>str</em>) – The smtp server used to send email notifications of fatal errors</p></li>
+<li><p><strong>MAILING_LIST</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of email addresses to send critical alerts too</p></li>
+<li><p><strong>USERNAME</strong> (<em>str</em>) – The email address that said notififcations will be sent form</p></li>
+<li><p><strong>PASSWORD</strong> (<em>str</em>) – The password to the aforementioned email account</p></li>
+</ul>
+</dd>
+</dl>
+<p>Note that the above two should both specified in the .env file</p>
+<dl class="py attribute">
+<dt id="constants.Constants.instance">
+<code class="sig-name descname">instance</code><em class="property">: Optional[Constants]</em><em class="property"> = None</em><a class="headerlink" href="#constants.Constants.instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="constants.GetConstants">
+<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">GetConstants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#constants.GetConstants" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function meant to access the instance of the singleton safely. Always use this after the singleton has been initialize</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – Raised when the singleton has not first been instantiated</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The instance of the singleton</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt id="constants.parse_config">
 <code class="sig-prename descclassname">constants.</code><code class="sig-name descname">parse_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tag</span><span class="o">=</span><span class="default_value">'!ENV'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#constants.parse_config" title="Permalink to this definition">¶</a></dt>
@@ -194,54 +249,6 @@ to be parsed: ${VAR_NAME}.</p>
 </dl>
 </dd></dl>
 
-<dl class="py class">
-<dt id="constants.Constants">
-<em class="property">class </em><code class="sig-prename descclassname">constants.</code><code class="sig-name descname">Constants</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#constants.Constants" title="Permalink to this definition">¶</a></dt>
-<dd><p>Singleton accesible via GetConstants
-Below is the list of the variables you can access via the getter for this singleton</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>BOT_TOKEN</strong> (<em>str</em>) – The API token for the bot</p></li>
-<li><p><strong>GUILD_ID</strong> (<em>int</em>) – The ID for the server which the bot will be serving</p></li>
-<li><p><strong>WAITING_ROOM_CHANNEL_ID</strong> (<em>str</em>) – Channel ID of the waiting room</p></li>
-<li><p><strong>QUEUE_CHANNEL_ID</strong> (<em>int</em>) – Channel ID of the queue</p></li>
-<li><p><strong>ANNOUNCMENT_CHANNEL_ID</strong> (<em>int</em>) – Channel ID of the announcement channel</p></li>
-<li><p><strong>ADMIN</strong> (<em>str</em>) – Name for the admin role</p></li>
-<li><p><strong>INSTRUCTOR_ROLE_ID</strong> (<em>int</em>) – Role ID for users that have the role of admin</p></li>
-<li><p><strong>STUDENT</strong> (<em>str</em>) – Name for the student role</p></li>
-<li><p><strong>STUDENT_ROLE_ID</strong> (<em>int</em>) – Role ID for users that have the role of student</p></li>
-<li><p><strong>CLASS</strong> (<em>str</em>) – The name of the class that the bot is serving</p></li>
-<li><p><strong>COMMAND_CHAR</strong> (<em>str</em>) – The character used to envoke commands, i.e. “/eq” where “/” is the command character</p></li>
-<li><p><strong>HELP_MESSAGES</strong> (<em>str</em>) – The path to the YAML file which contains the various help messages</p></li>
-<li><p><strong>MESSAGE_LIFETIME</strong> (<em>str</em>) – How long after sending the bot’s DM’s to users persist</p></li>
-<li><p><strong>LOGGING_DIR</strong> (<em>str</em>) – The path to the directory where log files will be put in</p></li>
-<li><p><strong>LOGGING_CAPACITY</strong> (<em>str</em>) – Maximum number of log files allowed in logging directory. If this amount is surpassed,
-then the oldest log file will be deleted</p></li>
-<li><p><strong>SMTP_HOST</strong> (<em>str</em>) – The smtp server used to send email notifications of fatal errors</p></li>
-<li><p><strong>MAILING_LIST</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – List of email addresses to send critical alerts too</p></li>
-<li><p><strong>USERNAME</strong> (<em>str</em>) – The email address that said notififcations will be sent form</p></li>
-<li><p><strong>PASSWORD</strong> (<em>str</em>) – The password to the aforementioned email account</p></li>
-</ul>
-</dd>
-</dl>
-<p>Note that the above two should both specified in the .env file</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="constants.GetConstants">
-<code class="sig-prename descclassname">constants.</code><code class="sig-name descname">GetConstants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#constants.GetConstants" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function meant to access the instance of the singleton safely. Always use this after the singleton has been initialize</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><strong>RuntimeError</strong> – Raised when the singleton has not first been instantiated</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The instance of the singleton</p>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
 
@@ -252,10 +259,10 @@ then the oldest log file will be deleted</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="errors.html" class="btn btn-neutral float-right" title="Exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="errors.html" class="btn btn-neutral float-right" title="Errors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="cogs/tools.html" class="btn btn-neutral float-left" title="Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="cogs/tools.html" class="btn btn-neutral float-left" title="Tools Cog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

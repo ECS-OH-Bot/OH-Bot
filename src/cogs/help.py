@@ -18,6 +18,10 @@ logger = getLogger(f"main.{__name__}")
 
 
 class Help(commands.Cog):
+    """
+    This cog defines the set of commands with which users can ask the bot what commands are availible to them.
+    Note that the ctx argument that each of these methods take is given by the discord API.
+    """
     def __init__(self, client):
         self.client = client
 
@@ -33,6 +37,7 @@ class Help(commands.Cog):
     @commands.group(name='help', invoke_without_command=True)
     async def help_cmd(self, ctx: Context) -> None:
         """
+        help(self, ctx)
         Generalized help command that displays all command availible to the user.\n
         Invoked like: /help
         """

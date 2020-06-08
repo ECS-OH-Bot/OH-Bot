@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Error Manager &mdash; Discord OH Bot 1.1 documentation</title>
+  <title>Error Manager Cog &mdash; Discord OH Bot 1.1 documentation</title>
   
 
   
@@ -34,7 +34,9 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Help Cog" href="help.html" />
+    <link rel="prev" title="Cogs" href="../cogs.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -78,12 +80,27 @@
               
             
             
-              <p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../cogs.html">Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/creating_new_cogs.html">Creating New Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/interpretting_logging_messages.html">How to Interpret Log Messages</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cogs.html">Cogs</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Error Manager Cog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="help.html">Help Cog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oh_queue.html">oh_queue module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oh_state_manager.html">oh_state_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">tools module</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Discord OH Bot’s Documentation!</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">constants module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors.html">errors module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../main.html">main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logger_util.html">logger_util module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_utils.html">user_utils module</a></li>
 </ul>
 
             
@@ -129,7 +146,9 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Error Manager</li>
+          <li><a href="../cogs.html">Cogs</a> &raquo;</li>
+        
+      <li>Error Manager Cog</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -148,8 +167,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="error-manager">
-<h1>Error Manager<a class="headerlink" href="#error-manager" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-cogs.error_manager">
+<span id="error-manager-cog"></span><h1>Error Manager Cog<a class="headerlink" href="#module-cogs.error_manager" title="Permalink to this headline">¶</a></h1>
+<p>Cog to facilitate the handling of errors raised by bot commands across all cogs</p>
+<dl class="py class">
+<dt id="cogs.error_manager.ErrorManager">
+<em class="property">class </em><code class="sig-prename descclassname">cogs.error_manager.</code><code class="sig-name descname">ErrorManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bot</span><span class="p">:</span> <span class="n">discord.ext.commands.bot.Bot</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cogs.error_manager.ErrorManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">discord.ext.commands.cog.Cog</span></code></p>
+<dl class="py method">
+<dt id="cogs.error_manager.ErrorManager.on_command_error">
+<em class="property">async </em><code class="sig-name descname">on_command_error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">discord.ext.commands.context.Context</span></em>, <em class="sig-param"><span class="n">err</span><span class="p">:</span> <span class="n">Exception</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.error_manager.ErrorManager.on_command_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle errors raised by commands across all cogs</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -157,6 +189,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="help.html" class="btn btn-neutral float-right" title="Help Cog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../cogs.html" class="btn btn-neutral float-left" title="Cogs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

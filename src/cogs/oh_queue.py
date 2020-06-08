@@ -18,6 +18,10 @@ logger = getLogger(f"main.{__name__}")
 
 
 class OH_Queue(commands.Cog):
+    """
+    This cog defines the set of commands with which users can interact with the queue
+    Note that the ctx argument that each of these methods take is given by the discord API.
+    """
 
     def __init__(self, client: Bot):
         self.client = client

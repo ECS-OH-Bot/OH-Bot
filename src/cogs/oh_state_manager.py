@@ -16,23 +16,35 @@ from cogs.tools import selfClean
 
 
 class OHState(Enum):
+    """
+    Integer enum used to represent the two states of the queue. Either open or closed
+    """
     CLOSED = 0
     OPEN = 1
 
 
 async def officeHoursAreClosed(context: Context) -> bool:
+    """
+    Helper function that returns True if the queue is currecntly closed, and throws an exception if they are not closed
+    """
     if not context.bot.get_cog("OHStateManager").state.value == OHState.CLOSED.value:
         raise OHStateError("Office hours are not closed.")
     return True
 
 
 async def officeHoursAreOpen(context: Context) -> bool:
+    """
+    Helper function that returns True if the queue is currently open, and throws an exception if they are not open
+    """
     if not context.bot.get_cog("OHStateManager").state.value == OHState.OPEN.value:
         raise OHStateError("Office hours are not open.")
     return True
 
 
 class OHStateManager(Cog):
+    """
+    Cog that allows admins and instructors to manage when the queuue is open
+    """
     def __init__(self):
         self.state: OHState = OHState.CLOSED
 
@@ -51,6 +63,9 @@ class OHStateManager(Cog):
     @commands.check(officeHoursAreClosed)
     @commands.check(isAdmin)
     async def startOH(self, context: Context):
+        """
+        Opens up the queue, starting office hours
+        """
         self.state = OHState.OPEN
         # Send a message to the user and delete any and all messages made by the bot to the announcements channel
         await gather(context.author.send("Office hours have been opened. Students may now queue up"),
@@ -68,6 +83,9 @@ class OHStateManager(Cog):
     @commands.check(officeHoursAreOpen)
     @commands.check(isAdmin)
     async def stopOH(self, context: Context):
+        """
+        Closes the queue, ending office hours
+        """
         self.state = OHState.CLOSED
         # Send a message to the user and delete any and all messages made by the bot to the announcements channel
         await gather(context.author.send("Office hours have been closed. No new students will be added to the queue."),

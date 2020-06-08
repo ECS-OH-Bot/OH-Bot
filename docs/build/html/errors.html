@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Exceptions &mdash; Discord OH Bot 1.1 documentation</title>
+  <title>Errors &mdash; Discord OH Bot 1.1 documentation</title>
   
 
   
@@ -35,8 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Main" href="main.html" />
-    <link rel="prev" title="Constants" href="constants.html" /> 
+    <link rel="prev" title="Constants Singleton" href="constants.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,9 +88,10 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="cogs.html">Cogs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Exceptions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="main.html">Main</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants Singleton</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="logger_util.html">Logging Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_utils.html">User Utilities</a></li>
 </ul>
 
             
@@ -137,7 +137,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Exceptions</li>
+      <li>Errors</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -157,18 +157,20 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-errors">
-<span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-errors" title="Permalink to this headline">¶</a></h1>
+<span id="errors"></span><h1>Errors<a class="headerlink" href="#module-errors" title="Permalink to this headline">¶</a></h1>
 <p>Error types used by this bot</p>
-<dl class="py class">
+<dl class="py exception">
 <dt id="errors.CommandPermissionError">
-<em class="property">class </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">CommandPermissionError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.CommandPermissionError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised when a non-elevated user attempts to invoke a command that requires special privileges</p>
+<em class="property">exception </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">CommandPermissionError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.CommandPermissionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">discord.ext.commands.errors.CommandError</span></code></p>
+<p>Raised when a non-elevated user attempts to invoke a command that requires special privileges</p>
 </dd></dl>
 
-<dl class="py class">
+<dl class="py exception">
 <dt id="errors.OHStateError">
-<em class="property">class </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">OHStateError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.OHStateError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Raised when the expected OH state for a command is different from the actual state</p>
+<em class="property">exception </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">OHStateError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.OHStateError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">discord.ext.commands.errors.CommandError</span></code></p>
+<p>Raised when the expected OH state for a command is different from the actual state</p>
 </dd></dl>
 
 </div>
@@ -181,10 +183,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="main.html" class="btn btn-neutral float-right" title="Main" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="constants.html" class="btn btn-neutral float-left" title="Constants" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="constants.html" class="btn btn-neutral float-left" title="Constants Singleton" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

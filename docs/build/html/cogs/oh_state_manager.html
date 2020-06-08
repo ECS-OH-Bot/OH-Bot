@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Office Hours State Manager &mdash; Discord OH Bot 1.1 documentation</title>
+  <title>OH State Manager Cog &mdash; Discord OH Bot 1.1 documentation</title>
   
 
   
@@ -34,7 +34,9 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tools Cog" href="tools.html" />
+    <link rel="prev" title="OH Queue Cog" href="oh_queue.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -78,12 +80,26 @@
               
             
             
-              <p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../cogs.html">Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/creating_new_cogs.html">Creating New Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/interpretting_logging_messages.html">How to Interpret Log Messages</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cogs.html">Cogs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="error_manager.html">Error Manager Cog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="help.html">Help Cog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oh_queue.html">OH Queue Cog</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OH State Manager Cog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools Cog</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Discord OH Bot’s Documentation!</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants Singleton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors.html">Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logger_util.html">Logging Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_utils.html">User Utilities</a></li>
 </ul>
 
             
@@ -129,7 +145,9 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Office Hours State Manager</li>
+          <li><a href="../cogs.html">Cogs</a> &raquo;</li>
+        
+      <li>OH State Manager Cog</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -148,8 +166,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="office-hours-state-manager">
-<h1>Office Hours State Manager<a class="headerlink" href="#office-hours-state-manager" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="oh-state-manager-cog">
+<h1>OH State Manager Cog<a class="headerlink" href="#oh-state-manager-cog" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="cogs.oh_state_manager.OHState">
+<em class="property">class </em><code class="sig-prename descclassname">cogs.oh_state_manager.</code><code class="sig-name descname">OHState</code><a class="headerlink" href="#cogs.oh_state_manager.OHState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integer enum used to represent the two states of the queue. Either open or closed</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="cogs.oh_state_manager.officeHoursAreClosed">
+<em class="property">async </em><code class="sig-prename descclassname">cogs.oh_state_manager.</code><code class="sig-name descname">officeHoursAreClosed</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">discord.ext.commands.context.Context</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#cogs.oh_state_manager.officeHoursAreClosed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function that returns True if the queue is currecntly closed, and throws an exception if they are not closed</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="cogs.oh_state_manager.officeHoursAreOpen">
+<em class="property">async </em><code class="sig-prename descclassname">cogs.oh_state_manager.</code><code class="sig-name descname">officeHoursAreOpen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">discord.ext.commands.context.Context</span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#cogs.oh_state_manager.officeHoursAreOpen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function that returns True if the queue is currently open, and throws an exception if they are not open</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="cogs.oh_state_manager.OHStateManager">
+<em class="property">class </em><code class="sig-prename descclassname">cogs.oh_state_manager.</code><code class="sig-name descname">OHStateManager</code><a class="headerlink" href="#cogs.oh_state_manager.OHStateManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cog that allows admins and instructors to manage when the queuue is open</p>
+<dl class="py method">
+<dt id="cogs.oh_state_manager.OHStateManager.startOH">
+<em class="property">async </em><code class="sig-name descname">startOH</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.oh_state_manager.OHStateManager.startOH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens up the queue, starting office hours</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cogs.oh_state_manager.OHStateManager.stopOH">
+<em class="property">async </em><code class="sig-name descname">stopOH</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.oh_state_manager.OHStateManager.stopOH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the queue, ending office hours</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -157,6 +211,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="tools.html" class="btn btn-neutral float-right" title="Tools Cog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="oh_queue.html" class="btn btn-neutral float-left" title="OH Queue Cog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

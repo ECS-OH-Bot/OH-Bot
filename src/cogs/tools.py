@@ -19,7 +19,9 @@ async def selfClean(context: Context):
 
 
 class Tools(commands.Cog):
-
+    """
+    A collection of functions used as utilities for other cogs
+    """
     def __init__(self, client):
         self.client = client
 

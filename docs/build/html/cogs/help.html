@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Help Messages &mdash; Discord OH Bot 1.1 documentation</title>
+  <title>Help Cog &mdash; Discord OH Bot 1.1 documentation</title>
   
 
   
@@ -34,7 +34,9 @@
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" /> 
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="oh_queue module" href="oh_queue.html" />
+    <link rel="prev" title="Error Manager Cog" href="error_manager.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -78,12 +80,27 @@
               
             
             
-              <p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../cogs.html">Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/creating_new_cogs.html">Creating New Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/interpretting_logging_messages.html">How to Interpret Log Messages</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../cogs.html">Cogs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="error_manager.html">Error Manager Cog</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Help Cog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oh_queue.html">oh_queue module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oh_state_manager.html">oh_state_manager module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">tools module</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Welcome to Discord OH Bot’s Documentation!</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">constants module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors.html">errors module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../main.html">main module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logger_util.html">logger_util module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_utils.html">user_utils module</a></li>
 </ul>
 
             
@@ -129,7 +146,9 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Help Messages</li>
+          <li><a href="../cogs.html">Cogs</a> &raquo;</li>
+        
+      <li>Help Cog</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -148,8 +167,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="help-messages">
-<h1>Help Messages<a class="headerlink" href="#help-messages" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-cogs.help">
+<span id="help-cog"></span><h1>Help Cog<a class="headerlink" href="#module-cogs.help" title="Permalink to this headline">¶</a></h1>
+<p>Module that implments the help command and all of its subcommands</p>
+<dl class="py class">
+<dt id="cogs.help.Help">
+<em class="property">class </em><code class="sig-prename descclassname">cogs.help.</code><code class="sig-name descname">Help</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">client</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cogs.help.Help" title="Permalink to this definition">¶</a></dt>
+<dd><p>This cog defines the set of commands with which users can ask the bot what commands are availible to them.
+Note that the ctx argument that each of these methods take is given by the discord API.</p>
+<dl class="py method">
+<dt id="cogs.help.Help.help_cmd">
+<em class="property">async </em><code class="sig-name descname">help_cmd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.help.Help.help_cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generalized help command that displays all command availible to the user.</p>
+<p>Invoked like: /help</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cogs.help.Help.queue_help">
+<em class="property">async </em><code class="sig-name descname">queue_help</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.help.Help.queue_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tells the user all commands that are pertinent to using the queue according to their acces level</p>
+<p>Invoked like: /help queue</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="cogs.help.Help.refresh_help">
+<em class="property">async </em><code class="sig-name descname">refresh_help</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ctx</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.help.Help.refresh_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility refreshing the help in the help channel. Useful for when new commands get impletmented</p>
+<p>Invoked like: /help refreshhelp</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 
 
@@ -157,6 +205,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="oh_queue.html" class="btn btn-neutral float-right" title="oh_queue module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="error_manager.html" class="btn btn-neutral float-left" title="Error Manager Cog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

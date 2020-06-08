@@ -12,19 +12,17 @@ Welcome to Discord OH Bot's Documentation!
    :maxdepth: 2
    :caption: Source Code Documentation:
 
-   cogs
    constants
    errors
-   main
    logger_util
    user_utils
+   cogs
 
 
 
 
 
-
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`
