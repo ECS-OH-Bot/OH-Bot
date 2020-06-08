@@ -38,10 +38,20 @@ verifyDep(){
     return 0
 }
 
-generateEnv(){
+generateEnvFile(){
     touch .env
     echo "Please enter your discord bot token:"
     read BOT_TOKEN
+    if ! python3 generateEnv.py $BOT_TOKEN; then
+        echo "Failure Generating .env file"
+        echo "Refer to Docs on generating .env file by hand"
+    fi
+    echo "# See docs on how to setup email logging with these variables" >> .env
+    echo "#SMTP_HOST"  >> .env
+    echo "#TO" >> .env
+    echo "#EMAIL" >> .env
+    echo "#PASSWORD" >> .env
+    echo "#CLASS"   >> .env
 }
 
 
