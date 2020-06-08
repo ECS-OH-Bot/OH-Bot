@@ -9,6 +9,7 @@ main(){
     done
 
     setupVenv
+    generateEnvFile
 
 }
 
