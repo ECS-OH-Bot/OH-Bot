@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEPS=("python3")
-INTERPRETER = $(command -v python3)
+INTERPRETER=$(command -v python3)
 
 main(){
     for dep in "${DEPS[@]}"
@@ -60,8 +60,8 @@ generateEnvFile(){
 }
 
 generateRunConfig(){
-    echo "$INTERPRETER main.py config.yaml" >> setup.sh
-    chmod +x setup.sh
+    echo "$INTERPRETER main.py config.yaml" >> run.sh
+    chmod +x run.sh
 }
 
 main
