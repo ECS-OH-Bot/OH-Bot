@@ -53,6 +53,9 @@ generateEnvFile(){
     echo "#EMAIL" >> .env
     echo "#PASSWORD" >> .env
     echo "#CLASS"   >> .env
+
+    echo ".env File generate successfully"
+    echo "Try starting the bot with './run.sh'"
 }
 
 
