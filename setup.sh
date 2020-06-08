@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DEPS=("python3")
+INTERPRETER = $(command -v python3)
 
 main(){
     for dep in "${DEPS[@]}"
@@ -10,7 +11,7 @@ main(){
 
     setupVenv
     generateEnvFile
-
+    generateRunConfig
 }
 
 setupVenv(){
@@ -58,6 +59,9 @@ generateEnvFile(){
     echo "Try starting the bot with './run.sh'"
 }
 
-
+generateRunConfig(){
+    echo "$INTERPRETER main.py config.yaml" >> setup.sh
+    chmod +x setup.sh
+}
 
 main
