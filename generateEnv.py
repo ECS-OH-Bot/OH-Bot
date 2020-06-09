@@ -54,7 +54,7 @@ def main(token:str) -> int:
 
 
 def writeVar(varName:str, val:str, file) -> None:
-    alloc = f"{varName}={val}\n"
+    alloc = f"export {varName}={val}\n"
     file.write(alloc)
     
 

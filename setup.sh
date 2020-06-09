@@ -43,8 +43,8 @@ verifyDep(){
 generateEnvFile(){
     touch .env
     echo "Please enter your discord bot token:"
-    read BOT_TOKEN
-    if ! python3 generateEnv.py $BOT_TOKEN; then
+    read -r BOT_TOKEN
+    if ! python3 generateEnv.py "$BOT_TOKEN"; then
         echo "Failure Generating .env file"
         echo "Refer to Docs on generating .env file by hand"
     fi
@@ -55,12 +55,16 @@ generateEnvFile(){
     echo "#PASSWORD" >> .env
     echo "#CLASS"   >> .env
 
-    echo ".env File generate successfully"
-    echo "Try starting the bot with './run.sh'"
+    echo -e '.env File generate successfully\n'
+    echo -e "Try starting the bot with './run.sh'\n"
 }
 
 generateRunConfig(){
-    echo "$INTERPRETER main.py config.yaml" >> run.sh
+    {
+        echo "#!/bin/bash"
+        echo "source .env"
+        echo "$INTERPRETER main.py config.yaml"
+    } >> run.sh
     chmod +x run.sh
 }
 
