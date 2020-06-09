@@ -1,7 +1,7 @@
 Welcome to Discord OH Bot's Documentation!
 ==========================================
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Tutorials
 
    tutorials/creating_new_cogs
@@ -10,6 +10,7 @@ Welcome to Discord OH Bot's Documentation!
 
 .. toctree::
    :maxdepth: 2
+   :titlesonly:
    :caption: Source Code Documentation:
 
    constants

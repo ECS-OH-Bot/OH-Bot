@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="How to Interpret Log Messages" href="interpretting_logging_messages.html" />
+    <link rel="next" title="How to Make Use of Log Messages" href="interpretting_logging_messages.html" />
     <link rel="prev" title="Welcome to Discord OH Bot’s Documentation!" href="../index.html" /> 
 </head>
 
@@ -82,27 +82,20 @@
             
               <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating New Cogs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interpretting_logging_messages.html">How to Interpret Log Messages</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../cogs.html">Cogs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../errors.html">Exceptions</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Welcome to Discord OH Bot’s Documentation!</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating New Cogs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interpretting_logging_messages.html">How to Interpret Log Messages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cogs.html">Cogs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../constants.html">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../errors.html">Exceptions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../main.html">Main</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating New Cogs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-a-cog">What is a Cog?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-can-i-set-up-a-cog">How Can I Set Up a Cog?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../main.html">Main</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interpretting_logging_messages.html">How to Make Use of Log Messages</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants Singleton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors.html">Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logger_util.html">Logging Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_utils.html">User Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cogs.html">Cogs</a></li>
 </ul>
 
             
@@ -169,6 +162,56 @@
             
   <div class="section" id="creating-new-cogs">
 <h1>Creating New Cogs<a class="headerlink" href="#creating-new-cogs" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="what-is-a-cog">
+<h2>What is a Cog?<a class="headerlink" href="#what-is-a-cog" title="Permalink to this headline">¶</a></h2>
+<p>In the words of the <a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Cog">Discord API docs</a>, a cog is
+“a collection of commands, listeners, and optional state to help group commands together”. A more intuitive way to think of what a cog is to
+recall what a cog is in a machine: an individual component that serves some purpose within the machine. Cogs are a nice way to think of grouping
+toghether functionalities that the bot should have.</p>
+</div>
+<div class="section" id="how-can-i-set-up-a-cog">
+<h2>How Can I Set Up a Cog?<a class="headerlink" href="#how-can-i-set-up-a-cog" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Create a new python module in the <code class="code docutils literal notranslate"><span class="pre">src/cogs/</span></code> cogs directory.</p></li>
+<li><p>Open the aforementioned file in your editor of choice and do the following</p>
+<ol class="arabic simple">
+<li><p>Copy and paste this expression to initialize logging for the module: <code class="code docutils literal notranslate"><span class="pre">logger</span> <span class="pre">=</span> <span class="pre">getLogger(f&quot;main.{__name__}&quot;)</span></code></p></li>
+<li><p>Define a class that inherits from <code class="code docutils literal notranslate"><span class="pre">commands.Cog</span></code> and defines its constructor as the following:</p></li>
+</ol>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple">
+<li><p>To define a new command, create an asynchronous method and decorate it with the
+<a class="reference external" href="https://discordpy.readthedocs.io/en/latest/ext/commands/api.html?highlight=commands%20command#discord.ext.commands.command">&#64;commands.command</a>
+decorator</p></li>
+</ol>
+</li>
+</ol>
+<p>That’s it. To pull it all toghether by definining a cog that replys “hello” when the user types the command “/hi” and logs the user that
+entered the command</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
+
+<span class="kn">from</span> <span class="nn">discord.ext</span> <span class="kn">import</span> <span class="n">commands</span>
+<span class="kn">from</span> <span class="nn">discord.ext.commands</span> <span class="kn">import</span> <span class="n">Bot</span>
+<span class="kn">from</span> <span class="nn">discord.ext.commands.context</span> <span class="kn">import</span> <span class="n">Context</span>
+
+<span class="k">class</span> <span class="nc">Hello</span><span class="p">(</span><span class="n">commands</span><span class="o">.</span><span class="n">Cog</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="n">Bot</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">client</span>
+
+    <span class="nd">@commands</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;hi&#39;</span><span class="p">])</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">say_hello</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">Context</span><span class="p">):</span>
+        <span class="n">sender</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">author</span>
+        <span class="k">await</span> <span class="n">sender</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sender</span><span class="si">}</span><span class="s2"> said hi&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -179,7 +222,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="interpretting_logging_messages.html" class="btn btn-neutral float-right" title="How to Interpret Log Messages" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="interpretting_logging_messages.html" class="btn btn-neutral float-right" title="How to Make Use of Log Messages" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to Discord OH Bot’s Documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

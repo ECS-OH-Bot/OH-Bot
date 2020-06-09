@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>How to Interpret Log Messages &mdash; Discord OH Bot 1.1 documentation</title>
+  <title>How to Make Use of Log Messages &mdash; Discord OH Bot 1.1 documentation</title>
   
 
   
@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Cogs" href="../cogs.html" />
+    <link rel="next" title="Constants Singleton" href="../constants.html" />
     <link rel="prev" title="Creating New Cogs" href="creating_new_cogs.html" /> 
 </head>
 
@@ -83,26 +83,23 @@
               <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="creating_new_cogs.html">Creating New Cogs</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Interpret Log Messages</a></li>
-</ul>
-<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../cogs.html">Cogs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../errors.html">Exceptions</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Welcome to Discord OH Bot’s Documentation!</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="creating_new_cogs.html">Creating New Cogs</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">How to Interpret Log Messages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cogs.html">Cogs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../constants.html">Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../errors.html">Exceptions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../main.html">Main</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Make Use of Log Messages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-we-do-logging">How We Do Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#log-file">1. Log File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#standard-output">2. Standard Output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#email-notification">3. Email Notification</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../index.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../main.html">Main</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants Singleton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors.html">Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logger_util.html">Logging Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_utils.html">User Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cogs.html">Cogs</a></li>
 </ul>
 
             
@@ -148,7 +145,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>How to Interpret Log Messages</li>
+      <li>How to Make Use of Log Messages</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -167,8 +164,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="how-to-interpret-log-messages">
-<h1>How to Interpret Log Messages<a class="headerlink" href="#how-to-interpret-log-messages" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="how-to-make-use-of-log-messages">
+<h1>How to Make Use of Log Messages<a class="headerlink" href="#how-to-make-use-of-log-messages" title="Permalink to this headline">¶</a></h1>
+<p>When running a live service that you cannot constantly monitor, it is essential that you keep a record of what has happened, so
+that you can backtrack to pinpoint where problems happened. This bot accomplishes this using
+<a class="reference external" href="https://docs.python.org/3/howto/logging.html">Python’s builtin logging module</a></p>
+<div class="section" id="how-we-do-logging">
+<h2>How We Do Logging<a class="headerlink" href="#how-we-do-logging" title="Permalink to this headline">¶</a></h2>
+<p>Our log messages have been configured to display the date, the time (in the form HH:MM:SS,sss, where sss represents microseconds),
+what file and what line the statement came from, i.e. <code class="code docutils literal notranslate"><span class="pre">&lt;file_name&gt;:&lt;line_number&gt;</span></code>, the level of the message, either DEBUG,
+INFO, WARNING, ERROR, or CRITICAL, in order of asscending severity, and then the log message, which should give a concise statement
+regarding what happened. We record these messages in three ways.</p>
+<div class="section" id="log-file">
+<h3>1. Log File<a class="headerlink" href="#log-file" title="Permalink to this headline">¶</a></h3>
+<p>All logging statements are put into a log file. This log file is located in whatever directory was specified in the config file.
+Note that this log file is set to “rollover” at midnight so long as it’s running. This means that in a live deployment that you’ll
+have one log file per day. After seven days, the oldest log file gets deleted so as to not clutter up the directory.</p>
+</div>
+<div class="section" id="standard-output">
+<h3>2. Standard Output<a class="headerlink" href="#standard-output" title="Permalink to this headline">¶</a></h3>
+<p>As with the log file, all log statement are printed to stdout. This is very useful for testing and debugging purposes. Morevoer, services
+like Azure, the one we used for hosting, allow you to view the realtime output of what your hosting, which makes it very useful if you
+ever have that nightmare scenario of trying to find a bug in production</p>
+</div>
+<div class="section" id="email-notification">
+<h3>3. Email Notification<a class="headerlink" href="#email-notification" title="Permalink to this headline">¶</a></h3>
+<p>Lastly, you have a life; you’re not going to sit around looking at log output all day to know if something failed catastrophically, i.e. an
+error went unhandled. So we’ve setup a system, where you can give your email and password (note that you should be using an
+<a class="reference external" href="https://support.google.com/accounts/answer/185833?hl=en">app password</a> if you’re using Gmail. I would advise against using your real password),
+and the bot will email everyon on the mailing list given in the config file in the event that an exception occurs and was left unhandled.</p>
+</div>
+</div>
 </div>
 
 
@@ -179,7 +205,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../cogs.html" class="btn btn-neutral float-right" title="Cogs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../constants.html" class="btn btn-neutral float-right" title="Constants Singleton" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="creating_new_cogs.html" class="btn btn-neutral float-left" title="Creating New Cogs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
