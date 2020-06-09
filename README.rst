@@ -10,11 +10,11 @@ The Discord Office Hour Butler
 .. raw:: html
 
    <p align=center style="font-size:large">
-   <a href=#purpose>Purpose</a> • 
-   <a href=#overview>Overview</a> • 
-   <a href=#installation>Installation</a> • 
-   <a href=https://ecs-oh-bot.github.io/OH-Bot/docs/build/html/index.html>Docs</a> •
-   <a href=#liscense>License</a>
+      <a href=#purpose>Purpose</a> • 
+      <a href=#overview>Overview</a> • 
+      <a href=#installation>Installation</a> • 
+      <a href=https://ecs-oh-bot.github.io/OH-Bot/docs/build/html/index.html>Docs</a> •
+      <a href=#license>License</a>
    </p>
 .. raw:: html
 
@@ -113,7 +113,7 @@ Requirements
 
 -  `Discord <https://discordapp.com/>`__ app & account
 
-Installation (In Progress)
+Installation
 --------------------------
 
 Clone the source code
