@@ -1,4 +1,7 @@
-` <https://discordapp.com/>`__\ OH-Bot
+.. |DiscordLogo| image:: https://img.icons8.com/color/48/000000/discord-logo.png
+   :target: https://discordapp.com
+
+|DiscordLogo| OH-Bot
 ======================================
 
 The Discord Office Hour Butler
@@ -6,10 +9,13 @@ The Discord Office Hour Butler
 
 .. raw:: html
 
-   <p align="center" style="font-size:large">
-
-Purpose • Overview • Installation • Docs • License
-
+   <p align=center style="font-size:large">
+   <a href=#purpose>Purpose</a> • 
+   <a href=#overview>Overview</a> • 
+   <a href=#installation>Installation</a> • 
+   <a href=https://ecs-oh-bot.github.io/OH-Bot/docs/build/html/index.html>Docs</a> •
+   <a href=#liscense>License</a>
+   </p>
 .. raw:: html
 
    </p>
