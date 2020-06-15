@@ -27,7 +27,7 @@ setupVenv(){
 
     if [[ $INTERPRETER != *"/OH-Bot/venv"* ]]; then
         echo "Failed to activate virtual environment"
-        rm -rf venv
+        echo "Checks erroes aboce or try to start with a fresh venv"
         exit 129
     else
         echo "Virtual Enironment Activated"
@@ -35,7 +35,13 @@ setupVenv(){
 
     echo 'Installing Dependices'
     # Install the deps after we have verified that the venv is loaded
-    python3 -m pip install -r requirements.txt
+    if python3 -m pip install -r requirements.txt; then
+        echo 'Deps installed successfully'
+        return
+    else 
+        echo 'Failed to install Dependices, check errors above or try to start with a fresh venv'
+        exit 132
+    fi
 }
 
 verifyDep(){
