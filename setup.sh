@@ -15,19 +15,25 @@ main(){
 }
 
 setupVenv(){
-    mkdir venv
-    python3 -m venv ./venv
-    . ./venv/bin/activate
-   
+
+    if [ -f venv/bin/activate ]; then
+        echo 'Virtual Environment Found'
+    else 
+        mkdir venv
+        python3 -m venv ./venv          
+    fi
+    . ./venv/bin/activate  
     INTERPRETER=$(command -v python3)
 
     if [[ $INTERPRETER != *"/OH-Bot/venv"* ]]; then
         echo "Failed to activate virtual environment"
+        rm -rf venv
         exit 129
     else
         echo "Virtual Enironment Activated"
     fi
 
+    echo 'Installing Dependices'
     # Install the deps after we have verified that the venv is loaded
     python3 -m pip install -r requirements.txt
 }
