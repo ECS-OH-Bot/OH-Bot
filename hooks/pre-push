@@ -1,23 +1,47 @@
 #!/bin/bash
 
+EXIT_CODE=0
+
 runShellCheck(){
 
     for file in *.sh; do
-        if ! shellcheck -x "$file"; then
-            echo 'Fix shellcheck errors or commit with --no-verify flag'
-            exit 1
+        if ! shellcheck -x "$file" 1>&2; then
+            EXIT_CODE=1
         fi
     done
 }
 
 runPythonLinter(){
-    return 0
+    
+    for file in $(find src -iname '*.py'); do
+        if [[ ! flake8 --max-line-length=150 "$file" 1>&2 ]]; then
+            EXIT_CODE=2
+    done
 }
 
 main(){
     runShellCheck
-    # runPythonLinter
-    exit 0
+    runPythonLinter
 }
 
 main
+
+case $EXIT_CODE in
+    0)
+        exit EXIT_CODE
+        ;;
+
+    1)
+        echo 'Fix shellcheck errors or commit with --no-verify flag'
+        exit EXIT_CODE
+        ;;
+    
+    2)
+        echo 'Flake8 Violations found, fix style issues or commit with --no verify flag'
+        exit EXIT_CODE
+        ;;
+
+    *)
+        echo 'Unknown Exit code'
+        exit EXIT_CODE
+        ;;
