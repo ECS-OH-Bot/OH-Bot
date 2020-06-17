@@ -43,9 +43,13 @@ handled by **OH-Bot**
 and maintain your own instance. See `Quick Start <#quickstart>`__ to
 get started.
 
-The standard OH-Session protocol that we follow: 1. Instructors Opens
-OH-Queue 2. Students enter queue and enter waiting room 3. Instructors
-dequeue students 4. Instructors close queue when OH-Session is over
+The standard OH-Session protocol that we follow: 
+1. Instructors Opens
+OH-Queue 
+2. Students enter queue and enter waiting room 
+3. Instructors
+dequeue students 
+4. Instructors close queue when OH-Session is over
 
 Waiting Queue System
 --------------------
