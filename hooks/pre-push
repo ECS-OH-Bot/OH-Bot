@@ -1,0 +1,23 @@
+#!/bin/bash
+
+runShellCheck(){
+
+    for file in *.sh; do
+        if ! shellcheck -x "$file"; then
+            echo 'Fix shellcheck errors or commit with --no-verify flag'
+            exit 1
+        fi
+    done
+}
+
+runPythonLinter(){
+    return 0
+}
+
+main(){
+    runShellCheck
+    # runPythonLinter
+    exit 0
+}
+
+main
