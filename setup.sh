@@ -94,8 +94,8 @@ generateRunConfig(){
         echo "#!/bin/bash"
         echo "source $ENV_FILE"
         echo "$INTERPRETER src/main.py configs/config.yaml"
-    } > run.sh
-    chmod +x run.sh
+    } > "run${ENV_FILE}.sh"
+    chmod +x "run${ENV_FILE}.sh"
 }
 
 # https://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash

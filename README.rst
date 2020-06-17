@@ -132,13 +132,13 @@ Run the setup script
 
 .. code:: bash
 
-   ./setup.sh
+   ./setup.sh --name {ENV_FILE_NAME}
 
 Run the script to start up the bot
 
 .. code:: bash
 
-   ./run.sh
+   ./run{ENV_FILE_NAME}.sh
 
 `Docs <https://ecs-oh-bot.github.io/OH-Bot/docs/build/html/index.html>`__
 =========================================================================
