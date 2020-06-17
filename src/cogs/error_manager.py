@@ -7,12 +7,9 @@ from logging import getLogger
 from discord import Permissions
 from discord.ext import commands
 from discord.ext.commands import Bot, Context
-
-from constants import GetConstants
 from errors import CommandPermissionError, OHStateError
 
 logger = getLogger(f"main.{__name__}")
-
 
 
 class ErrorManager(commands.Cog):
@@ -54,11 +51,11 @@ class ErrorManager(commands.Cog):
                               "If the error persists please contact Grant Gilson."
                               )
             logger.critical("An internal error has occured during processing of a command\n"
-                             f"\tCommand: {context.invoked_with}"
-                             f"\tSender: {context.author}"
-                             f"\tChannel: {context.channel}",
-                             exc_info=err, stack_info=True
-                             )
+                            f"\tCommand: {context.invoked_with}"
+                            f"\tSender: {context.author}"
+                            f"\tChannel: {context.channel}",
+                            exc_info=err, stack_info=True
+                            )
 
         # Once the error has been handled, delete the offending message if we have permission to do so
         if context.channel.permissions_for is not None:

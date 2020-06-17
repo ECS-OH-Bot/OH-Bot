@@ -12,6 +12,7 @@ logger = getLogger('main')
 parser = argparse.ArgumentParser(description="Discord bot to manage office hours")
 parser.add_argument('config', help='The path to the configuration file. Probably config.yaml')
 
+
 def main():
     # Instantiate constants singleton
     # For convenience, this object holds onto command line arguments

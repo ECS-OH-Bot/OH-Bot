@@ -10,7 +10,7 @@ import os
 
 # Courtesy of:
 # https://medium.com/swlh/python-yaml-configuration-with-environment-variables-parsing-77930f4273ac
-def parse_config(path=None, data=None, tag='!ENV'):
+def parse_config(path=None, data=None, tag='!ENV'): # noqa
     """
     Load a yaml configuration file and resolve any environment variables
     The environment variables must have !ENV before them and be in this format
@@ -29,7 +29,7 @@ def parse_config(path=None, data=None, tag='!ENV'):
     :rtype: dict[str, T]
     """
     # pattern for global vars: look for ${word}
-    pattern = re.compile('.*?\${(\w+)}.*?')
+    pattern = re.compile('.*?\${(\w+)}.*?') # noqa
     loader = yaml.SafeLoader
 
     # the tag will be used to mark where to start searching for the pattern
@@ -120,8 +120,8 @@ class Constants:
 
         # Predefined constants
 
-
         Constants.instance = self
+
 
 def GetConstants():
     if Constants.instance is not None:

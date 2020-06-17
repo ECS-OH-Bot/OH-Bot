@@ -62,7 +62,6 @@ class OH_Queue(commands.Cog):
         queue_text = f"The queue is currently {status}. "\
                      f"There are {len(self.OHQueue)} student(s) in the queue\n```{table_text}```"
 
-
         # Find any previous message sent by the bot in the queue channel
         previous_messages: List[Message] = await self.queue_channel.history().flatten()
         previous_queue_message: Optional[Message] = None
@@ -88,8 +87,6 @@ class OH_Queue(commands.Cog):
             if next_student.voice is None:
                 await self.OHQueue[0].send("It looks like you are not in a voice channel right now. Make sure you join "
                                            "the waiting room before it is your turn!")
-
-
 
     @commands.command(aliases=["enterqueue", "eq"])
     @commands.check(officeHoursAreOpen)
@@ -158,7 +155,6 @@ breakout rooms when you are called on, you will be removed from the queue!**")
             logger.debug(f"{sender} tried to leave the queue, but they were already not in the queue")
             await sender.send(f"{sender.mention} you were not in the queue")
 
-
     @commands.command(aliases=["dequeue", 'dq'])
     async def dequeueStudent(self, context: Context):
         """
@@ -211,7 +207,6 @@ breakout rooms when you are called on, you will be removed from the queue!**")
             await sender.send("The queue is empty. Perhaps now is a good time for a coffee break?",
                               delete_after=GetConstants().MESSAGE_LIFE_TIME)
 
-
     @commands.command(aliases=["cq", "clearqueue"])
     @commands.check(isAdmin)
     async def clearQueue(self, context: Context):
@@ -223,7 +218,7 @@ breakout rooms when you are called on, you will be removed from the queue!**")
         self.OHQueue.clear()
 
         logger.debug(f"{sender} has cleared the queue")
-        await sender.send(f"The queue has been cleared.")
+        await sender.send("The queue has been cleared.")
 
 
 def setup(bot):

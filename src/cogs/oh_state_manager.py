@@ -12,7 +12,6 @@ from discord import TextChannel, Message
 from user_utils import isAdmin
 from errors import OHStateError
 from constants import GetConstants
-from cogs.tools import selfClean
 
 
 class OHState(Enum):

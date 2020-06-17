@@ -8,6 +8,7 @@ from discord import User, Member
 from constants import GetConstants
 from errors import CommandPermissionError
 
+
 async def userToMember(user: User, bot: commands.Bot) -> Optional[Member]:
     """
     Resolves a user into a member of the guild
@@ -48,6 +49,7 @@ async def isAdmin(context: commands.Context) -> bool:
     if not any(role.id == GetConstants().INSTRUCTOR_ROLE_ID for role in roles):
         raise CommandPermissionError("User is not an admin")
     return True
+
 
 async def isStudent(context: commands.Context) -> bool:
     """

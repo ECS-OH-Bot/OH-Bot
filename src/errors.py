@@ -11,6 +11,7 @@ class CommandPermissionError(CommandError):
     """
     pass
 
+
 class OHStateError(CommandError):
     """
     Raised when the expected OH state for a command is different from the actual state
