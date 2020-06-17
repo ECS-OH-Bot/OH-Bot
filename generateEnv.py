@@ -19,10 +19,13 @@ def main(token:str) -> int:
     async def on_error(event, *args, **kwargs):
         print(event)
         await client.logout()
+        exit(150)
 
 
     @client.event
     async def on_ready():
+        print(f"Bare Instance of Bot established")
+        print(f"Gathering Environment Variables....")
         with open(".env", 'w') as file:
             writeVar("BOT_TOKEN", token, file)
             vars = {
@@ -34,11 +37,6 @@ def main(token:str) -> int:
                 "ADMIN_ROLE_ID" : find(lambda role : role.name == "Admin", client.guilds[0].roles).id,
                 "STUDENT_NAME": "Student",
                 "STUDENT_ROLE_ID" : find(lambda role : role.name == "Student", client.guilds[0].roles).id,
-                #"SMTP_HOST" :,
-                #"TO" :,
-                #"EMAIL" :,
-                #"PASSWORD" :,
-                #"CLASS" :,
             }
 
 

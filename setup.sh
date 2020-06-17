@@ -61,31 +61,31 @@ verifyDep(){
 }
 
 generateEnvFile(){
-    touch .env
+    touch $ENV_FILE
     echo "Please enter your discord bot token:"
     read -r BOT_TOKEN
     if ! python3 generateEnv.py "$BOT_TOKEN"; then
-        echoerr "Failure Generating .env file"
-        echoerr "Refer to Docs on generating .env file by hand"
+        echoerr "Failure Generating $ENV_FILE file"
+        echoerr "Refer to Docs on generating $ENV_FILE file by hand"
     fi
     {
         echo "# See docs on how to setup email logging with these variables"
-        echo "#SMTP_HOST" 
-        echo "#TO"
-        echo "#EMAIL"
-        echo "#PASSWORD"
-        echo "#CLASS"  
-    } >> .env
-    echo -e '.env File generate successfully\n'
+        echo "#export SMTP_HOST=" 
+        echo "#export TO="
+        echo "#export EMAIL="
+        echo "#export PASSWORD="
+        echo "#export CLASS="  
+    } >> $ENV_FILE
+    echo -e "$ENV_FILE File generate successfully\n"
     echo -e "Try starting the bot with './run.sh'\n"
 }
 
 generateRunConfig(){
     {
         echo "#!/bin/bash"
-        echo "source .env"
-        echo "$INTERPRETER main.py config.yaml"
-    } >> run.sh
+        echo "source $ENV_FILE"
+        echo "$INTERPRETER src/main.py configs/config.yaml"
+    } > run.sh
     chmod +x run.sh
 }
 
