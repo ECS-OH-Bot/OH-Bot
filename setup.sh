@@ -30,7 +30,7 @@ setupVenv(){
 
     if [[ $INTERPRETER != *"/OH-Bot/venv"* ]]; then
         echoerr "Failed to activate virtual environment"
-        echoerr "Checks erroes aboce or try to start with a fresh venv"
+        echoerr "Checks errors above or try to start with a fresh venv"
         exit 129
     else
         echo "Virtual Enironment Activated"
@@ -48,12 +48,13 @@ setupVenv(){
 }
 
 verifyDep(){
-    #######################
+    ################################
     # Arguments:
     #   $1: Dependicy to be checked
-    #######################
+    ################################
     if ! command -V "$1"; then
         echoerr "Dependency $1 not met" 
+        echoerr "Install $1 and/or add to PATH before running ./setup.sh again"
         exit 128
     fi
     return 0
@@ -67,13 +68,14 @@ generateEnvFile(){
         echoerr "Failure Generating .env file"
         echoerr "Refer to Docs on generating .env file by hand"
     fi
-    echo "# See docs on how to setup email logging with these variables" >> .env
-    echo "#SMTP_HOST"  >> .env
-    echo "#TO" >> .env
-    echo "#EMAIL" >> .env
-    echo "#PASSWORD" >> .env
-    echo "#CLASS"   >> .env
-
+    {
+        echo "# See docs on how to setup email logging with these variables"
+        echo "#SMTP_HOST" 
+        echo "#TO"
+        echo "#EMAIL"
+        echo "#PASSWORD"
+        echo "#CLASS"  
+    } >> .env
     echo -e '.env File generate successfully\n'
     echo -e "Try starting the bot with './run.sh'\n"
 }
