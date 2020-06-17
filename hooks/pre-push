@@ -1,0 +1,49 @@
+#!/bin/bash
+. venv/bin/activate
+EXIT_CODE=0
+
+runShellCheck(){
+
+    for file in *.sh; do
+        if ! shellcheck -x "$file"; then
+            EXIT_CODE=1
+        fi
+    done
+}
+
+runPythonLinter(){
+    
+    for file in $(find src -iname '*.py'); do
+        if ! flake8 --max-line-length=150 "$file"; then
+            EXIT_CODE=2
+        fi 
+    done
+}
+
+main(){
+    runShellCheck
+    runPythonLinter
+}
+
+main
+
+case $EXIT_CODE in
+    0)
+        exit $EXIT_CODE
+        ;;
+
+    1)
+        echo 'Fix shellcheck errors or commit with --no-verify flag'
+        exit $EXIT_CODE
+        ;;
+    
+    2)
+        echo 'Flake8 Violations found, fix style issues or commit with --no verify flag'
+        exit $EXIT_CODE
+        ;;
+
+    *)
+        echo 'Unknown Exit code'
+        exit $EXIT_CODE
+
+esac

@@ -36,7 +36,7 @@ class voice(commands.Cog):
                     else:
                         """
                         May have to enable after load testing
-                        Dont know how well this code works under a large set of users 
+                        Dont know how well this code works under a large set of users
                         """
                         # await member.send("Creating channels too quickly you've been put on a 15 second cooldown!")
                         # await asyncio.sleep(15)
@@ -80,7 +80,7 @@ class voice(commands.Cog):
                     await channel2.delete()
                     await asyncio.sleep(3)
                     c.execute('DELETE FROM voiceChannel WHERE userID=?', (id,))
-            except:
+            except: # noqa
                 # TODO Add exception handler here
                 # IDK why OP has a bare except here but i dont like it
                 pass
@@ -105,7 +105,7 @@ class voice(commands.Cog):
 
             await context.channel.send("**You have 60 seconds to answer each question!**")
             await context.channel.send(
-                f"**Enter the name of the category you wish to create the channels in:(e.g Voice Channels)**")
+                "**Enter the name of the category you wish to create the channels in:(e.g Voice Channels)**")
             try:
                 category = await self.bot.wait_for('message', check=check, timeout=60.0)
                 logger.debug(f"User({context.author}) has chosen to put their channel in {category}")
@@ -134,7 +134,7 @@ class voice(commands.Cog):
                                 (guildID, id, channel.id, new_cat.id, guildID))
                         await context.channel.send("**You are all setup and ready to go!**")
                         logger.debug(f"User {context.author} has successfully created the voice channel {channel}")
-                    except:
+                    except: # noqa
                         logger.debug(f"User {context.author} did not enter names properly")
                         await context.channel.send("You didn't enter the names properly.\nUse `.voice setup` again!")
         else:
@@ -318,7 +318,7 @@ class voice(commands.Cog):
         c = conn.cursor()
         logger.debug("Established connection with voice database")
         channel = context.author.voice.channel
-        if channel == None:
+        if channel is None:
             await context.channel.send(f"{context.author.mention} you're not in a voice channel.")
             logger.debug(f"{context.author} attempted to claim a channel but they're not in one")
         else:
@@ -336,7 +336,7 @@ class voice(commands.Cog):
                         logger.debug(f"{context.author} attempted to claim the channel {channel}, which was already"
                                      f"owned by {owner}")
                         x = True
-                if x == False:
+                if x is False:
                     await context.channel.send(f"{context.author.mention} You are now the owner of the channel!")
                     logger.debug(f"{context.author} claimed the channel {channel}")
                     c.execute("UPDATE voiceChannel SET userID = ? WHERE voiceID = ?", (id, channel.id))
