@@ -2,6 +2,9 @@
 
 DEPS=("python3")
 INTERPRETER=$(command -v python3)
+ENV_FILE=".env"
+
+echoerr() { echo "$@" 1>&2; }
 
 main(){
     for dep in "${DEPS[@]}"
@@ -26,8 +29,8 @@ setupVenv(){
     INTERPRETER=$(command -v python3)
 
     if [[ $INTERPRETER != *"/OH-Bot/venv"* ]]; then
-        echo "Failed to activate virtual environment"
-        echo "Checks erroes aboce or try to start with a fresh venv"
+        echoerr "Failed to activate virtual environment"
+        echoerr "Checks erroes aboce or try to start with a fresh venv"
         exit 129
     else
         echo "Virtual Enironment Activated"
@@ -39,14 +42,18 @@ setupVenv(){
         echo 'Deps installed successfully'
         return
     else 
-        echo 'Failed to install Dependices, check errors above or try to start with a fresh venv'
+        echoerr 'Failed to install Dependices, check errors above or try to start with a fresh venv'
         exit 132
     fi
 }
 
 verifyDep(){
+    #######################
+    # Arguments:
+    #   $1: Dependicy to be checked
+    #######################
     if ! command -V "$1"; then
-        echo "Dependency $1 not met" 
+        echoerr "Dependency $1 not met" 
         exit 128
     fi
     return 0
@@ -57,8 +64,8 @@ generateEnvFile(){
     echo "Please enter your discord bot token:"
     read -r BOT_TOKEN
     if ! python3 generateEnv.py "$BOT_TOKEN"; then
-        echo "Failure Generating .env file"
-        echo "Refer to Docs on generating .env file by hand"
+        echoerr "Failure Generating .env file"
+        echoerr "Refer to Docs on generating .env file by hand"
     fi
     echo "# See docs on how to setup email logging with these variables" >> .env
     echo "#SMTP_HOST"  >> .env
