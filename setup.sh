@@ -7,6 +7,7 @@ ENV_FILE=".env"
 echoerr() { echo "$@" 1>&2; }
 
 main(){
+
     for dep in "${DEPS[@]}"
     do
         verifyDep "$dep"
@@ -17,6 +18,7 @@ main(){
     generateRunConfig
 }
 
+
 setupVenv(){
 
     if [ -f venv/bin/activate ]; then
@@ -25,6 +27,7 @@ setupVenv(){
         mkdir venv
         python3 -m venv ./venv          
     fi
+    # shellcheck disable=SC1091
     . ./venv/bin/activate  
     INTERPRETER=$(command -v python3)
 
@@ -61,10 +64,16 @@ verifyDep(){
 }
 
 generateEnvFile(){
+    if test -f $ENV_FILE; then
+        echoerr "$ENV_FILE already exists"
+        # shellcheck disable=SC2016
+        echoerr 'You can create more environment files with the flag -n|--name {FILE_NAME}'
+        exit 134    
+    fi
     touch $ENV_FILE
     echo "Please enter your discord bot token:"
     read -r BOT_TOKEN
-    if ! python3 generateEnv.py "$BOT_TOKEN"; then
+    if ! python3 generateEnv.py "$BOT_TOKEN" "$ENV_FILE"; then
         echoerr "Failure Generating $ENV_FILE file"
         echoerr "Refer to Docs on generating $ENV_FILE file by hand"
     fi
@@ -88,5 +97,24 @@ generateRunConfig(){
     } > run.sh
     chmod +x run.sh
 }
+
+# https://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+#Incase we want to add more flag at a later time
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+        -n | --name)
+            ENV_FILE="$2"
+            shift
+            shift
+            ;;
+
+        *)
+        echoerr "Unknown Flag $1"
+        exit 133
+    esac
+done
 
 main
