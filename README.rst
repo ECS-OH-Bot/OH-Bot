@@ -12,7 +12,7 @@ The Discord Office Hour Butler
    <p align=center style="font-size:large">
       <a href=#purpose>Purpose</a> • 
       <a href=#overview>Overview</a> • 
-      <a href=#installation>Installation</a> • 
+      <a href=#quickstart>Quick Start</a> • 
       <a href=https://ecs-oh-bot.github.io/OH-Bot/docs/build/html/index.html>Docs</a> •
       <a href=#license>License</a>
    </p>
@@ -40,7 +40,7 @@ like notifying and moving students when they are ready to been seen are
 handled by **OH-Bot**
 
 **OH-Bot** is a *self-hotsted* bot - meaning that you will need to host
-and maintain your own instance. See `installation <#installation>`__ to
+and maintain your own instance. See `Quick Start <#quickstart>`__ to
 get started.
 
 The standard OH-Session protocol that we follow: 1. Instructors Opens
@@ -113,7 +113,7 @@ Requirements
 
 -  `Discord <https://discordapp.com/>`__ app & account
 
-Installation
+Quick Start
 --------------------------
 
 Clone the source code
