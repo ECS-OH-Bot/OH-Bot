@@ -8,12 +8,13 @@ from discord import TextChannel, VoiceChannel, Invite, User, Permissions, Member
 from discord.ext import commands
 from discord.ext.commands import Bot, MemberConverter
 from discord.ext.commands.context import Context
+from discord.ext.commands.errors import BadArgument
 
 from tabulate import tabulate
 
 from user_utils import isAdmin, userToMember
 from cogs.oh_state_manager import OHState, officeHoursAreOpen
-from errors import CommandPermissionError
+from errors import CommandPermissionError, OHQueueCommandUseError
 
 from constants import GetConstants
 
@@ -27,7 +28,7 @@ class OH_Queue(commands.Cog):
         self.OHQueue: List[Member] = list()
         self.admins = list()
 
-        self.instructor_queue = defaultdict(SimpleQueue)
+        self.instructor_queue: defaultdict[str, SimpleQueue] = defaultdict(SimpleQueue)
 
         # Channel references are resolved by the pre invoke hook
         self.queue_channel: Optional[TextChannel] = None
@@ -65,7 +66,7 @@ class OH_Queue(commands.Cog):
         table_data = ((position + 1, user.nick if user.nick is not None else user.name) for (position, user)
                       in enumerate(self.OHQueue))
         table_text = tabulate(table_data, ["Position", "Name"], tablefmt="fancy_grid")
-        queue_text = f"The queue is currently {status}. "\
+        queue_text = f"The queue is currently {status}. " \
                      f"There are {len(self.OHQueue)} student(s) in the queue\n```{table_text}```"
 
         # Find any previous message sent by the bot in the queue channel
@@ -96,25 +97,27 @@ class OH_Queue(commands.Cog):
 
     @commands.command(aliases=["enterqueue", "eq"])
     @commands.check(officeHoursAreOpen)
-    async def enterQueue(self, context: Context, student: str=None, target_instructor: str=None):
+    async def enterQueue(self, context: Context, student: str = None, instructor: str = None):
         """
         Enters user into the OH queue
         if they already are enqueued return them their position in queue
         @ctx: context object containing information about the caller
         """
-        if not student and not target_instructor:
-            await self._eq_default(context)
-        elif student and target_instructor:
-            member_conv = MemberConverter()
+        try:
+            # Case of the normal eq use where the student enqueues themself
+            if not student and not instructor:
+                await self._eq_default(context)
 
-            student_id, instructor_id = await gather(member_conv.convert(context, student),
-                                                     member_conv.convert(context, target_instructor))
-            print(student_id)
-            print(instructor_id)
-        else:
+            # Case where the two optional arguments have been passed in
+            elif student and instructor and await isAdmin(context):
+                await self._eq_elevated_queue(context, student, instructor)
+            # Else the command was not used properly
+            else:
+                raise OHQueueCommandUseError
 
-
-
+        except OHQueueCommandUseError:
+            logger.error("")
+            await context.author.send("You ")
 
     async def _eq_default(self, context: Context):
         sender = context.author
@@ -159,6 +162,26 @@ class OH_Queue(commands.Cog):
                 delete_after=GetConstants().MESSAGE_LIFE_TIME
             )
 
+    async def _eq_elevated_queue(self, context: Context, student: str, instructor: str):
+        """
+        Manages the placing of a student into an instructor's elevated queue
+        :param context: Object containing information about the caller
+        :param student: The student that is being sent into another instructor's queue
+        :param instructor: The instructor that the student is being sent to
+        :return: None
+        """
+
+        member_conv = MemberConverter()
+        try:
+            student_id, instructor_id = await gather(member_conv.convert(context, student),
+                                                     member_conv.convert(context, instructor))
+            self.instructor_queue[instructor_id].put(student_id)
+            print(self.instructor_queue)
+            logger.debug(f"{context.author} has placed {student_id} into {instructor_id}'s queue")
+        except BadArgument:
+            logger.error(f"{context.author} gave the incorrect arguments"
+                         f" for the eq command: {student} and {instructor}")
+            await context.author.send("One of the users you entered is not a valid user")
 
     @commands.command(aliases=['leavequeue', 'lq'])
     async def leaveQueue(self, context: Context):
@@ -203,30 +226,36 @@ class OH_Queue(commands.Cog):
             await sender.send(
                 "You must be connected to a voice channel to do this. The queue has not been modified.")
 
+        elif self.instructor_queue[sender]:
+            student = self.instructor_queue[sender]
+            logger.debug(f"{context.author} dequeud {student} from their personal queue")
+            await self._dequeue_helper(context, student)
+
         elif len(self.OHQueue):
             student = self.OHQueue.pop(0)
             logger.debug(f"{student} has been dequeued")
-            if student.voice is None:
-                logger.debug(f"{student} was not in the waiting when they were dequeued")
-                await sender.send(
-                    f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot "
-                    "move them into your voice channel. They have been removed from the queue.",
-                    delete_after=GetConstants().MESSAGE_LIFE_TIME)
-                # This one should not get a message timeout. The user may be afk
-                await student.send(
-                    f"{student.mention} you have been called on but were not in the waiting room or any of the breakout"
-                    "rooms. I cannot move you into the office hours. You have been removed from the queue.",
-                    )
-            else:
-                await student.send(f"You are being summoned to {sender.mention}'s OH",
-                                   delete_after=GetConstants().MESSAGE_LIFE_TIME)
-                # Add this student to the voice chat
-                await student.move_to(sender.voice.channel)
-                logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
+            await self._dequeue_helper(context, student)
+
+    async def _dequeue_helper(self, context: Context, student):
+        sender = context.author
+        if student.voice is None:
+            logger.debug(f"{student} was not in the waiting when they were dequeued")
+            await sender.send(
+                f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot "
+                "move them into your voice channel. They have been removed from the queue.",
+                delete_after=GetConstants().MESSAGE_LIFE_TIME)
+            # This one should not get a message timeout. The user may be afk
+            await student.send(
+                f"{student.mention} you have been called on but were not in the waiting room or any of the breakout"
+                "rooms. I cannot move you into the office hours. You have been removed from the queue.",
+            )
         else:
-            logger.debug(f"{sender} tried to dequeue from an empty queue")
-            await sender.send("The queue is empty. Perhaps now is a good time for a coffee break?",
-                              delete_after=GetConstants().MESSAGE_LIFE_TIME)
+            await student.send(f"You are being summoned to {sender.mention}'s OH",
+                               delete_after=GetConstants().MESSAGE_LIFE_TIME)
+            # Add this student to the voice chat
+            await student.move_to(sender.voice.channel)
+            logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
+
 
     @commands.command(aliases=["cq", "clearqueue"])
     @commands.check(isAdmin)

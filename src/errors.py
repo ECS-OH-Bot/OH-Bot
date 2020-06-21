@@ -23,3 +23,4 @@ class OHQueueCommandUseError(CommandError):
     """
     Raised when a user incorrectly uses the queue
     """
+    pass
