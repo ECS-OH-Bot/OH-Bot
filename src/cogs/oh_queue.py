@@ -1,9 +1,12 @@
+from asyncio import gather
+from collections import defaultdict
 from logging import getLogger
+from queue import SimpleQueue
 from typing import Optional, List
 
 from discord import TextChannel, VoiceChannel, Invite, User, Permissions, Member, Message
 from discord.ext import commands
-from discord.ext.commands import Bot
+from discord.ext.commands import Bot, MemberConverter
 from discord.ext.commands.context import Context
 
 from tabulate import tabulate
@@ -23,6 +26,9 @@ class OH_Queue(commands.Cog):
         self.client = client
         self.OHQueue: List[Member] = list()
         self.admins = list()
+
+        self.instructor_queue = defaultdict(SimpleQueue)
+
         # Channel references are resolved by the pre invoke hook
         self.queue_channel: Optional[TextChannel] = None
         self.waiting_room: Optional[VoiceChannel] = None
@@ -90,13 +96,27 @@ class OH_Queue(commands.Cog):
 
     @commands.command(aliases=["enterqueue", "eq"])
     @commands.check(officeHoursAreOpen)
-    async def enterQueue(self, context: Context):
+    async def enterQueue(self, context: Context, student: str=None, target_instructor: str=None):
         """
         Enters user into the OH queue
         if they already are enqueued return them their position in queue
         @ctx: context object containing information about the caller
         """
+        if not student and not target_instructor:
+            await self._eq_default(context)
+        elif student and target_instructor:
+            member_conv = MemberConverter()
 
+            student_id, instructor_id = await gather(member_conv.convert(context, student),
+                                                     member_conv.convert(context, target_instructor))
+            print(student_id)
+            print(instructor_id)
+        else:
+
+
+
+
+    async def _eq_default(self, context: Context):
         sender = context.author
         if sender not in self.OHQueue:
             # Append the Member instance to the queue.
@@ -127,7 +147,7 @@ class OH_Queue(commands.Cog):
             else:
                 await sender.move_to(self.waiting_room)
                 await sender.send("I have moved you into the waiting room. **If you are not in the waiting room or \
-breakout rooms when you are called on, you will be removed from the queue!**")
+        breakout rooms when you are called on, you will be removed from the queue!**")
                 logger.debug(f"{sender} has been placed in the waiting room")
 
         else:
@@ -138,6 +158,7 @@ breakout rooms when you are called on, you will be removed from the queue!**")
                 f"Current position: {position}",
                 delete_after=GetConstants().MESSAGE_LIFE_TIME
             )
+
 
     @commands.command(aliases=['leavequeue', 'lq'])
     async def leaveQueue(self, context: Context):
