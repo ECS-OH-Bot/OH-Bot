@@ -9,14 +9,12 @@ from discord.ext import commands
 from discord.ext.commands import Bot, MemberConverter
 from discord.ext.commands.context import Context
 from discord.ext.commands.errors import BadArgument
-
 from tabulate import tabulate
 
-from user_utils import isAdmin, userToMember, isStudent
 from cogs.oh_state_manager import OHState, officeHoursAreOpen
-from errors import OHQueueCommandUseError
-
 from constants import GetConstants
+from errors import OHQueueCommandUseError
+from user_utils import userToMember, isStudent, isAtLeastInstructor
 
 logger = getLogger(f"main.{__name__}")
 
@@ -109,7 +107,7 @@ class OH_Queue(commands.Cog):
                 await self._eq_default(context)
 
             # Case where the two optional arguments have been passed in
-            elif student and instructor and await isAdmin(context):
+            elif student and instructor and await isAtLeastInstructor(context):
                 await self._eq_elevated_queue(context, student, instructor)
             # Else the command was not used properly
             else:
@@ -259,7 +257,7 @@ class OH_Queue(commands.Cog):
             logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
 
     @commands.command(aliases=["cq", "clearqueue"])
-    @commands.check(isAdmin)
+    @commands.check(isAtLeastInstructor)
     async def clearQueue(self, context: Context):
         """
         Clears all students from the queue

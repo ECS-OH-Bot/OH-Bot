@@ -5,13 +5,13 @@ from asyncio import gather
 from enum import Enum
 from typing import List
 
-from discord.ext.commands import Cog, Bot, Context
-from discord.ext import commands
 from discord import TextChannel, Message
+from discord.ext import commands
+from discord.ext.commands import Cog, Bot, Context
 
-from user_utils import isAdmin
-from errors import OHStateError
 from constants import GetConstants
+from errors import OHStateError
+from user_utils import isAtLeastInstructor
 
 
 class OHState(Enum):
@@ -48,7 +48,7 @@ class OHStateManager(Cog):
 
     @commands.command(aliases=["open", "start"])
     @commands.check(officeHoursAreClosed)
-    @commands.check(isAdmin)
+    @commands.check(isAtLeastInstructor)
     async def startOH(self, context: Context):
         self.state = OHState.OPEN
         # Send a message to the user and delete any and all messages made by the bot to the announcements channel
@@ -65,7 +65,7 @@ class OHStateManager(Cog):
 
     @commands.command(aliases=["close", "end"])
     @commands.check(officeHoursAreOpen)
-    @commands.check(isAdmin)
+    @commands.check(isAtLeastInstructor)
     async def stopOH(self, context: Context):
         self.state = OHState.CLOSED
         # Send a message to the user and delete any and all messages made by the bot to the announcements channel

@@ -70,6 +70,15 @@ async def isInstructor(context: commands.Context) -> bool:
     return await membership_check(context, GetConstants().INSTRUCTOR_ROLE_ID, GetConstants().INSTRUCTOR)
 
 
+async def isAtLeastInstructor(context: commands.Context) -> bool:
+    """
+    Returns true if context.author is either an admin or an instructor and False otherwise
+    :param context:
+    :return:
+    """
+    return await isInstructor(context) or await isAdmin(context)
+
+
 async def isStudent(context: commands.Context) -> bool:
     """
     Returns true if context.author has the Student role, false otherwise
