@@ -80,6 +80,8 @@ def logging_setup(p_logger: logging.Logger) -> None:
     sets up a stream handler to log everything to stdout as well
     @param p_logger: The logger which we are adding these handlers to
     """
+    handlers = []
+
     directory = GetConstants().LOGGING_DIR
     optional_make_dir(directory)
 
@@ -94,21 +96,26 @@ def logging_setup(p_logger: logging.Logger) -> None:
     fh.suffix = '%Y_%m_%d.log'
     fh.setFormatter(formatter)
     fh.setLevel(logging.DEBUG)
+    handlers.append(fh)
 
     # Stream handler
     sh = logging.StreamHandler(stdout)
     sh.setFormatter(formatter)
     sh.setLevel(logging.DEBUG)
+    handlers.append(sh)
 
     # Email Handler
-    eh = SSLSMTPHandler(GetConstants().SMTP_HOST, f"{GetConstants().CLASS} OH Bot <your_friendly_bot@discord>",
-                        GetConstants().MAILING_LIST,
-                        "A CRITICAL ERROR HAS OCCURRED")
-    eh.setFormatter(formatter)
-    eh.setLevel(logging.CRITICAL)
+    # Only initialize the handler if we're given information
+    if GetConstants().SMTP_HOST and GetConstants().MAILING_LIST and GetConstants().USERNAME and GetConstants().PASSWORD:
+        eh = SSLSMTPHandler(GetConstants().SMTP_HOST, f"{GetConstants().CLASS} OH Bot <your_friendly_bot@discord>",
+                            GetConstants().MAILING_LIST,
+                            "A CRITICAL ERROR HAS OCCURRED")
+        eh.setFormatter(formatter)
+        eh.setLevel(logging.CRITICAL)
+        handlers.append(eh)
 
     queue = Queue(-1)
     qh = QueueHandler(queue)
-    q_listener = QueueListener(queue, fh, sh, eh, respect_handler_level=True)
+    q_listener = QueueListener(queue, *handlers, respect_handler_level=True)
     p_logger.addHandler(qh)
     q_listener.start()
