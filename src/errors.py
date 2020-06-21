@@ -17,3 +17,10 @@ class OHStateError(CommandError):
     Raised when the expected OH state for a command is different from the actual state
     """
     pass
+
+
+class OHQueueCommandUseError(CommandError):
+    """
+    Raised when a user incorrectly uses the queue
+    """
+    pass
