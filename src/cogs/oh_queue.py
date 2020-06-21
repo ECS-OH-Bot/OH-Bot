@@ -12,7 +12,7 @@ from discord.ext.commands.errors import BadArgument
 
 from tabulate import tabulate
 
-from user_utils import isAdmin, userToMember
+from user_utils import isAdmin, userToMember, isStudent
 from cogs.oh_state_manager import OHState, officeHoursAreOpen
 from errors import CommandPermissionError, OHQueueCommandUseError
 
@@ -176,8 +176,10 @@ class OH_Queue(commands.Cog):
             student_id, instructor_id = await gather(member_conv.convert(context, student),
                                                      member_conv.convert(context, instructor))
             self.instructor_queue[instructor_id].put(student_id)
-            print(self.instructor_queue)
             logger.debug(f"{context.author} has placed {student_id} into {instructor_id}'s queue")
+            recipient = await userToMember(instructor_id, context.bot)
+            await recipient.send(f"{instructor_id} placed {student_id} in your elevated queue")
+
         except BadArgument:
             logger.error(f"{context.author} gave the incorrect arguments"
                          f" for the eq command: {student} and {instructor}")
@@ -206,9 +208,7 @@ class OH_Queue(commands.Cog):
         @ctx: context object containing information about the caller
         """
         sender = context.author
-        try:
-            await isAdmin(context)
-        except CommandPermissionError:
+        if await isStudent(context):
             logger.debug(f"{sender} was a student who called dq. This will trigger them to leave queue")
             await self.leaveQueue(context)
             return
@@ -226,9 +226,11 @@ class OH_Queue(commands.Cog):
             await sender.send(
                 "You must be connected to a voice channel to do this. The queue has not been modified.")
 
-        elif self.instructor_queue[sender]:
-            student = self.instructor_queue[sender]
+        elif sender in self.instructor_queue:
+            student = self.instructor_queue[sender].get()
             logger.debug(f"{context.author} dequeud {student} from their personal queue")
+            if student in self.OHQueue:
+                self.OHQueue.remove(student)
             await self._dequeue_helper(context, student)
 
         elif len(self.OHQueue):
