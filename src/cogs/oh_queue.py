@@ -14,7 +14,7 @@ from tabulate import tabulate
 
 from user_utils import isAdmin, userToMember, isStudent
 from cogs.oh_state_manager import OHState, officeHoursAreOpen
-from errors import CommandPermissionError, OHQueueCommandUseError
+from errors import OHQueueCommandUseError
 
 from constants import GetConstants
 
@@ -257,7 +257,6 @@ class OH_Queue(commands.Cog):
             # Add this student to the voice chat
             await student.move_to(sender.voice.channel)
             logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
-
 
     @commands.command(aliases=["cq", "clearqueue"])
     @commands.check(isAdmin)
