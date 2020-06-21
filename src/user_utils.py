@@ -29,9 +29,10 @@ async def userToMember(user: User, bot: commands.Bot) -> Optional[Member]:
     return member
 
 
-async def membership_check(context: commands.Context, role_id: str, role_name: str) -> bool:
+async def membership_check(context: commands.Context, role_id: str, role_name: str, throw_exception: bool = True) -> bool:
     """
     Checks if the author of the message in question belongs to the parameterized role
+    :param throw_exception: If true, will throw exception if user is not a member of the specified role
     :param context: Object containing metadata about the most recent message sent
     :param role_id: The UUID of the role for which we are checking for membership in
     :param role_name: The human-readable name of the role for which we are checking for membership in
@@ -50,7 +51,10 @@ async def membership_check(context: commands.Context, role_id: str, role_name: s
         roles = context.author.roles
 
     if not any(role.id == role_id for role in roles):
-        raise CommandPermissionError(f"User is not an {role_name}")
+        if throw_exception:
+            raise CommandPermissionError(f"User is not an {role_name}")
+        else:
+            return False
     return True
 
 
@@ -83,4 +87,4 @@ async def isStudent(context: commands.Context) -> bool:
     """
     Returns true if context.author has the Student role, false otherwise
     """
-    return await membership_check(context, GetConstants().STUDENT_ROLE_ID, GetConstants().STUDENT)
+    return await membership_check(context, GetConstants().STUDENT_ROLE_ID, GetConstants().STUDENT, throw_exception=False)

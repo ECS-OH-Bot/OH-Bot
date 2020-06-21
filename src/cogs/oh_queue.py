@@ -114,8 +114,9 @@ class OH_Queue(commands.Cog):
                 raise OHQueueCommandUseError
 
         except OHQueueCommandUseError:
-            logger.error("")
-            await context.author.send("You ")
+            logger.error(f"User: {context.author} tried to use eq with the "
+                         f"following command: /eq {student} {instructor}")
+            await context.author.send("You did not use the eq command correctly")
 
     async def _eq_default(self, context: Context):
         sender = context.author

@@ -15,6 +15,8 @@ aliases:
       '
 
   - &queuehelp_admin '
+      *Enqueue
+
       *Clear the OH queue by using the following command:*
 
       `/clear or /cq`
