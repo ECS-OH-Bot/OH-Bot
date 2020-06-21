@@ -3,6 +3,7 @@ Cog to manage opening / closing office hours
 """
 from asyncio import gather
 from enum import Enum
+from logging import getLogger
 from typing import List
 
 from discord import TextChannel, Message
@@ -12,6 +13,8 @@ from discord.ext.commands import Cog, Bot, Context
 from constants import GetConstants
 from errors import OHStateError
 from user_utils import isAtLeastInstructor
+
+logger = getLogger(f"main.{__name__}")
 
 
 class OHState(Enum):
@@ -62,6 +65,7 @@ class OHStateManager(Cog):
                          "@here, the queue is now open."),
                      context.bot.get_cog("OH_Queue").onQueueUpdate()
                      )
+        logger.debug(f"{context.author} has opened the queue")
 
     @commands.command(aliases=["close", "end"])
     @commands.check(officeHoursAreOpen)
@@ -78,6 +82,7 @@ class OHStateManager(Cog):
                          "@here, the queue is now closed."),
                      context.bot.get_cog("OH_Queue").onQueueUpdate()
                      )
+        logger.debug(f"{context.author} has closed the queue")
 
 
 def setup(bot: Bot):
