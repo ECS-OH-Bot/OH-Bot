@@ -15,7 +15,12 @@ aliases:
       '
 
   - &queuehelp_admin '
-      *Enqueue
+      *Enqueue a particular student into an instructor''s elevated queue:*
+
+      `/eq @student @target_instructor`
+
+      ------------
+
 
       *Clear the OH queue by using the following command:*
 
