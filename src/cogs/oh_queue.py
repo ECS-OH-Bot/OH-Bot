@@ -1,7 +1,6 @@
 from asyncio import gather
 from collections import defaultdict
 from logging import getLogger
-from queue import SimpleQueue
 from typing import Optional, List
 
 from discord import TextChannel, VoiceChannel, Invite, User, Permissions, Member, Message
@@ -26,7 +25,7 @@ class OH_Queue(commands.Cog):
         self.OHQueue: List[Member] = list()
         self.admins = list()
 
-        self.instructor_queue: defaultdict[str, SimpleQueue] = defaultdict(SimpleQueue)
+        self.instructor_queue: defaultdict[str, List] = defaultdict(list)
 
         # Channel references are resolved by the pre invoke hook
         self.queue_channel: Optional[TextChannel] = None
@@ -174,7 +173,7 @@ class OH_Queue(commands.Cog):
         try:
             student_id, instructor_id = await gather(member_conv.convert(context, student),
                                                      member_conv.convert(context, instructor))
-            self.instructor_queue[instructor_id].put(student_id)
+            self.instructor_queue[instructor_id].append(student_id)
             logger.debug(f"{context.author} has placed {student_id} into {instructor_id}'s queue")
             recipient = await userToMember(instructor_id, context.bot)
             await recipient.send(f"{instructor_id} placed {student_id} in your elevated queue")
@@ -201,7 +200,7 @@ class OH_Queue(commands.Cog):
             await sender.send(f"{sender.mention} you were not in the queue")
 
     @commands.command(aliases=["dequeue", 'dq'])
-    async def dequeueStudent(self, context: Context):
+    async def dequeueStudent(self, context: Context, student: str = None):
         """
         Dequeue a student from the queue and notify them
         @ctx: context object containing information about the caller
@@ -225,9 +224,29 @@ class OH_Queue(commands.Cog):
             await sender.send(
                 "You must be connected to a voice channel to do this. The queue has not been modified.")
 
+        elif student:
+            member_conv = MemberConverter()
+            student = await member_conv.convert(context, student)
+            if student not in self.OHQueue and student not in self.instructor_queue.get(sender):
+                logger.debug(f"{sender} tried to deuque a student that was not in either the common queue"
+                             f"or in their elevated queue")
+                await sender.send(f"{student} was not in any queue. Perhaps there was a typo?")
+                return
+
+            logger.debug(f"{sender} dequeued {student} by selection")
+
+            if student in self.OHQueue:
+                self.OHQueue.remove(student)
+
+            if student in self.instructor_queue.get(sender):
+                # A little hacky but we need to remove student from elevated queue
+                self.instructor_queue.get(sender).remove(student)
+
+            await self._dequeue_helper(context, student)
+
         elif sender in self.instructor_queue:
-            student = self.instructor_queue[sender].get()
-            logger.debug(f"{context.author} dequeud {student} from their personal queue")
+            student = self.instructor_queue[sender].pop(0)
+            logger.debug(f"{sender} dequeud {student} from their personal queue")
             if student in self.OHQueue:
                 self.OHQueue.remove(student)
             await self._dequeue_helper(context, student)
@@ -240,7 +259,7 @@ class OH_Queue(commands.Cog):
     async def _dequeue_helper(self, context: Context, student):
         sender = context.author
         if student.voice is None:
-            self.instructor_queue[sender].put(student)
+            self.instructor_queue[sender].append(student)
             logger.debug(f"{student} was not in the waiting when they were dequeued; they were placed in"
                          f"{sender}'s elevated queue")
             await sender.send(
@@ -262,16 +281,33 @@ class OH_Queue(commands.Cog):
 
     @commands.command(aliases=["cq", "clearqueue"])
     @commands.check(isAtLeastInstructor)
-    async def clearQueue(self, context: Context):
+    async def clearQueue(self, context: Context, student: str = None):
         """
         Clears all students from the queue
         @ctx: context object containing information about the caller
         """
         sender = context.author
-        self.OHQueue.clear()
 
-        logger.debug(f"{sender} has cleared the queue")
-        await sender.send("The queue has been cleared.")
+        if student:
+            member_conv = MemberConverter()
+            student = await member_conv.convert(context, student)
+            if student in self.OHQueue:
+                self.OHQueue.remove(student)
+            self._instructor_queue_find_and_remove(student)
+
+            logger.debug(f"{sender} has removed {student} from all queues")
+            await sender.send(f"You have removed {student} from all queues")
+        else:
+            self.OHQueue.clear()
+
+            logger.debug(f"{sender} has cleared the queue")
+            await sender.send("The queue has been cleared.")
+
+    def _instructor_queue_find_and_remove(self, student: Member):
+        for instructor, queue in self.instructor_queue.items():
+            if student in queue:
+                self.instructor_queue[instructor].remove(student)
+                break
 
 
 def setup(bot):
