@@ -11,6 +11,9 @@ Roles:
   Admin:
     Name: !ENV ${ADMIN_NAME}
     RoleID: !ENV ${ADMIN_ROLE_ID}
+  Instructor:
+    Name: !ENV ${INSTRUCTOR_NAME}
+    RoleID: !ENV ${INSTRUCTOR_ROLE_ID}
   Student:
     Name: !ENV ${STUDENT_NAME}
     RoleID: !ENV ${STUDENT_ROLE_ID}

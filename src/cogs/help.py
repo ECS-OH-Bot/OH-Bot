@@ -6,7 +6,7 @@ from discord.ext import commands
 from discord.ext.commands import Context
 from yaml import load, add_constructor
 
-from user_utils import isAdmin
+from user_utils import isAdmin, isAtLeastInstructor
 from cogs.tools import selfClean
 from constants import GetConstants
 from errors import CommandPermissionError
@@ -30,8 +30,8 @@ class Help(commands.Cog):
     @commands.group(name='help', invoke_without_command=True)
     async def help_cmd(self, ctx: Context) -> None:
         try:
-            await isAdmin(ctx)
-            logger.debug(f"{ctx.author} requested to see all admin commands")
+            await isAtLeastInstructor(ctx)
+            logger.debug(f"{ctx.author} requested to see all instructor commands")
             help_string = self.help_messages['all_admin']
         except CommandPermissionError:
             logger.debug(f"{ctx.author} requested to see all student commands")
@@ -42,8 +42,8 @@ class Help(commands.Cog):
     @help_cmd.command(name='queue')
     async def queue_help(self, ctx: Context) -> None:
         try:
-            await isAdmin(ctx)
-            logger.debug(f"{ctx.author} requested to see admin commands for the queue")
+            await isAtLeastInstructor(ctx)
+            logger.debug(f"{ctx.author} requested to see instructor commands for the queue")
             help_string = self.help_messages['queue_admin']
         except CommandPermissionError:
             logger.debug(f"{ctx.author} requested to see student commands for the queue")

@@ -43,6 +43,8 @@ def main(token:str) -> int:
                 "ADMIN_ROLE_ID" : find(lambda role : role.name == "Admin", client.guilds[0].roles).id,
                 "STUDENT_NAME": "Student",
                 "STUDENT_ROLE_ID" : find(lambda role : role.name == "Student", client.guilds[0].roles).id,
+                "INSTRUCTOR_NAME": "Instructor",
+                "INSTRUCTOR_ROLE_ID": find(lambda role : role.name == "Instructor", client.guilds[0].roles).id
             }
 
             print(f"Variables Gathered, Writing...")

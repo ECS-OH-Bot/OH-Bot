@@ -3,15 +3,19 @@ Cog to manage opening / closing office hours
 """
 from asyncio import gather
 from enum import Enum
+from logging import getLogger
 from typing import List
 
-from discord.ext.commands import Cog, Bot, Context
-from discord.ext import commands
 from discord import TextChannel, Message
+from discord.ext import commands
+from discord.ext.commands import Cog, Bot, Context
 
-from user_utils import isAdmin
-from errors import OHStateError
 from constants import GetConstants
+from errors import OHStateError
+from user_utils import isAtLeastInstructor
+from cogs.tools import selfClean
+
+logger = getLogger(f"main.{__name__}")
 
 
 class OHState(Enum):
@@ -48,7 +52,7 @@ class OHStateManager(Cog):
 
     @commands.command(aliases=["open", "start"])
     @commands.check(officeHoursAreClosed)
-    @commands.check(isAdmin)
+    @commands.check(isAtLeastInstructor)
     async def startOH(self, context: Context):
         self.state = OHState.OPEN
         # Send a message to the user and delete any and all messages made by the bot to the announcements channel
@@ -56,28 +60,35 @@ class OHStateManager(Cog):
                      self.__remove_bot_messages(context)
                      )
 
+        if context.channel != GetConstants().QUEUE_CHANNEL_ID:
+            await selfClean(context)
+
         # Then remove the command message, send the announcement and trigger the queue message to reprint
-        await gather(
-                     (await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send(
+        await gather((await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send(
                          "@here, the queue is now open."),
                      context.bot.get_cog("OH_Queue").onQueueUpdate()
                      )
+        logger.debug(f"{context.author} has opened the queue")
 
     @commands.command(aliases=["close", "end"])
     @commands.check(officeHoursAreOpen)
-    @commands.check(isAdmin)
+    @commands.check(isAtLeastInstructor)
     async def stopOH(self, context: Context):
         self.state = OHState.CLOSED
         # Send a message to the user and delete any and all messages made by the bot to the announcements channel
         await gather(context.author.send("Office hours have been closed. No new students will be added to the queue."),
                      self.__remove_bot_messages(context)
                      )
+
+        if context.channel != GetConstants().QUEUE_CHANNEL_ID:
+            await selfClean(context)
+
         # Then remove the command message, send the announcement and trigger the queue message to reprint
-        await gather(
-                     (await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send(
+        await gather((await context.bot.fetch_channel(GetConstants().ANNOUNCEMENT_CHANNEL_ID)).send(
                          "@here, the queue is now closed."),
                      context.bot.get_cog("OH_Queue").onQueueUpdate()
                      )
+        logger.debug(f"{context.author} has closed the queue")
 
 
 def setup(bot: Bot):

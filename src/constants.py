@@ -92,7 +92,10 @@ class Constants:
 
         # Roles
         admin = config["Roles"]["Admin"]
-        self.ADMIN, self.INSTRUCTOR_ROLE_ID = admin["Name"], int(admin["RoleID"])
+        self.ADMIN, self.ADMIN_ROLE_ID = admin["Name"], int(admin["RoleID"])
+
+        instructor = config["Roles"]["Instructor"]
+        self.INSTRUCTOR, self.INSTRUCTOR_ROLE_ID = instructor["Name"], int(instructor["RoleID"])
 
         student = config["Roles"]["Student"]
         self.STUDENT, self.STUDENT_ROLE_ID = student["Name"], int(student["RoleID"])

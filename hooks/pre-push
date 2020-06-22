@@ -14,7 +14,7 @@ runShellCheck(){
 runPythonLinter(){
     
     for file in $(find src -iname '*.py'); do
-        if ! flake8 --max-line-length=150 "$file"; then
+        if ! flake8 "$file"; then
             EXIT_CODE=2
         fi 
     done
