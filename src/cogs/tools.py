@@ -37,7 +37,14 @@ class Tools(commands.Cog):
 
     @commands.command()
     async def shutdown(self, context: Context):
+        """
+        If bot is in safe state, close bot connection to discord service and shutdown
+        Args:
+            context: context object containing information about the caller
 
+        Returns:
+            Successful Exit code 
+        """
         sender = context.author
         logger.debug(f"User: {sender} issued shutdown signal")
         if await isAdmin(context):
@@ -64,8 +71,4 @@ class Tools(commands.Cog):
 
 
 def setup(client):
-    """
-    Called internally by discord API cog functionality
-    I honestly have no idea how this works...
-    """
     client.add_cog(Tools(client))
