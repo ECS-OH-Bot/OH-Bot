@@ -240,15 +240,18 @@ class OH_Queue(commands.Cog):
     async def _dequeue_helper(self, context: Context, student):
         sender = context.author
         if student.voice is None:
-            logger.debug(f"{student} was not in the waiting when they were dequeued")
+            self.instructor_queue[sender].put(student)
+            logger.debug(f"{student} was not in the waiting when they were dequeued; they were placed in"
+                         f"{sender}'s elevated queue")
             await sender.send(
                 f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot "
-                "move them into your voice channel. They have been removed from the queue.",
+                "move them into your voice channel. They have been placed in your elevated queue. If they do"
+                "not show up, use /skip to remove them.",
                 delete_after=GetConstants().MESSAGE_LIFE_TIME)
             # This one should not get a message timeout. The user may be afk
             await student.send(
                 f"{student.mention} you have been called on but were not in the waiting room or any of the breakout"
-                "rooms. I cannot move you into the office hours. You have been removed from the queue.",
+                f"rooms. I cannot move you into the office hours. I will be dequeued by {sender} next.",
             )
         else:
             await student.send(f"You are being summoned to {sender.mention}'s OH",
