@@ -86,7 +86,7 @@ generateEnvFile(){
         echo "#export CLASS="  
     } >> $ENV_FILE
     echo -e "$ENV_FILE File generate successfully\n"
-    echo -e "Try starting the bot with './run.sh'\n"
+    echo -e "Try starting the bot with './run$ENV_FILE.sh'\n"
 }
 
 generateRunConfig(){
