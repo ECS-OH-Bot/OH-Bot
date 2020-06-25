@@ -134,6 +134,10 @@ Run the setup script
 
    ./setup.sh --name {ENV_FILE_NAME}
 
+Adjust the role hierarchy
+
+.. image:: ./assets/adjustRole.gif
+
 Run the script to start up the bot
 
 .. code:: bash
