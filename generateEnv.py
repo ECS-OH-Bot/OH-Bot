@@ -1,11 +1,11 @@
 import sys
 import discord
 from discord.utils import find
-from typing import *
 
 ENV_FILE=".env"
 
-def main(token:str) -> int:
+
+def main(token: str) -> int:
     """
     Args:
         token (str): bot access token
@@ -24,42 +24,51 @@ def main(token:str) -> int:
         await client.logout()
         exit(135)
 
-
     @client.event
     async def on_ready():
         """
         Gather Guild UIDs from guild the bot is instanciated to
         """
-        print(f"Bare Instance of Bot established")
-        print(f"Gathering Environment Variables....")
+        print("Bare Instance of Bot established")
+        # region allocConstants
+        print("Gathering Environment Variables....")
         with open(ENV_FILE, 'w') as file:
             writeVar("BOT_TOKEN", token, file)
             vars = {
-                "GUILD_ID" : client.guilds[0].id,
-                "QUEUE_ID" : find(lambda channel: channel.name == "oh-queue",client.get_all_channels()).id,
-                "WAITING_ROOM_ID" : find(lambda channel: channel.name == "Waiting Room",client.get_all_channels()).id,
-                "ANNOUNCEMENTS_ID" : find(lambda channel: channel.name == "announcements",client.get_all_channels()).id,
+                "GUILD_ID": client.guilds[0].id,
+                "QUEUE_ID": find(lambda channel: channel.name == "oh-queue", client.get_all_channels()).id,
+                "WAITING_ROOM_ID": find(lambda channel: channel.name == "Waiting Room", client.get_all_channels()).id,
+                "ANNOUNCEMENTS_ID": find(lambda channel: channel.name == "announcements", client.get_all_channels()).id,
                 "ADMIN_NAME": "Admin",
-                "ADMIN_ROLE_ID" : find(lambda role : role.name == "Admin", client.guilds[0].roles).id,
+                "ADMIN_ROLE_ID": find(lambda role: role.name == "Admin", client.guilds[0].roles).id,
                 "STUDENT_NAME": "Student",
-                "STUDENT_ROLE_ID" : find(lambda role : role.name == "Student", client.guilds[0].roles).id,
+                "STUDENT_ROLE_ID": find(lambda role: role.name == "Student", client.guilds[0].roles).id,
                 "INSTRUCTOR_NAME": "Instructor",
-                "INSTRUCTOR_ROLE_ID": find(lambda role : role.name == "Instructor", client.guilds[0].roles).id
+                "INSTRUCTOR_ROLE_ID": find(lambda role: role.name == "Instructor", client.guilds[0].roles).id
             }
 
-            print(f"Variables Gathered, Writing...")
+            print("Variables Gathered, Writing...")
 
             for key, val in vars.items():
                 writeVar(key, val, file)
 
+            print("Variables Written.")
+            # endregion
+
+        print("Elevating Bot User Role...")
+        bot_role = max(client.guilds[0].roles, key=lambda x: x.created_at)
+        newPosition = len(client.guilds[0].roles) - 2  # move the new position one less than the greatest
+        await bot_role.edit(
+            reason="Enable Autorole functionality for the bot",
+            position=newPosition
+        )
         await client.logout()
 
     client.run(token)
     return 0
 
 
-
-def writeVar(varName:str, val:str, file) -> None:
+def writeVar(varName: str, val: str, file) -> None:
     """Formatter File wrapper
 
     Args:
@@ -69,8 +78,6 @@ def writeVar(varName:str, val:str, file) -> None:
     """
     alloc = f"export {varName}={val}\n"
     file.write(alloc)
-    
-
 
 
 if __name__ == "__main__":
