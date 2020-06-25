@@ -29,11 +29,24 @@ aliases:
       ------------
 
 
+      *Removes a particular student from both the common queue and any elevated queues:*
+
+      `/cq @student`
+
+      ------------
+
+
       *Call a student into your OH session by using the following command:*
 
       `/dequeue or /dq`
 
       ------------
+
+
+      *Summon a specific student to your OH room:*
+
+      `/dq @student`
+
       '
 
   - &voicehelp '
