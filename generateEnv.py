@@ -55,13 +55,6 @@ def main(token: str) -> int:
             print("Variables Written.")
             # endregion
 
-        print("Elevating Bot User Role...")
-        bot_role = max(client.guilds[0].roles, key=lambda x: x.created_at)
-        newPosition = len(client.guilds[0].roles) - 2  # move the new position one less than the greatest
-        await bot_role.edit(
-            reason="Enable Autorole functionality for the bot",
-            position=newPosition
-        )
         await client.logout()
 
     client.run(token)
