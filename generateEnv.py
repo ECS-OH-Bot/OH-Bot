@@ -2,7 +2,7 @@ import sys
 import discord
 from discord.utils import find
 
-ENV_FILE=".env"
+ENV_FILE=".env" # noqa
 
 
 def main(token: str) -> int:
@@ -66,7 +66,7 @@ def writeVar(varName: str, val: str, file) -> None:
 
     Args:
         varName (str): environment variable to be exported
-        val (str): value to be assigned to 
+        val (str): value to be assigned to
         file (FileObject): file we are writing to
     """
     alloc = f"export {varName}={val}\n"
@@ -75,5 +75,5 @@ def writeVar(varName: str, val: str, file) -> None:
 
 if __name__ == "__main__":
     if sys.argv[2]:
-        ENV_FILE=sys.argv[2]
+        ENV_FILE=sys.argv[2] # noqa
     exit(main(sys.argv[1]))
