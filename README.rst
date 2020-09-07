@@ -44,10 +44,11 @@ and maintain your own instance. See `Quick Start <#quickstart>`__ to
 get started.
 
 The standard OH-Session protocol that we follow: 
-1. Instructors Opens OH-Queue 
-2. Students enter queue and enter waiting room 
-3. Instructors dequeue students 
-4. Instructors close queue when OH-Session is over
+
+#. Instructors Opens OH-Queue 
+#. Students enter queue and enter waiting room 
+#. Instructors dequeue students 
+#. Instructors close queue when OH-Session is over
 
 Waiting Queue System
 --------------------
@@ -134,7 +135,9 @@ Run the setup script
 
    ./setup.sh --name {ENV_FILE_NAME}
 
-Adjust the role hierarchy
+Adjust the role hierarchy.
+
+For security/privacy purposes, bot/scripts are not allowed to adjust themselves upward the role hierarchy. This must be done by hand to allow features of the bot.
 
 .. image:: ./assets/adjustRole.gif
 
