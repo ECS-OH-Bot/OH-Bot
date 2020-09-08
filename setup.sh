@@ -31,7 +31,7 @@ setupVenv(){
     . ./venv/bin/activate  
     INTERPRETER=$(command -v python3)
 
-    if [[ $INTERPRETER != *"/OH-Bot/venv"* ]]; then
+    if [[ $INTERPRETER != *"/venv/"* ]]; then
         echoerr "Failed to activate virtual environment"
         echoerr "Checks errors above or try to start with a fresh venv"
         exit 129
