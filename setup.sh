@@ -76,6 +76,7 @@ generateEnvFile(){
     if ! python3 generateEnv.py "$BOT_TOKEN" "$ENV_FILE"; then
         echoerr "Failure Generating $ENV_FILE file"
         echoerr "Refer to Docs on generating $ENV_FILE file by hand"
+        exit 135
     fi
     {
         echo "# See docs on how to setup email logging with these variables"
