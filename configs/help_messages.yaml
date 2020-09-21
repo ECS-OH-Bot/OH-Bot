@@ -15,6 +15,20 @@ aliases:
       '
 
   - &queuehelp_admin '
+      *Open the common OH queue and notify students*
+
+      `/open or /start`
+
+      ------------
+
+
+      *Close the common OH queue and notify students*
+
+      `/close or /end`
+
+      ------------
+
+
       *Enqueue a particular student into an instructor''s elevated queue:*
 
       `/eq @student @target_instructor`
