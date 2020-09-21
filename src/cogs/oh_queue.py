@@ -279,7 +279,7 @@ class OH_Queue(commands.Cog):
             await student.move_to(sender.voice.channel)
             logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
 
-    @commands.command(aliases=["cq", "clearqueue"])
+    @commands.command(aliases=["clear_queue"])
     @commands.check(isAtLeastInstructor)
     async def clearQueue(self, context: Context):
         """
