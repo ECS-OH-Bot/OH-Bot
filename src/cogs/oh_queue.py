@@ -279,29 +279,46 @@ class OH_Queue(commands.Cog):
             await student.move_to(sender.voice.channel)
             logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
 
-    @commands.command(aliases=["cq", "clearqueue"])
+    @commands.command(aliases=["clear_queue"])
     @commands.check(isAtLeastInstructor)
-    async def clearQueue(self, context: Context, student: str = None):
+    async def clearQueue(self, context: Context):
         """
         Clears all students from the queue
         @ctx: context object containing information about the caller
         """
         sender = context.author
+        self.OHQueue.clear()
+        logger.debug(f"{sender} has cleared the queue")
+        await sender.send("The queue has been cleared.")
 
-        if student:
+    @commands.command(aliases=["remove", "rm"])
+    @commands.check(isAtLeastInstructor)
+    async def removeStudentFromQueue(self, context: Context, student: str = None):
+        """
+        Removes a student from any and all queues they are on.
+        @context: context object containing information about the caller
+        @student: String uniquely identifying a student
+        """
+        sender = context.author
+
+        if student is None:
+            logger.debug(f"{sender} used the remove command without specifying a student")
+            await sender.send(f"You must specify a student to remove. For example `/remove {sender}`")
+        else:
             member_conv = MemberConverter()
-            student = await member_conv.convert(context, student)
+            try:
+                student = await member_conv.convert(context, student)
+            except BadArgument as err:
+                logger.debug(f"{sender} called remove but student {student} could not be found.")
+                await sender.send(f"Student `{student}` not found.")
+                return
             if student in self.OHQueue:
                 self.OHQueue.remove(student)
             self._instructor_queue_find_and_remove(student)
 
             logger.debug(f"{sender} has removed {student} from all queues")
             await sender.send(f"You have removed {student} from all queues")
-        else:
-            self.OHQueue.clear()
 
-            logger.debug(f"{sender} has cleared the queue")
-            await sender.send("The queue has been cleared.")
 
     def _instructor_queue_find_and_remove(self, student: Member):
         for instructor, queue in self.instructor_queue.items():
