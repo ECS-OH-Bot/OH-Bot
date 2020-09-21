@@ -38,14 +38,14 @@ aliases:
 
       *Clear the OH queue by using the following command:*
 
-      `/clear or /cq`
+      `/clearqueue or /cq`
 
       ------------
 
 
       *Removes a particular student from both the common queue and any elevated queues:*
 
-      `/cq @student`
+      `/remove @student`
 
       ------------
 
