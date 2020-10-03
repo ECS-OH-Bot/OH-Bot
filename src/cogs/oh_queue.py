@@ -244,7 +244,7 @@ class OH_Queue(commands.Cog):
 
             await self._dequeue_helper(context, student)
 
-        elif sender in self.instructor_queue:
+        elif sender in self.instructor_queue and len(self.instructor_queue[sender]):
             student = self.instructor_queue[sender].pop(0)
             logger.debug(f"{sender} dequeud {student} from their personal queue")
             if student in self.OHQueue:
@@ -255,6 +255,10 @@ class OH_Queue(commands.Cog):
             student = self.OHQueue.pop(0)
             logger.debug(f"{student} has been dequeued")
             await self._dequeue_helper(context, student)
+
+        else:
+            logger.debug(f"{sender} attempted to dequeue but there are no students to dequeue.")
+            await sender.send("There are no students to dequeue.")
 
     async def _dequeue_helper(self, context: Context, student):
         sender = context.author
