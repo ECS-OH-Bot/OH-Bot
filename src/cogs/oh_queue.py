@@ -179,7 +179,8 @@ class OH_Queue(commands.Cog):
             logger.debug(f"{context.author} has placed {student_id} into {instructor_id}'s queue")
             recipient = await userToMember(instructor_id, context.bot)
             await recipient.send(f"{instructor_id} placed {student_id} in your elevated queue")
-            del self.bad_dq_counter[student]
+            if student in self.bad_dq_counter:
+                del self.bad_dq_counter[student]
 
         except BadArgument:
             logger.error(f"{context.author} gave the incorrect arguments"
@@ -266,7 +267,7 @@ class OH_Queue(commands.Cog):
     async def _dequeue_helper(self, context: Context, student, from_elevated_queue: bool):
         sender = context.author
         if student.voice is None:
-            await self._student_not_in_waiting_room_protocol(sender, student, from_elevated_queue)
+            await self._student_not_in_waiting_room_protocol(context, sender, student, from_elevated_queue)
         else:
             await student.send(f"You are being summoned to {sender.mention}'s OH",
                                delete_after=GetConstants().MESSAGE_LIFE_TIME)
@@ -274,7 +275,7 @@ class OH_Queue(commands.Cog):
             await student.move_to(sender.voice.channel)
             logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
 
-    async def _student_not_in_waiting_room_protocol(self, sender, student, from_elevated_queue: bool) -> None:
+    async def _student_not_in_waiting_room_protocol(self, context, sender, student, from_elevated_queue: bool) -> None:
         async def _dq_first_strike():
             if not from_elevated_queue:
                 await student.send(
@@ -369,13 +370,16 @@ class OH_Queue(commands.Cog):
             if student in self.instructor_queue[sender]:
                 del self.instructor_queue[sender]
             return
+        else:
+            if bad_dq_count == 1:
+                await _dq_first_strike()
+            elif bad_dq_count == 2:
+                await _dq_second_strike()
+            elif bad_dq_count >= 3:
+                await _dq_third_strike()
 
-        if bad_dq_count == 1:
-            await _dq_first_strike()
-        elif bad_dq_count == 2:
-            await _dq_second_strike()
-        elif bad_dq_count >= 3:
-            await _dq_third_strike()
+        logger.debug(f"After an unsuccessful dq of {student}, preparing to dq the next student")
+        await self.dequeueStudent(context)
 
     @commands.command(aliases=["clear_queue"])
     @commands.check(isAtLeastInstructor)
