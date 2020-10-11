@@ -1,6 +1,9 @@
 OH Queue Cog
 ============
 
+The logic for how we handle the dequeue operation is best described by the following flow cahrt
+.. image:: images/queue_flow.png
+
 .. autoclass:: cogs.oh_queue.OH_Queue
 
    .. py:method:: onQueueUpdate() -> None
