@@ -365,11 +365,10 @@ class OH_Queue(commands.Cog):
 
         if len(target_queue) == 0:
             await _dq_third_strike()
-            if student in self.OHQueue:
+            if student in self.OHQueue and not from_elevated_queue:
                 self.OHQueue.remove(student)
             if student in self.instructor_queue[sender]:
                 del self.instructor_queue[sender]
-            return
         else:
             if bad_dq_count == 1:
                 await _dq_first_strike()
