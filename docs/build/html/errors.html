@@ -1,7 +1,8 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
   
@@ -11,18 +12,12 @@
   
 
   
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-
-  
   
   
   
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -34,6 +29,10 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Logging Setup" href="logger_util.html" />
@@ -51,7 +50,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Discord OH Bot
+            <a href="index.html" class="icon icon-home"> Discord OH Bot
           
 
           
@@ -74,7 +73,6 @@
           
         </div>
 
-        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -99,7 +97,6 @@
             
           
         </div>
-        
       </div>
     </nav>
 
@@ -138,7 +135,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
       <li>Errors</li>
     
@@ -159,8 +156,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="errors">
-<h1>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-errors">
+<span id="errors"></span><h1>Errors<a class="headerlink" href="#module-errors" title="Permalink to this headline">¶</a></h1>
+<p>Error types used by this bot</p>
+<dl class="py exception">
+<dt id="errors.CommandPermissionError">
+<em class="property">exception </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">CommandPermissionError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.CommandPermissionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">discord.ext.commands.errors.CommandError</span></code></p>
+<p>Raised when a non-elevated user attempts to invoke a command that requires special privileges</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="errors.OHQueueCommandUseError">
+<em class="property">exception </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">OHQueueCommandUseError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.OHQueueCommandUseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">discord.ext.commands.errors.CommandError</span></code></p>
+<p>Raised when a user incorrectly uses the queue</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="errors.OHStateError">
+<em class="property">exception </em><code class="sig-prename descclassname">errors.</code><code class="sig-name descname">OHStateError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#errors.OHStateError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">discord.ext.commands.errors.CommandError</span></code></p>
+<p>Raised when the expected OH state for a command is different from the actual state</p>
+</dd></dl>
+
 </div>
 
 
@@ -183,19 +202,11 @@
 
   <div role="contentinfo">
     <p>
-        
         &copy; Copyright 2020, Grant Gilson, Noah Rose Ledesma, Stephen Ott
 
     </p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -206,6 +217,7 @@
 
   </div>
   
+
 
   <script type="text/javascript">
       jQuery(function () {

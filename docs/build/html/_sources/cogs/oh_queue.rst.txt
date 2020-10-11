@@ -2,7 +2,9 @@ OH Queue Cog
 ============
 
 The logic for how we handle the dequeue operation is best described by the following flow cahrt
-.. image:: images/queue_flow.png
+
+.. image:: ../queue_flow.png
+   :scale: 50 %
 
 .. autoclass:: cogs.oh_queue.OH_Queue
 
