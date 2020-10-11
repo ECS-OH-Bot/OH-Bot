@@ -1,8 +1,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -12,12 +11,18 @@
   
 
   
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -29,13 +34,9 @@
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="oh_state_manager module" href="oh_state_manager.html" />
+    <link rel="next" title="OH State Manager Cog" href="oh_state_manager.html" />
     <link rel="prev" title="Help Cog" href="help.html" /> 
 </head>
 
@@ -50,7 +51,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> Discord OH Bot
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> Discord OH Bot
           
 
           
@@ -73,6 +74,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -83,29 +85,28 @@
               <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/creating_new_cogs.html">Creating New Cogs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/interpretting_logging_messages.html">How to Interpret Log Messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/interpretting_logging_messages.html">How to Make Use of Log Messages</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../constants.html">Constants Singleton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors.html">Errors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../logger_util.html">Logging Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_utils.html">User Utilities</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../cogs.html">Cogs</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="error_manager.html">Error Manager Cog</a></li>
 <li class="toctree-l2"><a class="reference internal" href="help.html">Help Cog</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">OH Queue Cog</a></li>
-<li class="toctree-l2"><a class="reference internal" href="oh_state_manager.html">oh_state_manager module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools.html">tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oh_state_manager.html">OH State Manager Cog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools Cog</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../cogs.html#indices-and-tables">Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../constants.html">constants module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../errors.html">errors module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../main.html">main module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../logger_util.html">logger_util module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_utils.html">user_utils module</a></li>
 </ul>
 
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -144,7 +145,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
           <li><a href="../cogs.html">Cogs</a> &raquo;</li>
         
@@ -169,47 +170,6 @@
             
   <div class="section" id="oh-queue-cog">
 <h1>OH Queue Cog<a class="headerlink" href="#oh-queue-cog" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt id="cogs.oh_queue.OH_Queue">
-<em class="property">class </em><code class="sig-prename descclassname">cogs.oh_queue.</code><code class="sig-name descname">OH_Queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">client</span><span class="p">:</span> <span class="n">discord.ext.commands.bot.Bot</span></em><span class="sig-paren">)</span><a class="headerlink" href="#cogs.oh_queue.OH_Queue" title="Permalink to this definition">¶</a></dt>
-<dd><p>This cog defines the set of commands with which users can interact with the queue
-Note that the ctx argument that each of these methods take is given by the discord API.</p>
-<dl class="py method">
-<dt id="cogs.oh_queue.OH_Queue.onQueueUpdate">
-<em class="property">async </em><code class="sig-name descname">onQueueUpdate</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.oh_queue.OH_Queue.onQueueUpdate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update the persistant queue message based on _OHQueue</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="cogs.oh_queue.OH_Queue.enterQueue">
-<em class="property">async </em><code class="sig-name descname">enterQueue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.oh_queue.OH_Queue.enterQueue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Enters user into the OH queue. If they already are enqueued return them their position in queue</p>
-<p>Invoked like: /eq</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="cogs.oh_queue.OH_Queue.leaveQueue">
-<em class="property">async </em><code class="sig-name descname">leaveQueue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.oh_queue.OH_Queue.leaveQueue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes caller from the queue</p>
-<p>Invoked like: /lq</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="cogs.oh_queue.OH_Queue.dequeueStudent">
-<em class="property">async </em><code class="sig-name descname">dequeueStudent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.oh_queue.OH_Queue.dequeueStudent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dequeue a student from the queue and notify them</p>
-<p>Invoked like: /dq</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="cogs.oh_queue.OH_Queue.clearQueue">
-<em class="property">async </em><code class="sig-name descname">clearQueue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">context</span><span class="p">:</span> <span class="n">Context</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#cogs.oh_queue.OH_Queue.clearQueue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Clears all students from the queue</p>
-<p>Invoked like: /cq</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 
 
@@ -220,7 +180,7 @@ Note that the ctx argument that each of these methods take is given by the disco
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="oh_state_manager.html" class="btn btn-neutral float-right" title="oh_state_manager module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="oh_state_manager.html" class="btn btn-neutral float-right" title="OH State Manager Cog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="help.html" class="btn btn-neutral float-left" title="Help Cog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
@@ -232,11 +192,19 @@ Note that the ctx argument that each of these methods take is given by the disco
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Grant Gilson, Noah Rose Ledesma, Stephen Ott
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -247,7 +215,6 @@ Note that the ctx argument that each of these methods take is given by the disco
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {

@@ -2,8 +2,7 @@
 
 
 <!DOCTYPE html>
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8">
   
@@ -13,12 +12,18 @@
   
 
   
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
   
   
   
 
   
-  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -30,10 +35,6 @@
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
     
-
-  
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
@@ -49,7 +50,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> Discord OH Bot
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> Discord OH Bot
           
 
           
@@ -72,6 +73,7 @@
           
         </div>
 
+        
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
             
@@ -96,6 +98,7 @@
             
           
         </div>
+        
       </div>
     </nav>
 
@@ -134,7 +137,7 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="index.html">Docs</a> &raquo;</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
       <li>Index</li>
     
@@ -161,44 +164,17 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
- | <a href="#Q"><strong>Q</strong></a>
- | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
- | <a href="#T"><strong>T</strong></a>
- | <a href="#U"><strong>U</strong></a>
  
 </div>
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/tools.html#cogs.tools.Tools.clear">clear() (cogs.tools.Tools method)</a>
-</li>
-      <li><a href="cogs/oh_queue.html#cogs.oh_queue.OH_Queue.clearQueue">clearQueue() (cogs.oh_queue.OH_Queue method)</a>
-</li>
-      <li>
-    cogs.error_manager
-
-      <ul>
-        <li><a href="cogs/error_manager.html#module-cogs.error_manager">module</a>
-</li>
-      </ul></li>
-      <li>
-    cogs.help
-
-      <ul>
-        <li><a href="cogs/help.html#module-cogs.help">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="errors.html#errors.CommandPermissionError">CommandPermissionError</a>
-</li>
       <li>
     constants
 
@@ -206,6 +182,8 @@
         <li><a href="constants.html#module-constants">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="constants.html#constants.Constants">Constants (class in constants)</a>
 </li>
   </ul></td>
@@ -213,10 +191,6 @@
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/oh_queue.html#cogs.oh_queue.OH_Queue.dequeueStudent">dequeueStudent() (cogs.oh_queue.OH_Queue method)</a>
-</li>
-  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="logger_util.html#logger_util.SelfCleaningRotatingTimedFileHandler.doRollover">doRollover() (logger_util.SelfCleaningRotatingTimedFileHandler method)</a>
 </li>
@@ -228,19 +202,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="logger_util.html#logger_util.SSLSMTPHandler.emit">emit() (logger_util.SSLSMTPHandler method)</a>
 </li>
-      <li><a href="cogs/oh_queue.html#cogs.oh_queue.OH_Queue.enterQueue">enterQueue() (cogs.oh_queue.OH_Queue method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/error_manager.html#cogs.error_manager.ErrorManager">ErrorManager (class in cogs.error_manager)</a>
-</li>
-      <li>
-    errors
-
-      <ul>
-        <li><a href="errors.html#module-errors">module</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -252,28 +213,10 @@
   </ul></td>
 </tr></table>
 
-<h2 id="H">H</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/help.html#cogs.help.Help">Help (class in cogs.help)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/help.html#cogs.help.Help.help_cmd">help_cmd() (cogs.help.Help method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="constants.html#constants.Constants.instance">instance (constants.Constants attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="user_utils.html#user_utils.isAdmin">isAdmin() (in module user_utils)</a>
-</li>
-      <li><a href="user_utils.html#user_utils.isStudent">isStudent() (in module user_utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -281,8 +224,6 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/oh_queue.html#cogs.oh_queue.OH_Queue.leaveQueue">leaveQueue() (cogs.oh_queue.OH_Queue method)</a>
-</li>
       <li><a href="logger_util.html#logger_util.log_file_name">log_file_name() (in module logger_util)</a>
 </li>
       <li>
@@ -308,17 +249,9 @@
     module
 
       <ul>
-        <li><a href="cogs/error_manager.html#module-cogs.error_manager">cogs.error_manager</a>
-</li>
-        <li><a href="cogs/help.html#module-cogs.help">cogs.help</a>
-</li>
         <li><a href="constants.html#module-constants">constants</a>
 </li>
-        <li><a href="errors.html#module-errors">errors</a>
-</li>
         <li><a href="logger_util.html#module-logger_util">logger_util</a>
-</li>
-        <li><a href="user_utils.html#module-user_utils">user_utils</a>
 </li>
       </ul></li>
   </ul></td>
@@ -327,26 +260,6 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/oh_state_manager.html#cogs.oh_state_manager.officeHoursAreClosed">officeHoursAreClosed() (in module cogs.oh_state_manager)</a>
-</li>
-      <li><a href="cogs/oh_state_manager.html#cogs.oh_state_manager.officeHoursAreOpen">officeHoursAreOpen() (in module cogs.oh_state_manager)</a>
-</li>
-      <li><a href="cogs/oh_queue.html#cogs.oh_queue.OH_Queue">OH_Queue (class in cogs.oh_queue)</a>
-</li>
-      <li><a href="cogs/oh_state_manager.html#cogs.oh_state_manager.OHState">OHState (class in cogs.oh_state_manager)</a>
-</li>
-      <li><a href="errors.html#errors.OHStateError">OHStateError</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/oh_state_manager.html#cogs.oh_state_manager.OHStateManager">OHStateManager (class in cogs.oh_state_manager)</a>
-</li>
-      <li><a href="cogs/error_manager.html#cogs.error_manager.ErrorManager.on_command_error">on_command_error() (cogs.error_manager.ErrorManager method)</a>
-</li>
-      <li><a href="cogs/tools.html#cogs.tools.Tools.on_member_join">on_member_join() (cogs.tools.Tools method)</a>
-</li>
-      <li><a href="cogs/oh_queue.html#cogs.oh_queue.OH_Queue.onQueueUpdate">onQueueUpdate() (cogs.oh_queue.OH_Queue method)</a>
-</li>
       <li><a href="logger_util.html#logger_util.optional_make_dir">optional_make_dir() (in module logger_util)</a>
 </li>
   </ul></td>
@@ -360,59 +273,14 @@
   </ul></td>
 </tr></table>
 
-<h2 id="Q">Q</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/help.html#cogs.help.Help.queue_help">queue_help() (cogs.help.Help method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="R">R</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/help.html#cogs.help.Help.refresh_help">refresh_help() (cogs.help.Help method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="logger_util.html#logger_util.SelfCleaningRotatingTimedFileHandler">SelfCleaningRotatingTimedFileHandler (class in logger_util)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="logger_util.html#logger_util.SSLSMTPHandler">SSLSMTPHandler (class in logger_util)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/oh_state_manager.html#cogs.oh_state_manager.OHStateManager.startOH">startOH() (cogs.oh_state_manager.OHStateManager method)</a>
-</li>
-      <li><a href="cogs/oh_state_manager.html#cogs.oh_state_manager.OHStateManager.stopOH">stopOH() (cogs.oh_state_manager.OHStateManager method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="T">T</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="cogs/tools.html#cogs.tools.Tools">Tools (class in cogs.tools)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="U">U</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    user_utils
-
-      <ul>
-        <li><a href="user_utils.html#module-user_utils">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="user_utils.html#user_utils.userToMember">userToMember() (in module user_utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -429,11 +297,19 @@
 
   <div role="contentinfo">
     <p>
+        
         &copy; Copyright 2020, Grant Gilson, Noah Rose Ledesma, Stephen Ott
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -444,7 +320,6 @@
 
   </div>
   
-
 
   <script type="text/javascript">
       jQuery(function () {
