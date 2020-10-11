@@ -360,8 +360,8 @@ class OH_Queue(commands.Cog):
                 del self.bad_dq_counter[student]
 
         target_queue = self.instructor_queue[sender] if from_elevated_queue else self.OHQueue
+        self.bad_dq_counter[student] += 1
         bad_dq_count = self.bad_dq_counter[student]
-        bad_dq_count += 1
 
         if len(target_queue) == 0:
             await _dq_third_strike()
