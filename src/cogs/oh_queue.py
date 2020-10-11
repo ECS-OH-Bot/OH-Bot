@@ -276,11 +276,13 @@ class OH_Queue(commands.Cog):
             logger.debug(f"{student} has been summoned and moved to {sender.voice.channel}")
 
     async def _student_not_in_waiting_room_protocol(self, context, sender, student, from_elevated_queue: bool) -> None:
+        invite: Invite = await self.waiting_room.create_invite()
         async def _dq_first_strike():
             if not from_elevated_queue:
                 await student.send(
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
-                    f"into an OH room. You are now the next person in line. Please join the waiting room"
+                    f"into an OH room. You are now the next person in line. Please join the waiting room "
+                    f"{invite.url}"
                 )
                 await sender.send(
                     f"{student.mention} was not in a voice channel. They will be the next person in line. This is their"
@@ -292,7 +294,8 @@ class OH_Queue(commands.Cog):
                 await student.send(
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
                     f"into an OH room. You are now the next person in line in {sender.mention}'s personal queue. "
-                    f"Please join the waiting room."
+                    f"Please join the waiting room "
+                    f"{invite.url}."
                 )
                 await sender.send(
                     f"{student.mention} was not in a voice channel. They will be the next person in line in your "
@@ -306,7 +309,8 @@ class OH_Queue(commands.Cog):
             if not from_elevated_queue:
                 await student.send(
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
-                    f"into an OH room. You have been placed at the end of the queue. Please join the waiting room"
+                    f"into an OH room. You have been placed at the end of the queue. Please join the waiting room "
+                    f"{invite.url}"
                 )
                 await sender.send(
                     f"{student.mention} was not in a voice channel. This is their second strike, so they have been "
@@ -318,7 +322,8 @@ class OH_Queue(commands.Cog):
                 await student.send(
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
                     f"into an OH room. You have been moved to the end of {sender.mention}'s personal queue. "
-                    f"Please join the waiting room."
+                    f"Please join the waiting room. "
+                    f"{invite.url}"
                 )
                 await sender.send(
                     f"{student.mention} was not in a voice channel. They have been placed at the back of your personal "
@@ -346,7 +351,8 @@ class OH_Queue(commands.Cog):
             else:
                 await student.send(
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
-                    f"into an OH room. You have been added to the end of main queue. Please join the waiting room"
+                    f"into an OH room. You have been added to the end of main queue. Please join the waiting room "
+                    f"{invite.url}"
                 )
                 await sender.send(
                     f"{student.mention} was not in a voice channel. Since this is their third strike, they have been "
