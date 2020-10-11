@@ -179,6 +179,7 @@ class OH_Queue(commands.Cog):
             logger.debug(f"{context.author} has placed {student_id} into {instructor_id}'s queue")
             recipient = await userToMember(instructor_id, context.bot)
             await recipient.send(f"{instructor_id} placed {student_id} in your elevated queue")
+            del self.bad_dq_counter[student]
 
         except BadArgument:
             logger.error(f"{context.author} gave the incorrect arguments"
@@ -265,14 +266,6 @@ class OH_Queue(commands.Cog):
     async def _dequeue_helper(self, context: Context, student, from_elevated_queue: bool):
         sender = context.author
         if student.voice is None:
-            self.instructor_queue[sender].append(student)
-            # logger.debug(f"{student} was not in the waiting when they were dequeued; they were placed in"
-            #              f"{sender}'s elevated queue")
-            # await sender.send(
-            #     f"{student.mention} is not in the waiting room or any of the breakout rooms. I cannot "
-            #     "move them into your voice channel. They have been placed in your elevated queue. If they do"
-            #     "not show up, use /skip to remove them.",
-            #     delete_after=GetConstants().MESSAGE_LIFE_TIME)
             await self._student_not_in_waiting_room_protocol(sender, student, from_elevated_queue)
         else:
             await student.send(f"You are being summoned to {sender.mention}'s OH",
@@ -288,12 +281,24 @@ class OH_Queue(commands.Cog):
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
                     f"into an OH room. You are now the next person in line. Please join the waiting room"
                 )
+                await sender.send(
+                    f"{student.mention} was not in a voice channel. They will be the next person in line. This is their"
+                    f" first strike"
+                )
+                logger.debug(f"{student} was dq'ed by {sender}, but they were not in the waiting room"
+                             f". This is their first strike: {bad_dq_count}")
             else:
                 await student.send(
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
                     f"into an OH room. You are now the next person in line in {sender.mention}'s personal queue. "
                     f"Please join the waiting room."
                 )
+                await sender.send(
+                    f"{student.mention} was not in a voice channel. They will be the next person in line in your "
+                    f"personal queue. This is their first strike"
+                )
+                logger.debug(f"{student} was dq'ed by {sender} to their personal queue, but they were "
+                             f"not in the waiting room. This is their first strike: {bad_dq_count}")
             target_queue.insert(1, student)
 
         async def _dq_second_strike():
@@ -302,12 +307,24 @@ class OH_Queue(commands.Cog):
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
                     f"into an OH room. You have been placed at the end of the queue. Please join the waiting room"
                 )
+                await sender.send(
+                    f"{student.mention} was not in a voice channel. This is their second strike, so they have been "
+                    f"placed at the back of the queue."
+                )
+                logger.debug(f"{student} was dq'ed by {sender}, but they were not in the waiting room"
+                             f". This is their second strike: {bad_dq_count}")
             else:
                 await student.send(
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
                     f"into an OH room. You have been moved to the end of {sender.mention}'s personal queue. "
                     f"Please join the waiting room."
                 )
+                await sender.send(
+                    f"{student.mention} was not in a voice channel. They have been placed at the back of your personal "
+                    f"queue. This is their second strike"
+                )
+                logger.debug(f"{student} was dq'ed by {sender}, but they were not in the waiting room"
+                             f". This is their second strike: {bad_dq_count}")
             target_queue.append(student)
 
         async def _dq_third_strike():
@@ -317,26 +334,41 @@ class OH_Queue(commands.Cog):
                     f"into an OH room. You have been removed from the queue. Please enqueue yourself if you still "
                     f"need help"
                 )
-                self.OHQueue.remove(student)
+                await sender.send(
+                    f"{student.mention} was not in a voice channel. Since this is their third strike, they have been "
+                    f"removed from the queue"
+                )
+                logger.debug(f"{student} was dq'ed by {sender}, but they were not in the waiting room"
+                             f". This is their third strike: {bad_dq_count}. They have been removed from the shared "
+                             f"queue")
 
             else:
                 await student.send(
                     f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
                     f"into an OH room. You have been added to the end of main queue. Please join the waiting room"
                 )
+                await sender.send(
+                    f"{student.mention} was not in a voice channel. Since this is their third strike, they have been "
+                    f"placed in the shared queue."
+                )
+                logger.debug(f"{student} was dq'ed by {sender}, but they were not in the waiting room"
+                             f". This is their third strike: {bad_dq_count} They have been placed in the shared queue")
                 self.OHQueue.append(student)
 
             if student in self.bad_dq_counter:
                 del self.bad_dq_counter[student]
 
         target_queue = self.instructor_queue[sender] if from_elevated_queue else self.OHQueue
-        if len(target_queue) == 1:
-            await _dq_third_strike()
-            self.OHQueue.remove(student)
-            return
-
         bad_dq_count = self.bad_dq_counter[student]
         bad_dq_count += 1
+
+        if len(target_queue) == 0:
+            await _dq_third_strike()
+            if student in self.OHQueue:
+                self.OHQueue.remove(student)
+            if student in self.instructor_queue[sender]:
+                del self.instructor_queue[sender]
+            return
 
         if bad_dq_count == 1:
             await _dq_first_strike()
