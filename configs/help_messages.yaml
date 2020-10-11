@@ -15,9 +15,37 @@ aliases:
       '
 
   - &queuehelp_admin '
+      *Open the common OH queue and notify students*
+
+      `/open or /start`
+
+      ------------
+
+
+      *Close the common OH queue and notify students*
+
+      `/close or /end`
+
+      ------------
+
+
+      *Enqueue a particular student into an instructor''s elevated queue:*
+
+      `/eq @student @target_instructor`
+
+      ------------
+
+
       *Clear the OH queue by using the following command:*
 
-      `/clear or /cq`
+      `/clear_queue`
+
+      ------------
+
+
+      *Removes a particular student from both the common queue and any elevated queues:*
+
+      `/remove @student`
 
       ------------
 
@@ -27,6 +55,12 @@ aliases:
       `/dequeue or /dq`
 
       ------------
+
+
+      *Summon a specific student to your OH room:*
+
+      `/dq @student`
+
       '
 
   - &voicehelp '

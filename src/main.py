@@ -12,6 +12,7 @@ logger = getLogger('main')
 parser = argparse.ArgumentParser(description="Discord bot to manage office hours")
 parser.add_argument('config', help='The path to the configuration file. Probably config.yaml')
 
+
 def main():
     # Instantiate constants singleton
     # For convenience, this object holds onto command line arguments
@@ -58,6 +59,7 @@ def after_cog_load(bot: commands.Bot) -> None:
 
 
 def load_cogs(bot: commands.Bot) -> None:
+    os.chdir("src")
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             logger.debug(f"Loading in the cog {filename}")

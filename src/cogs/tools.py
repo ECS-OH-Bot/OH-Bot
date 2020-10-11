@@ -6,6 +6,7 @@ from discord.ext.commands import Context
 from discord.utils import get
 
 from constants import GetConstants
+from user_utils import isAdmin
 
 logger = getLogger(f"main.{__name__}")
 
@@ -36,6 +37,28 @@ class Tools(commands.Cog):
         await ctx.channel.purge(limit=amount)
         logger.debug(f"{ctx.author} has cleared the channel {ctx.channel} of {amount} messages")
 
+    @commands.command()
+    async def shutdown(self, context: Context):
+        """
+        If bot is in safe state, close bot connection to discord service and shutdown
+        Args:
+            context: context object containing information about the caller
+
+        Returns:
+            Successful Exit code 
+        """
+        sender = context.author
+        logger.debug(f"User: {sender} issued shutdown signal")
+        if await isAdmin(context):
+            while True:
+                if self.client.is_ready():
+                    await gather(sender.send(f"Shutting Down now..."), selfClean(context))
+                    await context.bot.logout()
+                    logger.debug(f"ShutDown Successful. Exiting")
+                    return 0
+
+
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         """
@@ -50,8 +73,4 @@ class Tools(commands.Cog):
 
 
 def setup(client):
-    """
-    Called internally by discord API cog functionality
-    I honestly have no idea how this works...
-    """
     client.add_cog(Tools(client))

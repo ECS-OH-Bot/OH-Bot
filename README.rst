@@ -12,7 +12,7 @@ The Discord Office Hour Butler
    <p align=center style="font-size:large">
       <a href=#purpose>Purpose</a> • 
       <a href=#overview>Overview</a> • 
-      <a href=#installation>Installation</a> • 
+      <a href=#quickstart>Quick Start</a> • 
       <a href=https://ecs-oh-bot.github.io/OH-Bot/docs/build/html/index.html>Docs</a> •
       <a href=#license>License</a>
    </p>
@@ -40,12 +40,15 @@ like notifying and moving students when they are ready to been seen are
 handled by **OH-Bot**
 
 **OH-Bot** is a *self-hotsted* bot - meaning that you will need to host
-and maintain your own instance. See `installation <#installation>`__ to
+and maintain your own instance. See `Quick Start <#quickstart>`__ to
 get started.
 
-The standard OH-Session protocol that we follow: 1. Instructors Opens
-OH-Queue 2. Students enter queue and enter waiting room 3. Instructors
-dequeue students 4. Instructors close queue when OH-Session is over
+The standard OH-Session protocol that we follow: 
+
+#. Instructors Opens OH-Queue 
+#. Students enter queue and enter waiting room 
+#. Instructors dequeue students 
+#. Instructors close queue when OH-Session is over
 
 Waiting Queue System
 --------------------
@@ -54,13 +57,12 @@ Waiting Queue System
 student are allowed to enter and leave the queue whenever they like
 while OH is being held.
 
-Server `Template <https://discord.new/53Q2rPtTh5EG>`__
+Server `Template <https://discord.new/kVY9nyrwzV2N>`__
 ------------------------------------------------------
 
 **OH-Bot** makes use of Discord’s Server Template feature
 
 There are three roles in the **OH-Bot** server
-`template <#TODO:add_template_link>`__:
 
 -  Admin - total control of bot functionality and server interfaces
 -  Instructor - control over OH sessions and locked channels
@@ -113,7 +115,7 @@ Requirements
 
 -  `Discord <https://discordapp.com/>`__ app & account
 
-Installation
+Quick Start
 --------------------------
 
 Clone the source code
@@ -130,13 +132,19 @@ Run the setup script
 
 .. code:: bash
 
-   ./setup.sh
+   ./setup.sh --name {ENV_FILE_NAME}
+
+Adjust the role hierarchy.
+
+For security/privacy purposes, bot/scripts are not allowed to adjust themselves upward the role hierarchy. This must be done by hand to allow features of the bot.
+
+.. image:: ./assets/adjustRole.gif
 
 Run the script to start up the bot
 
 .. code:: bash
 
-   ./run.sh
+   ./run{ENV_FILE_NAME}.sh
 
 `Docs <https://ecs-oh-bot.github.io/OH-Bot/docs/build/html/index.html>`__
 =========================================================================
