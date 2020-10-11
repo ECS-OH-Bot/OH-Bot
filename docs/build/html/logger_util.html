@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Logging Setup &mdash; Discord OH Bot 1.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Utilities" href="user_utils.html" />
+    <link rel="prev" title="Errors" href="errors.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Discord OH Bot
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/creating_new_cogs.html">Creating New Cogs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/interpretting_logging_messages.html">How to Make Use of Log Messages</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Source Code Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="constants.html">Constants Singleton</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Logging Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_utils.html">User Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cogs.html">Cogs</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Discord OH Bot</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Logging Setup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/logger_util.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-logger_util">
+<span id="logging-setup"></span><h1>Logging Setup<a class="headerlink" href="#module-logger_util" title="Permalink to this headline">¶</a></h1>
+<p>Set of functions that culminate in logging_setup, which deals with setup of everything related to logging throughout 
+the rest of the bot</p>
+<dl class="py class">
+<dt id="logger_util.SSLSMTPHandler">
+<em class="property">class </em><code class="sig-prename descclassname">logger_util.</code><code class="sig-name descname">SSLSMTPHandler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mailhost</span></em>, <em class="sig-param"><span class="n">fromaddr</span></em>, <em class="sig-param"><span class="n">toaddrs</span></em>, <em class="sig-param"><span class="n">subject</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#logger_util.SSLSMTPHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handlers.SMTPHandler</span></code></p>
+<p>Subclass of the builtin SMTP logging handler that uses SSL to send email messages
+Used in this bot to send emails when a critical error has occured</p>
+<dl class="py method">
+<dt id="logger_util.SSLSMTPHandler.emit">
+<code class="sig-name descname">emit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">record</span><span class="p">:</span> <span class="n">logging.LogRecord</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#logger_util.SSLSMTPHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emit a record.</p>
+<p>Format the record and send it to the specified addressees.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="logger_util.SelfCleaningRotatingTimedFileHandler">
+<em class="property">class </em><code class="sig-prename descclassname">logger_util.</code><code class="sig-name descname">SelfCleaningRotatingTimedFileHandler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">when</span><span class="o">=</span><span class="default_value">'midnight'</span></em>, <em class="sig-param"><span class="n">interval</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#logger_util.SelfCleaningRotatingTimedFileHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handlers.TimedRotatingFileHandler</span></code></p>
+<p>Subclass of the builtin TimedRotatingFileHandler logging handler that changes to a new file at midnight. 
+When it does this it also goes and cleans up the directory that contains the log files</p>
+<dl class="py method">
+<dt id="logger_util.SelfCleaningRotatingTimedFileHandler.doRollover">
+<code class="sig-name descname">doRollover</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#logger_util.SelfCleaningRotatingTimedFileHandler.doRollover" title="Permalink to this definition">¶</a></dt>
+<dd><p>do a rollover; in this case, a date/time stamp is appended to the filename
+when the rollover happens.  However, you want the file to be named for the
+start of the interval, not the current time.  If there is a backup count,
+then we have to get a list of matching filenames, sort them and remove
+the one with the oldest suffix.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="logger_util.log_file_name">
+<code class="sig-prename descclassname">logger_util.</code><code class="sig-name descname">log_file_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directory</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#logger_util.log_file_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the name for a log file based off the current time</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="logger_util.logging_cleanup">
+<code class="sig-prename descclassname">logger_util.</code><code class="sig-name descname">logging_cleanup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">capacity</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">5</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#logger_util.logging_cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there are more than capacity log files in the directory,
+delete the oldest file until there are less than capacity</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="logger_util.logging_setup">
+<code class="sig-prename descclassname">logger_util.</code><code class="sig-name descname">logging_setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">p_logger</span><span class="p">:</span> <span class="n">logging.Logger</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#logger_util.logging_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up a file handler in the directory specified by OS variables and
+sets up a stream handler to log everything to stdout as well
+&#64;param p_logger: The logger which we are adding these handlers to</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="logger_util.optional_make_dir">
+<code class="sig-prename descclassname">logger_util.</code><code class="sig-name descname">optional_make_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directory</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#logger_util.optional_make_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if dir exists, if it doesn’t we go make that directory</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="user_utils.html" class="btn btn-neutral float-right" title="User Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="errors.html" class="btn btn-neutral float-left" title="Errors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Grant Gilson, Noah Rose Ledesma, Stephen Ott
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
