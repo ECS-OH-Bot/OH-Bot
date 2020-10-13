@@ -4,6 +4,7 @@ from asyncio import gather
 from discord.ext import commands
 from discord.ext.commands import Context
 from discord.utils import get
+from discord.errors import NotFound
 
 from constants import GetConstants
 from user_utils import isAdmin
@@ -16,8 +17,10 @@ async def selfClean(context: Context):
     Deletes the message that invoked a command is possible
     """
     if context.guild is not None:
-        await context.message.delete()
-
+        try:
+            await context.message.delete()
+        except NotFound:
+            logger.debug(f"Could not self clean a message sent by {context.message.author}.")
 
 class Tools(commands.Cog):
 
