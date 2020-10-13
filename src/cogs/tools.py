@@ -67,7 +67,7 @@ class Tools(commands.Cog):
                      member.send(f"{member.mention} welcome! You have been promoted to the role of Student"),
                      member.send(self.client.get_cog("Help").help_messages['all_student'])
                      )
-        logger.debug(f"{member.author} has joined the server")
+        logger.debug(f"{member.mention} has joined the server")
 
 
 def setup(client):
