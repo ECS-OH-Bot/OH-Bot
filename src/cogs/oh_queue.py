@@ -361,16 +361,50 @@ class OH_Queue(commands.Cog):
                 logger.debug(f"{student} was dq'ed by {sender}, but they were not in the waiting room"
                              f". This is their third strike: {bad_dq_count} They have been placed in the shared queue")
                 self.OHQueue.append(student)
-
+            
             if student in self.bad_dq_counter:
                 del self.bad_dq_counter[student]
+        
+        async def _dq_only_student_in_queue():
+            if not from_elevated_queue:
+                await student.send(
+                    f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
+                    f"into an OH room. You have been removed from the queue. Please enqueue yourself if you still "
+                    f"need help"
+                )
+                await sender.send(
+                    f"{student.mention} was not in a voice channel. Since they were the only one in the shared queue, "
+                    f"they have been removed from the queue"
+                )
+                logger.debug(f"{student} was dq'ed by {sender}, but they were not in the waiting room"
+                             f". They were the only person in the shared queue. They have been removed from the shared "
+                             f"queue")
+
+            else:
+                await student.send(
+                    f"{student.mention} you have been called on but were not in the waiting room. I cannot move you "
+                    f"into an OH room. You have been added to the end of main queue. Please join the waiting room "
+                    f"{invite.url}"
+                )
+                await sender.send(
+                    f"{student.mention} was not in a voice channel. Since they were the only one in your elevated queue, "
+                    f"they have been placed in the shared queue."
+                )
+                logger.debug(f"{student} was dq'ed by {sender}, but they were not in the waiting room"
+                             f". They were the only person in {sender}'s elevated queue. They have been placed in the shared queue")
+                self.OHQueue.append(student)
+            
+            if student in self.bad_dq_counter:
+                del self.bad_dq_counter[student]
+
+            
 
         target_queue = self.instructor_queue[sender] if from_elevated_queue else self.OHQueue
         self.bad_dq_counter[student] += 1
         bad_dq_count = self.bad_dq_counter[student]
 
         if len(target_queue) == 0:
-            await _dq_third_strike()
+            await _dq_only_student_in_queue()
             if student in self.OHQueue and not from_elevated_queue:
                 self.OHQueue.remove(student)
             if student in self.instructor_queue[sender]:
