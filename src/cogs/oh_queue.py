@@ -390,13 +390,41 @@ class OH_Queue(commands.Cog):
     @commands.check(isAtLeastInstructor)
     async def clearQueue(self, context: Context):
         """
-        Clears all students from the queue
+        Clears all students from the shared queue
         @ctx: context object containing information about the caller
         """
         sender = context.author
         self.OHQueue.clear()
         logger.debug(f"{sender} has cleared the queue")
         await sender.send("The queue has been cleared.")
+
+    @commands.command(aliases=["clear_my_queue"])
+    @commands.check(isAtLeastInstructor)
+    async def clearMyQueue(self, context: Context):
+        """
+        Clears all students from the sender's elevated queue
+        @ctx: context object containing information about the caller
+        """
+        sender = context.author
+        if sender not in self.instructor_queue:
+            logger.debug(f"{sender} attempted to clear their elevated queue, but they don't have one.")
+        else:
+            self.instructor_queue[sender].clear()
+            logger.debug(f"{sender} has cleared their elevated queue")
+        await sender.send("Your elevated queue has been cleared.")
+
+    @commands.command(aliases=["clear_queue_all"])
+    @commands.check(isAtLeastInstructor)
+    async def clearQueueAll(self, context: Context):
+        """
+        Clears all students from all instructor queues and the shared queue.
+        @ctx: context object containing information about the caller
+        """
+        sender = context.author
+        self.instructor_queue.clear()
+        self.OHQueue.clear()
+        logger.debug(f"{sender} has cleared all queues.")
+        await sender.send("All instructor queues and the shared queue have been cleared.")
 
     @commands.command(aliases=["remove", "rm"])
     @commands.check(isAtLeastInstructor)
