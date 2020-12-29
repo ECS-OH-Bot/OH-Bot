@@ -3,7 +3,6 @@ from asyncio import gather
 
 from discord.ext import commands
 from discord.ext.commands import Context
-from discord.utils import get
 from discord.errors import NotFound
 
 from constants import GetConstants
@@ -57,21 +56,6 @@ class Tools(commands.Cog):
                     await context.bot.logout()
                     logger.debug(f"ShutDown Successful. Exiting")
                     return 0
-
-
-
-    @commands.Cog.listener()
-    async def on_member_join(self, member):
-        """
-        On new student joining guild assign them student role and send them a welcome message
-        """
-        role = get(member.guild.roles, name=GetConstants().STUDENT)
-        await gather(member.add_roles(role),
-                     member.send(f"{member.mention} welcome! You have been promoted to the role of Student"),
-                     member.send(self.client.get_cog("Help").help_messages['all_student'])
-                     )
-        logger.debug(f"{member.mention} has joined the server")
-
 
 def setup(client):
     client.add_cog(Tools(client))
