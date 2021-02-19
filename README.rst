@@ -118,6 +118,11 @@ Requirements
 Quick Start
 --------------------------
 
+Instantiate an instance of the server `Template <https://discord.new/kVY9nyrwzV2N>`__ in Discord 
+
+
+Follow discord.py `docs <https://discordpy.readthedocs.io/en/latest/discord.html>`__ on creating and adding a bot to your server.
+
 Clone the source code
 
 .. code:: bash
