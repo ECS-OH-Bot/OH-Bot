@@ -95,10 +95,11 @@ Commands
 
    -  Removes sender from the OH-queue
 
--  ``/dequeue /dq`` - Access Role: [Admin, Instructor]
+-  ``/dequeue /dq`` - Access Role: [Admin, Instructor, Student]
 
    -  Removes next student from the queue and moves them into the voice
       channel the sender is currently connected to.
+   -  Removes self from queue if student.
 
 -  ``/help`` - Access Role: [Admin, Instructor]
 
