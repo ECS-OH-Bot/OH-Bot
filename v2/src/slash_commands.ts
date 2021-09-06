@@ -28,6 +28,10 @@ const enqueue_command = new SlashCommandBuilder()
         .setName('queue_name')
         .setDescription('The queue you want to wait on')
         .setRequired(true))
+    .addUserOption(option => option
+        .setName('user')
+        .setDescription('The user to add to the queue (staff only).')
+        .setRequired(false))
 
 const dequeue_command = new SlashCommandBuilder()
     .setName('next')

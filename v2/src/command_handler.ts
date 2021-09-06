@@ -32,8 +32,31 @@ class EnqueueCommandHandler implements CommandHandler {
     readonly permission = CommandAccessLevel.ANYONE
     async Process(server: AttendingServer, interaction: CommandInteraction) {
         const channel = interaction.options.getChannel('queue_name', true)
-        await server.EnqueueUser(channel.name, interaction.member as GuildMember)
-        await interaction.editReply(`You have been added to the ${channel.name} queue.`)
+        const user = interaction.options.getMember('user')
+
+        // Workaround for discord bug https://bugs.discord.com/T2703
+        // Ensure that a user does not invoke this command with a channel they canot view.
+        if (channel.type === 'GUILD_CATEGORY') {
+            const unviewable_channel = (channel as CategoryChannel).children
+                .find(child => !child.permissionsFor(interaction.member as GuildMember).has('VIEW_CHANNEL'))
+            if (unviewable_channel !== undefined) {
+                throw new UserError(`You do not have access to ${channel.name}`)
+            }
+        }
+
+        if (user instanceof GuildMember) {
+            // Sort of a hack, do a permission check for the user option
+            const admin_role = (interaction.member as GuildMember).roles.cache.find(role => role.name == 'Admin')
+            if(admin_role === undefined) {
+                await interaction.editReply(`No can do. You don't have access to this command.`)
+            } else {
+                await server.EnqueueUser(channel.name, user)
+                await interaction.editReply(`<@${user.id}> has been added to "${channel.name}"`)
+            }
+        } else {
+            await server.EnqueueUser(channel.name, interaction.member as GuildMember)
+            await interaction.editReply(`You have been added to the ${channel.name} queue.`)
+        }
     }
 }
 
