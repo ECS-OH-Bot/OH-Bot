@@ -87,7 +87,7 @@ export class AttendingServer {
                 }
             }
             if(this.attendance_sheet === null) {
-                this.attendance_sheet = await this.attendance_doc.addSheet({'title': this.server.name, 'headerValues': ['username', 'time in', 'time out']})
+                this.attendance_sheet = await this.attendance_doc.addSheet({'title': this.server.name, 'headerValues': ['username', 'time in', 'time out', 'helped students']})
             }
         }
         // Update with this info
@@ -95,7 +95,8 @@ export class AttendingServer {
         const start_time_str = `${start.toLocaleDateString()} ${start.toLocaleTimeString()}`
         const end = new Date(Date.now())
         const end_time_str = `${end.toLocaleDateString()} ${end.toLocaleTimeString()}`
-        await this.attendance_sheet.addRow({'username': member.user.username, 'time in': start_time_str, 'time out': end_time_str})
+        const helped_students = JSON.stringify(this.member_states.GetMemberState(member).members_helped.map(member => new Object({nick: member.nickname, username: member.user.username})))
+        await this.attendance_sheet.addRow({'username': member.user.username, 'time in': start_time_str, 'time out': end_time_str, 'helped students': helped_students})
     }
 
     async RemoveHelper(member: GuildMember): Promise<number> {
@@ -131,6 +132,7 @@ export class AttendingServer {
                 throw new UserError(`You are not registered as a helper for "${member_queue.name}" which <@${member.id}> is in.`)
             }
             await this.RemoveMemberFromQueues(member)
+            this.member_states.GetMemberState(helper).OnDequeue(member)
             return member_state
         }
 
@@ -153,7 +155,9 @@ export class AttendingServer {
         if (target_queue.length == 0) {
             throw new UserError('There is no one left to help. Now might be a good time for a coffee.')
         } 
-        return target_queue.Dequeue()
+        let target_member_state = await target_queue.Dequeue()
+        this.member_states.GetMemberState(helper).OnDequeue(target_member_state.member)
+        return target_member_state
     }
     
 

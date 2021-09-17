@@ -7,6 +7,9 @@ export class MemberState {
     readonly member: GuildMember
     private start_helping_timestamp: number | null = null
     private start_wait_timestamp: number | null = null
+    // A list of the members this user has helped during a single session.
+    // Cleared when the user starts helping
+    private helped_members: GuildMember[] = []
 
     get is_helping(): boolean {
         return this.start_helping_timestamp !== null
@@ -16,6 +19,10 @@ export class MemberState {
         return this.current_queue
     }
 
+    get members_helped(): GuildMember[] {
+        return this.helped_members
+    }
+
     StartHelping(): void {
         if(this.current_queue !== null) {
             throw new UserError('You can\'t host while in a queue yourself.')
@@ -23,6 +30,7 @@ export class MemberState {
             throw new UserError('You are already hosting.')
         }
         this.start_helping_timestamp = Date.now()
+        this.helped_members = []
     }
 
     StopHelping(): number {
@@ -64,6 +72,10 @@ export class MemberState {
         this.current_queue = null
     } 
 
+    OnDequeue(target: GuildMember) {
+        // Run when this member has dequeued another member
+        this.helped_members.push(target)
+    }
 
     constructor(member: GuildMember) {
         this.member = member
