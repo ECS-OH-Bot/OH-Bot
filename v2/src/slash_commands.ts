@@ -5,10 +5,10 @@ import { Guild } from 'discord.js';
 
 const queue_command = new SlashCommandBuilder()
     .setName('queue')
-    .setDescription('Add or remove queues')
+    .setDescription('Add or remove queue channels to the server (admin only)')
     .addSubcommand(subcommand => subcommand
         .setName('add')
-        .setDescription('Create a new queue')
+        .setDescription('Create a new queue channel')
         .addStringOption(option => option
             .setName('queue_name')
             .setDescription('The name of the queue to create')
