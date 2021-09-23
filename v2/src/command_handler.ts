@@ -1,6 +1,8 @@
 import { CategoryChannel, CommandInteraction, GuildChannel, GuildMember }  from "discord.js";
 import { AttendingServer } from "./server";
 import { UserError } from "./user_action_error";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const AsciiTable = require('ascii-table');
 
 enum CommandAccessLevel {
     ANYONE, STAFF, ADMIN
@@ -144,6 +146,31 @@ class ClearCommandHandler implements CommandHandler {
     }
 }
 
+class ListHelpersCommandHandler implements CommandHandler {
+    readonly permission = CommandAccessLevel.ANYONE
+    async Process(server: AttendingServer, interaction: CommandInteraction) {
+        const helpers = server.GetHelpingMemberStates()
+        if(helpers.size === 0) {
+            await interaction.editReply('No one is helping right now.')
+            return
+        }
+
+        const table = new AsciiTable()
+        table.setHeading('Staff Member', 'Queues', 'Time online')
+
+
+        helpers.forEach((queues, helper) => {
+            const name = helper.member.nickname !== null ? helper.member.nickname : helper.member.user.username
+            const help_time = helper.GetHelpTime()
+            const mins = String(Math.round(help_time / 60000)).padStart(2, '0')
+            const secs = String(Math.round((help_time % 60000) / 1000)).padStart(2, '0')
+            table.addRow(name, queues.join(', '), `${mins}:${secs}`)
+        })
+
+        await interaction.editReply('```' + table.toString() + '```')
+    }
+}
+
 
 const handlers = new Map<string, CommandHandler>([
     ['queue', new QueueCommandHandler()],
@@ -153,6 +180,7 @@ const handlers = new Map<string, CommandHandler>([
     ['stop', new StopCommandHandler()],
     ['leave', new LeaveCommandHandler()],
     ['clear', new ClearCommandHandler()],
+    ['list_helpers', new ListHelpersCommandHandler()],
 ])
 
 export async function ProcessCommand(server: AttendingServer, interaction: CommandInteraction): Promise<void> {

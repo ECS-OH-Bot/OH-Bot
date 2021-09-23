@@ -77,6 +77,14 @@ export class MemberState {
         this.helped_members.push(target)
     }
 
+    GetHelpTime() {
+        if(this.start_helping_timestamp === null) {
+            console.error(`Cannot get help time for ${this.member.user.username}.`)
+            return 0
+        }
+        return Date.now() - this.start_helping_timestamp
+    }
+
     constructor(member: GuildMember) {
         this.member = member
     }
@@ -96,5 +104,9 @@ export class MemberStateManager {
 
     Reset(): void {
         this.member_map = new Map<GuildMember, MemberState>();
+    }
+
+    forEach(callback: (member_state: MemberState) => void): void {
+        this.member_map.forEach(member_state => callback(member_state))
     }
 }

@@ -69,6 +69,10 @@ const clear_command = new SlashCommandBuilder()
         .setDescription('Clear all queues?')
         .setRequired(false))
 
+const list_helpers_command = new SlashCommandBuilder()
+    .setName('list_helpers')
+    .setDescription('See who is online and helping.')
+
 // Get the raw data that can be sent to Discord
 const commandData = [
     queue_command.toJSON(),
@@ -78,6 +82,7 @@ const commandData = [
     stop_command.toJSON(),
     leave_command.toJSON(),
     clear_command.toJSON(),
+    list_helpers_command.toJSON()
 ]
 
 export async function PostSlashCommands(guild: Guild): Promise<void> {

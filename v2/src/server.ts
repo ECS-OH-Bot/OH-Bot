@@ -287,4 +287,18 @@ export class AttendingServer {
                 return undefined;
             })
     }
+
+    GetHelpingMemberStates(): Map<MemberState, string[]> {
+        // Get a mapping between active helpers and the names of the queues
+        // they are subscribed to
+        let helping_members = new Map<MemberState, string[]>()
+        this.member_states.forEach(state => {
+            if(state.is_helping) {
+                const queue_names = this.GetHelpableQueues(state.member)
+                    .map(queue => queue.name)
+                helping_members.set(state, queue_names)
+            }
+        })
+        return helping_members
+    }
 }
