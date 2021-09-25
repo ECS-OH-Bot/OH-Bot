@@ -102,6 +102,14 @@ export class HelpQueue {
         user_state.TryAddToQueue(this)
         this.queue.push(user_state)
 
+        if (this.queue.length == 1) {
+            // The queue went from having 0 people to having 1.
+            // Notify helpers of this queue that someone has joined.
+            await Promise.all(
+                Array.from(this.helpers)
+                .map(helper => helper.send(`Heads up! <@${member.user.id}> has joined "${this.name}".`)))
+        }
+
         await this.UpdateDisplay()
     }
 
