@@ -92,8 +92,14 @@ class DequeueCommandHandler implements CommandHandler {
             CONNECT: true
         })
         const invite = await helper.voice.channel.createInvite()
-        await helpee.member.send(`It's your turn! Join the call: ${invite.toString()}`)
-        await interaction.editReply(`<@${helpee.member.user.id}> was sent an invite to your voice channel.`)
+        let invite_sent = false
+        await helpee.member.send(`It's your turn! Join the call: ${invite.toString()}`).then(() => {invite_sent = true})
+        if(invite_sent) {
+            await interaction.editReply(`<@${helpee.member.user.id}> was sent an invite to your voice channel.`)
+        } else {
+            console.error(`Could not send a message to ${helpee.member.user.username}.`)
+            await interaction.editReply(`I could not send <@${helpee.member.user.id}> an invite to your voice channel. Can you try to get in touch with them?`)
+        }
     }
 }
 
